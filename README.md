@@ -7,8 +7,7 @@
 
 ## Tabla de Contenidos  
 - [Descripción](#descripción)  
-- [Instalación](#instalación)  
-- [Guía de Uso](#guía-de-uso)  
+- [Guía de Uso](#guia-de-uso)  
 - [Futuras Actualizaciones](#futuras-actualizaciones)  
 
 ## Descripción  
@@ -30,16 +29,19 @@ A [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas cara
    - Los usuarios pueden agregar amigos y seguir a otros.  
    - Permite publicar diversos tipos de contenido, como textos, imágenes, videos y enlaces.  
 
-## Instalación  
+## Guia de uso  
 
 Actualmente en desarrollo.  
 Se incluirán instrucciones detalladas en futuras versiones.  
 
-## Guía de Uso  
+### Diagrama de Casos de Uso
+![cu](./diag/png/cu.drawio.png)
 
-Actualmente en desarrollo.  
-Se agregarán ejemplos prácticos y tutoriales en próximas versiones.  
+### Diagrama de Actividades
+![cu](./diag/png/da.drawio.png)
 
+### Diagrama de Clases
+![cu](./diag/png/dc.drawio.png)
 
 ## Futuras Actualizaciones  
 
