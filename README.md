@@ -14,10 +14,10 @@
 
 Whale es un proyecto en  [Java](https://www.java.com/es/) para la creación de una red social básica. 
 
-Actualmente, se encuentra en su fase inicial, y su propósito es ofrecer funcionalidades esenciales para los usuarios, como la creación de perfiles y un sistema sencillo de amigos. 
+Actualmente, se encuentra en su fase inicial, y su propósito es ofrecer funcionalidades esenciales para los usuarios, como la creación de perfiles, añadir publicaciones y un sistema sencillo de amigos. 
 
 La idea es hacer una mezcla parecida a [reddit](https://www.reddit.com/?rdt=51627), [twitter](https://x.com/?lang=es) y un toque personal y original
-A [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas características y actualizaciones originales.  
+a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas características y actualizaciones originales.  
 
 ### Características principales  
 
@@ -26,7 +26,7 @@ A [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas cara
    - Por el momento, no se utiliza ninguna base de datos; los usuarios serán moderados manualmente.  
 
 2. **Conexión entre usuarios y contenido**  
-   - Los usuarios pueden agregar amigos y seguir a otros.  
+   - Los usuarios pueden agregar amigos.  
    - Permite publicar diversos tipos de contenido, como textos, imágenes, videos y enlaces.  
 
 ## Guia de uso  
