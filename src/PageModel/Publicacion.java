@@ -1,11 +1,14 @@
 package PageModel;
+import Utils.UtilsExample;
+
+import java.util.List;
 
 public class Publicacion extends Contenido {
     private Integer likes;
-    private String[] comentarios;
+    private List<String> comentarios;
     private String multimedia;
 
-    public Publicacion(Integer id, String text, String fecha, String hashtag, Integer likes, String[] comentarios, String multimedia) {
+    public Publicacion(Integer id, String text, String fecha, List<String> hashtag, Integer likes, List<String> comentarios, String multimedia) {
         super(id, text, fecha, hashtag);
 
         this.likes = likes;
@@ -14,6 +17,10 @@ public class Publicacion extends Contenido {
     }
 
     public Integer getLikes() {return likes;}
-    public String[] getComentarios() {return comentarios;}
-    public String getAutor() {return multimedia;}
+    public List<String> getComentarios() {return comentarios;}
+    public String getMultimedia() {return multimedia;}
+
+    public String getPublicacion() {
+        return ("Id: "+id+", Likes: "+likes+" Texto: "+text+" Fecha: "+fecha+", Comentario: "+getComentarios()+", HashTag: "+hashtag);
+    }
 }

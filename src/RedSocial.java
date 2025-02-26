@@ -1,19 +1,30 @@
-import PageModel.Publicacion;
-import Utils.UtilsRed;
+import PageModel.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RedSocial {
     private String usuarios;
-    private ArrayList<Publicacion> publicaciones = new ArrayList<>();
+    private List<Comentario> comentarios;
+    private List<Publicacion> publicaciones;
 
-    public RedSocial(String usuarios, ArrayList<Publicacion> publicaciones) {
+    public RedSocial(String usuarios, List<Comentario> comentarios, List<Publicacion> publicaciones) {
         this.usuarios = usuarios;
+        this.comentarios = comentarios;
         this.publicaciones = publicaciones;
     }
 
-    public static void main(String[] args) {
-        String[] comentarios = new String[2];
-        Publicacion publicacion = new Publicacion(1,"hola como estás","12-02-2006","#peru",12, comentarios, "https://vueltaporelzoo.com");
+    public void getPublicaciones() {
+        for (int i=0; i<publicaciones.size(); i++) {
+            System.out.println(publicaciones.get(0));;
+        }
+   }
+
+    public void addPublicacion(Publicacion pub) {
+        publicaciones.add(pub);
     }
+
+    public List<String> getComentarios(Publicacion pub) {
+        return pub.getComentarios();
+    }
+
 }
