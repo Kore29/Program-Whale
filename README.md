@@ -1,3 +1,7 @@
+<div>
+  <img src="./images/background.jpg">
+</div>
+
 # Whale
 
 [![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?logo=intellij-idea&logoColor=white)](https://www.jetbrains.com/es-es/idea/)
@@ -35,13 +39,26 @@ Actualmente en desarrollo.
 Se incluirán instrucciones detalladas en futuras versiones.  
 
 ### Diagrama de Casos de Uso
-![cu](./diag/png/cu.drawio.png)
+<picture>
+  <source srcset="./diag/png/cu.drawio.light.png" media="(prefers-color-scheme: light)">
+  <source srcset="./diag/png/cu.drawio.black.png" media="(prefers-color-scheme: dark)">
+  <img src="./diag/png/cu.drawio.light.png" alt="Imagen adaptable" width="300"/>
+</picture>
 
 ### Diagrama de Actividades
-![cu](./diag/png/da.drawio.png)
+
+<picture>
+  <source srcset="./diag/png/da.drawio.light.png" media="(prefers-color-scheme: light)">
+  <source srcset="./diag/png/da.drawio.black.png" media="(prefers-color-scheme: dark)">
+  <img src="./diag/png/da.drawio.light.png" alt="Imagen adaptable" width="300"/>
+</picture>
 
 ### Diagrama de Clases
-![cu](./diag/png/dc.drawio.png)
+<picture>
+  <source srcset="./diag/png/dc.drawio.light.png" media="(prefers-color-scheme: light)">
+  <source srcset="./diag/png/dc.drawio.black.png" media="(prefers-color-scheme: dark)">
+  <img src="./diag/png/dc.drawio.light.png" alt="Imagen adaptable" width="300"/>
+</picture>
 
 ## Futuras Actualizaciones  
 
