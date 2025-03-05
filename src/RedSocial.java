@@ -1,30 +1,38 @@
 import PageModel.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class RedSocial {
-    private String usuarios;
+    private List<Usuario> usuarios;
     private List<Comentario> comentarios;
     private List<Publicacion> publicaciones;
 
-    public RedSocial(String usuarios, List<Comentario> comentarios, List<Publicacion> publicaciones) {
+    public RedSocial(List<Usuario> usuarios, List<Comentario> comentarios, List<Publicacion> publicaciones) {
         this.usuarios = usuarios;
         this.comentarios = comentarios;
         this.publicaciones = publicaciones;
     }
 
-    public void getPublicaciones() {
-        for (int i=0; i<publicaciones.size(); i++) {
-            System.out.println(publicaciones.get(0));;
-        }
-   }
-
-    public void addPublicacion(Publicacion pub) {
-        publicaciones.add(pub);
+    // Usuarios Start
+    public void addUsuario(Usuario usuario) {
+        usuarios.add(usuario);
     }
+    // Usuarios End
 
-    public List<String> getComentarios(Publicacion pub) {
-        return pub.getComentarios();
+    // Publicaciones Start
+    public void addPublicacion(Publicacion publicacion) {
+        publicaciones.add(publicacion);
     }
+    public void removePublicacion(Publicacion publicacion) {
+        publicaciones.remove(publicacion);
+    }
+    // Publicaciones End
+
+    // Comentarios Start
+    public List<String> getComentarios(Publicacion publicacion) {
+        return publicacion.getComentarios();
+    }
+    // Comentarios End
 
 }
