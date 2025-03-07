@@ -21,7 +21,7 @@ public class UtilsCreate {
         return tempPub;
     }
 
-    public static Usuario createUsuario() {
+    public static Usuario createRoot() {
         System.out.print("Como deseas llamarte? "); String tempNomb = sc.nextLine(); System.out.println();
         System.out.println("Escribe una contraseña para tu nuevo usuario: "); String tempCont = sc.nextLine(); System.out.println();
         System.out.println("Finalmente, escribe un email para asociarlo a tu cuenta: "); String tempEmail = sc.nextLine(); System.out.println();

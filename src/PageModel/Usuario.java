@@ -37,7 +37,7 @@ public class Usuario {
     public void setContenido(List<Contenido> contenido) {this.contenido = contenido;}
 
     // Modificar Amigos
-    public void agregarAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
-    public void eliminarAmigo(Usuario amigo) {amigos.remove(amigo);}
+    public void addAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
+    public void removeAmigo(Usuario amigo) {amigos.remove(amigo);}
     public boolean esAmigo(Usuario amigo) {return amigos.contains(amigo);}
 }

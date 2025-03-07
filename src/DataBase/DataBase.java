@@ -17,8 +17,7 @@ public class DataBase {
 
     static {
         // Crear usuarios
-        Usuario root = new Usuario("Gerard","1234","gerard@gmail.com","12-02-2005",null,null);
-        Usuario juan = new Usuario("Juan", "1234", "juan@example.com", "2025-01-01", null, null);
+        Usuario juan = new Usuario("Juan", "root", "juan@example.com", "2025-01-01", null, null);
         Usuario maria = new Usuario("María", "5678", "maria@example.com", "2024-12-15", null, null);
         Usuario carlos = new Usuario("Carlos", "abcd", "carlos@example.com", "2023-06-20", null, null);
 

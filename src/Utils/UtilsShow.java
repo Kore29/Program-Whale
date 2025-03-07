@@ -16,7 +16,7 @@ public class UtilsShow {
 
             Publicacion activePublicacion = publicacion.get(i);
 
-            System.out.println("Publicado en "+activePublicacion.getFecha());
+            System.out.println("Publicado el "+activePublicacion.getFecha());
             System.out.println(activePublicacion.getText()+" "+activePublicacion.getHashtag());
             System.out.println("<3 "+activePublicacion.getLikes());
 
