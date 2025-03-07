@@ -1,15 +1,17 @@
 package Utils;
-import PageModel.*;
 
+import PageModel.*;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.time.LocalTime;
 
-public class UtilsRedCreate {
+public class UtilsCreate {
     public static Scanner sc = new Scanner(System.in);
 
     public static Publicacion createPublicacion() {
+        System.out.println("Contenido: ");
         String tempText = sc.nextLine();
+        System.out.println("Enlace de contenido: (opcional)");
         String tempMult = sc.nextLine();
         String tempFech = String.valueOf(LocalDate.now());
 

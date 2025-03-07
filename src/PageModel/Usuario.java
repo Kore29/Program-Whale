@@ -7,10 +7,10 @@ public class Usuario {
     private String contrasena;
     private String email;
     private String creacion;
-    private String amigos;
+    private List<Integer> amigos;
     private List<Contenido> contenido;
 
-    public Usuario(String nombre, String contrasena, String email, String craecion, String amigos, List<Contenido> contenido) {
+    public Usuario(String nombre, String contrasena, String email, String craecion, List<Integer> amigos, List<Contenido> contenido) {
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.email = email;
@@ -23,7 +23,7 @@ public class Usuario {
     public String getContrasena() {return contrasena;}
     public String getEmail() {return email;}
     public String getCreacion() {return creacion;}
-    public String getAmigos() {return amigos;}
+    public List<Integer> getAmigos() {return amigos;}
     public List<Contenido> getContenido() {return contenido;}
 
 }

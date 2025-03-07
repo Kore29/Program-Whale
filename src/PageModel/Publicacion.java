@@ -1,5 +1,4 @@
 package PageModel;
-import Utils.UtilsExample;
 
 import java.util.List;
 
@@ -19,8 +18,4 @@ public class Publicacion extends Contenido {
     public Integer getLikes() {return likes;}
     public List<String> getComentarios() {return comentarios;}
     public String getMultimedia() {return multimedia;}
-
-    public String getPublicacion() {
-        return ("Id: "+id+", Likes: "+likes+" Texto: "+text+" Fecha: "+fecha+", Comentario: "+getComentarios()+", HashTag: "+hashtag);
-    }
 }

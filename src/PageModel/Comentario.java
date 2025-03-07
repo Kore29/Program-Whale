@@ -13,7 +13,4 @@ public class Comentario extends Contenido {
 
     public String getAutor() {return autor;}
 
-    public String getComentario() {
-        return ("(Id Publicación: "+id+", Texto: "+text+", HashTag: "+hashtag+", Autor: "+autor+")");
-    }
 }

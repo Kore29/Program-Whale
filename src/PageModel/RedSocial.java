@@ -1,7 +1,6 @@
-import PageModel.*;
+package PageModel;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class RedSocial {
     private List<Usuario> usuarios;
