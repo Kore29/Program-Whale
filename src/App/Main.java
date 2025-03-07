@@ -21,14 +21,51 @@ public class Main {
 
         String sec = sc.nextLine();
         if (sec.equals("y")) System.out.println("Cargando...");
-        else if (sec.equals("n")) UtilsCreate.createUsuario();
+        else if (sec.equals("n")) whale.addRoot(UtilsCreate.createUsuario());
 
-        System.out.println("--------------------");
-        System.out.println("PUBLICACIONES");
-        UtilsShow.showPublicaciones(DataBase.getPublicaciones());
+        // Página Inicial
+        while (true) {
+            System.out.println("PUBLICACIONES");
+            UtilsShow.showPublicaciones(DataBase.getPublicaciones());
 
-        NavBar.NavBar();
+            NavBar();
+            break;
+        }
+    }
 
-        UtilsApp.clearConsole();
+    public static void NavBar() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Selecciona una de las siguientes opciones -> \n Perfil 'Aceder al perfil' \n Buscar Contenido \n Gestionar Amigo");
+        String selected = sc.nextLine();
+
+        if (selected.equals("Perfil")) {
+            perfil();
+        } else if (selected.equals("Buscar Contenido")) {
+            System.out.println("Introduce los HashTags del contenido que quieras buscar: ");
+            String hashtagsImp = sc.nextLine();
+            buscarContenido(hashtagsImp);
+        } else if (selected.equals("Gestionar Amigos")) {
+            gestionarAmigos();
+        } else {
+            System.out.println("Porfavor, intenta escribir una parametro adecuado");
+        }
+    }
+
+    public static void perfil() {
+        Usuario root = DataBase.getUsuarios().get(0);
+        String nombre = root.getNombre();
+        List<Usuario> amigos = root.getAmigos();
+
+        System.out.println("Bienvenido "+ nombre);
+        System.out.println("Tienes "+amigos.size()+" amigos.");;
+    }
+
+    public static void buscarContenido(String hashtags) {
+
+    }
+
+    public static void gestionarAmigos() {
+
     }
 }

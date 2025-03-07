@@ -16,22 +16,29 @@ public class DataBase {
     private static RedSocial whale;
 
     static {
-        // All Usuarios
-        usuarios.add(new Usuario("Juan", "1234", "juan@example.com", "2025-01-01", null, null));
-        usuarios.add(new Usuario("María", "5678", "maria@example.com", "2024-12-15", null, null));
-        usuarios.add(new Usuario("Carlos", "abcd", "carlos@example.com", "2023-06-20", null, null));
-        usuarios.add(new Usuario("Ana", "efgh", "ana@example.com", "2022-11-11", null, null));
-        usuarios.add(new Usuario("Luis", "ijkl", "luis@example.com", "2024-02-28", null, null));
-        usuarios.add(new Usuario("Sofía", "mnop", "sofia@example.com", "2025-03-07", null, null));
+        // Crear usuarios
+        Usuario root = new Usuario("Gerard","1234","gerard@gmail.com","12-02-2005",null,null);
+        Usuario juan = new Usuario("Juan", "1234", "juan@example.com", "2025-01-01", null, null);
+        Usuario maria = new Usuario("María", "5678", "maria@example.com", "2024-12-15", null, null);
+        Usuario carlos = new Usuario("Carlos", "abcd", "carlos@example.com", "2023-06-20", null, null);
 
-        // All Publicaciones
-        publicaciones.add(new Publicacion(0,"Esto es información sobre los leones","12-02-2005",Hashtags.hashtags.get(2), 3, null, "https://fotoleon"));
-        publicaciones.add(new Publicacion(1,"Opinion sobre los arboles","15-07-2005",Hashtags.hashtags.get(3), 10, null, "https://arbol"));
-        publicaciones.add(new Publicacion(2,"Los aviones nos fumigan","13-05-2005",Hashtags.hashtags.get(4), 1, null, "https://aviones"));
+        juan.setAmigos(Arrays.asList(maria, carlos));
+        maria.setAmigos(List.of(juan));
 
-        // All Comentarios
-        comentarios.add(new Comentario(0,"Buena publicacion","12-02-2006",Hashtags.hashtags.get(0), usuarios.get(0).getNombre()));
-        comentarios.add(new Comentario(2,"No creo que los aviones nos fumiguen","12-02-2006",Hashtags.hashtags.get(0), usuarios.get(1).getNombre()));
+        usuarios.addAll(Arrays.asList(juan, maria, carlos));
+
+        // Crear publicaciones y asignarlas a usuarios
+        publicaciones.add(new Publicacion(0, "Leones", "12-02-2005", Hashtags.hashtags.get(2), 3, null, "https://fotoleon"));
+        publicaciones.add(new Publicacion(1, "Árboles", "15-07-2005", Hashtags.hashtags.get(3), 10, null, "https://arbol"));
+        publicaciones.add(new Publicacion(2, "Aviones", "13-05-2005", Hashtags.hashtags.get(4), 1, null, "https://aviones"));
+
+        juan.setContenido(List.of(publicaciones.get(0)));
+        maria.setContenido(List.of(publicaciones.get(1)));
+        carlos.setContenido(List.of(publicaciones.get(2)));
+
+        // Crear comentarios
+        comentarios.add(new Comentario(0, "Buena publicación", "12-02-2006", Hashtags.hashtags.get(0), juan.getNombre()));
+        comentarios.add(new Comentario(1, "No creo que los aviones nos fumiguen", "13-05-2006", Hashtags.hashtags.get(1), maria.getNombre()));
 
         whale = new RedSocial(usuarios,comentarios,publicaciones);
     }

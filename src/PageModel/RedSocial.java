@@ -15,6 +15,7 @@ public class RedSocial {
 
     // Usuarios
     public void addUsuario(Usuario usuario) {usuarios.add(usuario);}
+    public void addRoot(Usuario usuario) {usuarios.add(0,usuario);}
 
     // Publicaciones
     public void addPublicacion(Publicacion publicacion) {publicaciones.add(publicacion);}
