@@ -13,13 +13,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Comentario> comentarios = new ArrayList<>();
-        List<Publicacion> publicaciones = new ArrayList<>();
-        List<Usuario> usuarios = new ArrayList<>();
-
         Scanner sc = new Scanner(System.in);
-
-        RedSocial whale = new RedSocial(usuarios, comentarios, publicaciones);
+        RedSocial whale = DataBase.getRedSocial();
 
         System.out.println("Bienvenidos a Whale");
         System.out.println("Tienes una sesión creada? y/n");
@@ -30,7 +25,7 @@ public class Main {
 
         System.out.println("--------------------");
         System.out.println("PUBLICACIONES");
-        UtilsShow.showPublicaciones(publicaciones);
+        UtilsShow.showPublicaciones(DataBase.getPublicaciones());
 
         NavBar.NavBar();
 

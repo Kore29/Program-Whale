@@ -13,25 +13,13 @@ public class RedSocial {
         this.publicaciones = publicaciones;
     }
 
-    // Usuarios Start
-    public void addUsuario(Usuario usuario) {
-        usuarios.add(usuario);
-    }
-    // Usuarios End
+    // Usuarios
+    public void addUsuario(Usuario usuario) {usuarios.add(usuario);}
 
-    // Publicaciones Start
-    public void addPublicacion(Publicacion publicacion) {
-        publicaciones.add(publicacion);
-    }
-    public void removePublicacion(Publicacion publicacion) {
-        publicaciones.remove(publicacion);
-    }
-    // Publicaciones End
+    // Publicaciones
+    public void addPublicacion(Publicacion publicacion) {publicaciones.add(publicacion);}
+    public void removePublicacion(Publicacion publicacion) {publicaciones.remove(publicacion);}
 
     // Comentarios Start
-    public List<String> getComentarios(Publicacion publicacion) {
-        return publicacion.getComentarios();
-    }
-    // Comentarios End
-
+    public List<String> getComentarios(Publicacion publicacion) {return publicacion.getComentarios();}
 }
