@@ -2,9 +2,9 @@ package App;
 
 import PageModel.*;
 import Utils.UtilsCreate;
-import Utils.UtilsMain;
+import Utils.UtilsApp;
 import Utils.UtilsShow;
-import Utils.DataBase.UtilsExample;
+import DataBase.DataBase;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -21,8 +21,6 @@ public class Main {
 
         RedSocial whale = new RedSocial(usuarios, comentarios, publicaciones);
 
-        whale.addPublicacion(UtilsExample.example1);
-
         System.out.println("Bienvenidos a Whale");
         System.out.println("Tienes una sesión creada? y/n");
 
@@ -36,6 +34,6 @@ public class Main {
 
         NavBar.NavBar();
 
-        UtilsMain.clearConsole();
+        UtilsApp.clearConsole();
     }
 }

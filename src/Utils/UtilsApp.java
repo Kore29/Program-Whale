@@ -4,7 +4,7 @@ import PageModel.Usuario;
 
 import java.util.List;
 
-public class UtilsMain {
+public class UtilsApp {
 
     // Con java no se puede limpiar un consola, pero si se puede hacer muchos espacios para simularlo.
     public static void clearConsole() {
@@ -20,5 +20,4 @@ public class UtilsMain {
         }
         return usuarios.get(0);
     }
-
 }

@@ -19,7 +19,7 @@ public class UtilsShow {
             System.out.println("^_^ "+activePublicacion.getLikes());
         }
     }
-    public static void showUser(List<Usuario> usuarios) {
+    public static void showUser(String name) {
         System.out.println();
     }
 }

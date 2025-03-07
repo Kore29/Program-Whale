@@ -1,9 +1,9 @@
-package Utils.DataBase;
+package DataBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilsHashtags {
+public class Hashtags {
     public static List<String> hashtags = new ArrayList<>();
 
     static {

@@ -10,7 +10,7 @@ public class Usuario {
     private List<Integer> amigos;
     private List<Contenido> contenido;
 
-    public Usuario(String nombre, String contrasena, String email, String craecion, List<Integer> amigos, List<Contenido> contenido) {
+    public Usuario(String nombre, String contrasena, String email, String creacion, List<Integer> amigos, List<Contenido> contenido) {
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.email = email;

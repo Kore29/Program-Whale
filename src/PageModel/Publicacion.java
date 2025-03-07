@@ -7,7 +7,7 @@ public class Publicacion extends Contenido {
     private List<String> comentarios;
     private String multimedia;
 
-    public Publicacion(Integer id, String text, String fecha, List<String> hashtag, Integer likes, List<String> comentarios, String multimedia) {
+    public Publicacion(Integer id, String text, String fecha, String hashtag, Integer likes, List<String> comentarios, String multimedia) {
         super(id, text, fecha, hashtag);
 
         this.likes = likes;

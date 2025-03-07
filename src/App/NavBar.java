@@ -1,5 +1,10 @@
 package App;
 
+import PageModel.*;
+import Utils.UtilsApp;
+import App.Main;
+import Utils.UtilsShow;
+
 import java.util.Scanner;
 
 public class NavBar {
@@ -20,12 +25,13 @@ public class NavBar {
             buscarContenido(hashtagsImp);
         } else if (selected.equals("Gestionar Amigos")) {
             gestionarAmigos();
+        } else {
+            System.out.println("Porfavor, intenta escribir una parametro adecuado");
         }
     }
 
     public static void perfil() {
-        System.out.println("Amigos: ");
-
+        //UtilsShow.showUser(UtilsApp.buscarUsuario().getNombre());
     }
 
     public static void buscarContenido(String hashtags) {
