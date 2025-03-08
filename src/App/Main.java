@@ -63,12 +63,13 @@ public class Main {
 
     public static void NavBar() {
 
-        System.out.println("Selecciona una de las siguientes opciones\n1.Perfil,  2.Buscar Contenido");
-        int option = sc.nextInt(); if (option==1) {;} else if (option==2) {;} else {}
-
+        System.out.println("Selecciona una de las siguientes opciones\n1.Perfil  2.Crear Contenido  3.Filtrar Contenido");
         while (true) {
+            int option = sc.nextInt(); sc.nextLine();
+
             if (option==1) {perfil(); break;}
-            else if (option==2) {System.out.println("Introduce los HashTags del contenido que quieras buscar: "); String hashtagsImp = sc.nextLine(); buscarContenido(hashtagsImp); break;}
+            else if (option==2) {DataBase.addPublicaciones(createPublicacion()); break;}
+            else if (option==3) {filtrarContenido(); break;}
             else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
 
@@ -87,18 +88,17 @@ public class Main {
         if (root.getContenido().isEmpty()) {
             System.out.println("Aun no tienes publicaciones");
         } else {
-            for (int i=0; i<root.getContenido().size(); i++) {
-                System.out.println("- "+root.getContenido().get(i).getText());
-            }
+            UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),0);
         }
 
         System.out.println("CONFIGURACIÓN DE USUARIO");
-        System.out.println("1.Cambiar tu nombre,  2.Eliminar amigos,  3.Añadir un nuevo amigo,  4.Salir al menu principal");
+        System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menu principal");
         while (true) {
-            int option = sc.nextInt();
-            if (option==1) {UtilsApp.cambiarNombre(root, sc);}
-            else if (option==2) {UtilsApp.eliminarAmigo(root, sc);}
-            else if (option==3) {UtilsApp.anadirAmigo(root, sc);}
+            int option = sc.nextInt(); sc.nextLine();
+
+            if (option==1) {UtilsApp.cambiarNombre(root, sc); break;}
+            else if (option==2) {UtilsApp.eliminarAmigo(root, sc); break;}
+            else if (option==3) {UtilsApp.anadirAmigo(root, sc); break;}
             else if (option==4) {break;}
             else {System.out.println("Escribe un parametro valido");}
         }
@@ -107,10 +107,8 @@ public class Main {
     public static Publicacion createPublicacion() {
         int newId = UtilsApp.compararID(DataBase.getPublicaciones())+1;
 
-        System.out.println("Contenido: ");
-        String tempText = sc.nextLine();
-        System.out.println("Enlace de contenido: (opcional)");
-        String tempMult = sc.nextLine();
+        System.out.println("Contenido: "); String tempText = sc.nextLine();
+        System.out.println("Enlace de contenido: (opcional)"); String tempMult = sc.nextLine();
 
         String tempFech = String.valueOf(LocalDate.now());
         if (tempMult.isEmpty()) tempMult = null;
@@ -118,7 +116,10 @@ public class Main {
         return new Publicacion(newId,tempText,tempFech,null,0,null,tempMult);
     }
 
-    public static void buscarContenido(String hashtags) {
+    public static void filtrarContenido() {
+        System.out.println("Introduce los HashTags del contenido que quieras buscar: ");
+        String hashtags = sc.nextLine();
+
         System.out.println("Publicaciones con el hashtag a buscar...");
         for (int i=0; i<DataBase.getPublicaciones().size(); i++) {
             if (DataBase.getPublicaciones().get(i).getHashtag().equals(hashtags)) {

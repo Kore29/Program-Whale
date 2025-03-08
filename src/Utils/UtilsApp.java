@@ -20,20 +20,38 @@ public class UtilsApp {
     }
 
     public static void cambiarNombre(Usuario root, Scanner sc) {
-        System.out.print("Introduce el nombre por el que deseas cambiar: ");
+        System.out.println("Introduce el nombre por el que deseas cambiar: ");
         String tempNomb = sc.nextLine();
         root.setNombre(tempNomb);
+        System.out.println("Nombre cambiado: " + root.getNombre());
     }
 
     public static void eliminarAmigo(Usuario root, Scanner sc) {
+        StringBuilder fr = new StringBuilder("Amigos: ");
+
+        for (int i=0; i<root.getAmigos().size(); i++) {
+            fr.append(root.getAmigos().get(i).getNombre()).append(", ");
+        } fr.toString().trim();
+        System.out.println(fr.substring(0,fr.length()-2));
+
         System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
-        String tempAmig = sc.nextLine();
+
+        if (sc.hasNextLine()) sc.nextLine(); String tempAmig = sc.nextLine();
         root.removeAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
     }
 
     public static void anadirAmigo(Usuario root, Scanner sc) {
+        StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
+
+        for (int i=0; i<DataBase.getUsuarios().size(); i++) {
+            if (!root.esAmigo(root)) {
+                nfr.append(DataBase.getUsuarios().get(i).getNombre()).append(", ");
+            }
+        } nfr.toString().trim();
+        System.out.println(nfr.substring(0,nfr.length()-2));
+
         System.out.print("Introduce el nombre de la persona que quieres agregar: ");
-        String tempAmig = sc.nextLine();
+        if (sc.hasNextLine()) sc.nextLine(); String tempAmig = sc.nextLine();
         root.addAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
     }
 

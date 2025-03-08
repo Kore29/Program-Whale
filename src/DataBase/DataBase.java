@@ -42,19 +42,13 @@ public class DataBase {
         whale = new RedSocial(usuarios,comentarios,publicaciones);
     }
 
-    public static List<Usuario> getUsuarios() {
-        return usuarios;
-    }
+    public static List<Usuario> getUsuarios() {return usuarios;}
 
-    public static List<Comentario> getComentarios() {
-        return comentarios;
-    }
+    public static List<Comentario> getComentarios() {return comentarios;}
+    public static void addComentarios(Comentario comentario) {comentarios.add(comentario);}
 
-    public static List<Publicacion> getPublicaciones() {
-        return publicaciones;
-    }
+    public static List<Publicacion> getPublicaciones() {return publicaciones;}
+    public static void addPublicaciones(Publicacion publicacion) {publicaciones.add(publicacion);}
 
-    public static RedSocial getRedSocial() {
-        return whale;
-    }
+    public static RedSocial getRedSocial() {return whale;}
 }
