@@ -3,10 +3,6 @@ package Utils;
 import DataBase.DataBase;
 import PageModel.Comentario;
 import PageModel.Publicacion;
-import PageModel.Usuario;
-import jdk.jshell.execution.Util;
-
-import javax.xml.crypto.Data;
 import java.util.List;
 
 public class UtilsShow {
@@ -29,8 +25,5 @@ public class UtilsShow {
 
             System.out.println("------------------------------------------------------");
         }
-    }
-    public static void showUser(String name) {
-        System.out.println();
     }
 }
