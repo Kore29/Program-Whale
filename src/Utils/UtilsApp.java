@@ -64,4 +64,63 @@ public class UtilsApp {
         }
         return maxId;
     }
+    public static boolean validarCorreo(String email) {
+        //Verifica la longitud del correo electronico
+        if (email.length() > 20) {
+            System.out.println("Error: El correo electrónico no puede tener más de 20 caracteres.");
+            return false;
+        }
+
+        //Verifica si contiene alguno de los dos dominios
+        if (!email.contains("@gmail.com") || (!email.contains("@hotmail.com"))) {
+            System.out.println("El correo electrónico no es válido.");
+            return false;
+        }
+        System.out.println("El correo electrónico es válido.");
+        return true;
+    }
+    public static boolean tamanyNombre (String nombre){
+        //Comprueba si no supera de los 20 caracteres
+        if (nombre.length() > 20) {
+            System.out.println("Error: El correo electrónico no puede tener más de 20 caracteres.");
+            return false;
+        }
+        System.out.println("El nombre cumple con los parametros");
+        return true;
+    }
+    public static void crearContrasenya() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Introduce tu contraseña (máximo 18 caracteres, sin espacios): ");
+        String contrasenya = sc.nextLine();
+
+        //Valida la contraseña
+        String resultado = validarContrasenya(contrasenya);
+        System.out.println(resultado);
+    }
+
+    public static String validarContrasenya(String contrasenya) {
+        //Restricciones
+        if (contrasenya.length() > 18) {
+            return "Error: La contraseña no puede tener más de 18 caracteres.";
+        }
+        if (contrasenya.contains(" ")) {
+            return "Error: La contraseña no puede contener espacios.";
+        }
+
+        //Los niveles de seguridad
+        boolean tieneLetras = contrasenya.matches(".*[a-zA-Z].*"); // Verifica si tiene letras
+        boolean tieneNumeros = contrasenya.matches(".*\\d.*"); // Verifica si tiene números
+        boolean tieneMasDe8Caracteres = contrasenya.length() > 8; // Verifica si tiene más de 8 caracteres
+
+        if (tieneLetras && tieneNumeros && tieneMasDe8Caracteres) {
+            return "La contraseña es muy segura.";
+        } else if (tieneNumeros) {
+            return "La contraseña es medianamente segura.";
+        } else if (tieneLetras) {
+            return "La contraseña es poco segura.";
+        } else {
+            return "La contraseña no cumple con los requisitos minimos.";
+        }
+    }
 }
