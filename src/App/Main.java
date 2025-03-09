@@ -5,8 +5,10 @@ import Utils.UtilsApp;
 import Utils.UtilsShow;
 import DataBase.DataBase;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
@@ -39,11 +41,29 @@ public class Main {
     }
 
     public static Usuario createRoot() {
-
         // Crear el usuario Root con el ID 0
-        System.out.print("Como deseas llamarte? "); String tempNomb = sc.nextLine(); System.out.println();
-        System.out.println("Escribe una contraseña para tu nuevo usuario: "); String tempCont = sc.nextLine(); System.out.println();
-        System.out.println("Finalmente, escribe un email para asociarlo a tu cuenta: "); String tempEmail = sc.nextLine(); System.out.println();
+        System.out.print("Como deseas llamarte? ");
+        String tempNomb = sc.nextLine();
+        while (UtilsApp.checkNombre(tempNomb).equals("")) {
+            System.out.print("Escribe un nombre valido: ");
+            tempNomb = sc.nextLine();
+        }
+
+        System.out.println("Escribe una contraseña para tu nuevo usuario: ");
+        String tempCont = sc.nextLine();
+        while (UtilsApp.checkContrasena(tempCont).equals("")) {
+            System.out.print("Escribe una contraseña valida: ");
+            tempCont = sc.nextLine();
+        }
+        System.out.println(UtilsApp.checkContrasena(tempCont));
+
+        System.out.println("Finalmente, escribe un email para asociarlo a tu cuenta: ");
+        String tempEmail = sc.nextLine();
+        while (UtilsApp.checkEmail(tempEmail).equals("")) {
+            System.out.print("Escribe un email valido: ");
+            tempEmail = sc.nextLine();
+        }
+
         String tempCrea = String.valueOf(LocalTime.now());
 
         return new Usuario(tempNomb,tempCont,tempEmail,tempCrea,null,null);
@@ -63,43 +83,44 @@ public class Main {
 
     public static void NavBar() {
 
-        System.out.println("Selecciona una de las siguientes opciones\n1.Perfil  2.Crear Contenido  3.Filtrar Contenido");
+        System.out.println("Selecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Contenido  4.Filtrar Contenido");
         while (true) {
             int option = sc.nextInt(); sc.nextLine();
 
-            if (option==1) {perfil(); break;}
-            else if (option==2) {DataBase.addPublicaciones(createPublicacion()); break;}
-            else if (option==3) {filtrarContenido(); break;}
+            if (option==1) {UtilsApp.clearConsole(); perfil(); break;}
+            if (option==2) {UtilsApp.clearConsole(); seleccionarContenido(); break;}
+            else if (option==3) {UtilsApp.clearConsole(); DataBase.addPublicaciones(createPublicacion()); break;}
+            else if (option==4) {UtilsApp.clearConsole(); filtrarContenido(); break;}
             else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
 
     }
 
     public static void perfil() {
-        Usuario root = DataBase.getUsuarios().get(0);
-        String nombre = root.getNombre();
-        List<Usuario> amigos = root.getAmigos();
-
-        System.out.println("BIENVENIDO "+ nombre.toUpperCase());
-        System.out.println("Tienes "+amigos.size()+" amigos.");;
-        System.out.println();
-
-        System.out.println("TUS PUBLICACIONES");
-        if (root.getContenido().isEmpty()) {
-            System.out.println("Aun no tienes publicaciones");
-        } else {
-            UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),0);
-        }
-
-        System.out.println("CONFIGURACIÓN DE USUARIO");
-        System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menu principal");
         while (true) {
+            Usuario root = DataBase.getUsuarios().get(0);
+            String nombre = root.getNombre();
+            List<Usuario> amigos = root.getAmigos();
+
+            System.out.println("BIENVENIDO "+ nombre.toUpperCase());
+            System.out.println("Tienes "+amigos.size()+" amigos.");;
+            System.out.println();
+
+            System.out.println("TUS PUBLICACIONES");
+            if (root.getContenido().isEmpty()) {
+                System.out.println("Aun no tienes publicaciones");
+            } else {
+                UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),0);
+            }
+
+            System.out.println("CONFIGURACIÓN DE USUARIO");
+            System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menu principal");
             int option = sc.nextInt(); sc.nextLine();
 
-            if (option==1) {UtilsApp.cambiarNombre(root, sc); break;}
-            else if (option==2) {UtilsApp.eliminarAmigo(root, sc); break;}
-            else if (option==3) {UtilsApp.anadirAmigo(root, sc); break;}
-            else if (option==4) {break;}
+            if (option==1) {UtilsApp.cambiarNombre(root, sc);}
+            else if (option==2) {UtilsApp.eliminarAmigo(root, sc);}
+            else if (option==3) {UtilsApp.anadirAmigo(root, sc);}
+            else if (option==4) {UtilsApp.clearConsole(); break;}
             else {System.out.println("Escribe un parametro valido");}
         }
     }
@@ -113,11 +134,35 @@ public class Main {
         String tempFech = String.valueOf(LocalDate.now());
         if (tempMult.isEmpty()) tempMult = null;
 
-        return new Publicacion(newId,tempText,tempFech,null,0,null,tempMult);
+        return new Publicacion(newId,tempText,tempFech,null,0,new ArrayList<>(),tempMult);
+    }
+
+    public static void seleccionarContenido() {
+        System.out.print("Seleciona una de las posibles Publicaciones por el ID: ");
+        int id = sc.nextInt();
+
+        Publicacion selectPubl = UtilsApp.getPublicacionById(id);
+        System.out.println("1.Añadir Comentario  2.Dar Like");
+
+        while (true) {
+            int option = sc.nextInt();
+            if (option == 1) {sc.nextLine(); anadirComentario(selectPubl); break;}
+            if (option == 2) {selectPubl.addLike(); System.out.println("Like recibido..."); break;}
+            if (option == 3) System.out.println("Escribe una opcion valida");
+        }
+
+    }
+
+    public static void anadirComentario(Publicacion publicacion) {
+        System.out.print("Añade un comentario: "); String comentario = sc.nextLine();
+        if(comentario != null && !comentario.trim().isEmpty()) {
+
+        }
+        DataBase.addComentarios(new Comentario(publicacion.getId(),comentario,"12-02-2004",null, DataBase.getUsuarios().get(0).getNombre()));
     }
 
     public static void filtrarContenido() {
-        System.out.println("Introduce los HashTags del contenido que quieras buscar: ");
+        System.out.println("Introduce los HashTags del contenido que quieras buscar: (escribe exit para salir)");
         String hashtags = sc.nextLine();
 
         System.out.println("Publicaciones con el hashtag a buscar...");

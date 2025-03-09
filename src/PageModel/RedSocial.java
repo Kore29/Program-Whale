@@ -22,5 +22,5 @@ public class RedSocial {
     public void removePublicacion(Publicacion publicacion) {publicaciones.remove(publicacion);}
 
     // Comentarios Start
-    public List<String> getComentarios(Publicacion publicacion) {return publicacion.getComentarios();}
+    public void addComentario(Comentario comentario) {comentarios.add(comentario);}
 }

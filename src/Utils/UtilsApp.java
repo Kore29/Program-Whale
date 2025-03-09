@@ -10,6 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UtilsApp {
+
+    public static void clearConsole() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println(); // Imprime líneas en blanco
+        }
+    }
+
     public static Usuario buscarUsuario(List<Usuario> usuarios, String nombre) {
         for (int i=0; i<usuarios.size(); i++) {
             if(usuarios.get(i).getNombre().equals(nombre)) {
@@ -36,7 +43,7 @@ public class UtilsApp {
 
         System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
 
-        if (sc.hasNextLine()) sc.nextLine(); String tempAmig = sc.nextLine();
+        String tempAmig = sc.nextLine();
         root.removeAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
     }
 
@@ -44,14 +51,14 @@ public class UtilsApp {
         StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
 
         for (int i=0; i<DataBase.getUsuarios().size(); i++) {
-            if (!root.esAmigo(root)) {
+            if (!root.esAmigo(root) && DataBase.getUsuarios().get(i)!=root) {
                 nfr.append(DataBase.getUsuarios().get(i).getNombre()).append(", ");
             }
         } nfr.toString().trim();
         System.out.println(nfr.substring(0,nfr.length()-2));
 
         System.out.print("Introduce el nombre de la persona que quieres agregar: ");
-        if (sc.hasNextLine()) sc.nextLine(); String tempAmig = sc.nextLine();
+        String tempAmig = sc.nextLine();
         root.addAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
     }
 
@@ -64,60 +71,70 @@ public class UtilsApp {
         }
         return maxId;
     }
-    public static boolean validarCorreo(String email) {
-        //Verifica la longitud del correo electronico
-        if (email.length() > 20) {
-            System.out.println("Error: El correo electrónico no puede tener más de 20 caracteres.");
-            return false;
-        }
 
-        //Verifica si contiene alguno de los dos dominios
-        if (!email.contains("@gmail.com") || (!email.contains("@hotmail.com"))) {
-            System.out.println("El correo electrónico no es válido.");
-            return false;
+    public static Publicacion getPublicacionById(int id) {
+        for (int i=0; i<DataBase.getPublicaciones().size(); i++) {
+            Publicacion tempPubl = DataBase.getPublicaciones().get(i);
+            if (tempPubl.getId()==id) {return tempPubl;}
         }
-        System.out.println("El correo electrónico es válido.");
-        return true;
-    }
-    public static boolean tamanyNombre (String nombre){
-        //Comprueba si no supera de los 20 caracteres
-        if (nombre.length() > 20) {
-            System.out.println("Error: El correo electrónico no puede tener más de 20 caracteres.");
-            return false;
-        }
-        System.out.println("El nombre cumple con los parametros");
-        return true;
-    }
-    public static void crearContrasenya() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Introduce tu contraseña (máximo 18 caracteres, sin espacios): ");
-        String contrasenya = sc.nextLine();
-
-        //Valida la contraseña
-        String resultado = validarContrasenya(contrasenya);
-        System.out.println(resultado);
+        return null;
     }
 
-    public static String validarContrasenya(String contrasenya) {
-        //Restricciones
-        if (contrasenya.length() > 18) {
-            return "Error: La contraseña no puede tener más de 18 caracteres.";
-        }
-        if (contrasenya.contains(" ")) {
-            return "Error: La contraseña no puede contener espacios.";
+    public static String checkEmail(String email) {
+        if (email.length() > 50) {
+            return "";
         }
 
-        //Los niveles de seguridad
-        boolean tieneLetras = contrasenya.matches(".*[a-zA-Z].*"); // Verifica si tiene letras
-        boolean tieneNumeros = contrasenya.matches(".*\\d.*"); // Verifica si tiene números
-        boolean tieneMasDe8Caracteres = contrasenya.length() > 8; // Verifica si tiene más de 8 caracteres
+        String[] dominiosPermitidos = {"@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@protonmail.com", "@icloud.com"};
 
-        if (tieneLetras && tieneNumeros && tieneMasDe8Caracteres) {
+        boolean esValido = false;
+        for (String dominio : dominiosPermitidos) {
+            if (email.endsWith(dominio)) {esValido = true; break;}
+        }
+
+        return esValido ? email : "";
+    }
+
+    public static String checkNombre(String nombre) {
+
+        if (nombre.length() > 30) {
+            return "";
+        }
+
+        if (!nombre.matches("[a-zA-ZÀ-ÿ\\s]+")) {
+            return "";
+        }
+
+        StringBuilder nombreFormateado = new StringBuilder();
+        for (String palabra : nombre.split(" ")) {
+            if (!palabra.isEmpty()) {
+                nombreFormateado.append(Character.toUpperCase(palabra.charAt(0)))
+                        .append(palabra.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+
+        return nombreFormateado.toString().trim();
+    }
+
+    public static String checkContrasena(String contrasena) {
+
+        if (contrasena.length() > 18) {
+            return "";
+        }
+        if (contrasena.contains(" ")) {
+            return "";
+        }
+
+        boolean letr = contrasena.matches(".*[a-zA-Z].*");
+        boolean nume = contrasena.matches(".*\\d.*");
+        boolean tn8Cara = contrasena.length() > 8;
+
+        if (letr && nume && tn8Cara) {
             return "La contraseña es muy segura.";
-        } else if (tieneNumeros) {
+        } else if (nume) {
             return "La contraseña es medianamente segura.";
-        } else if (tieneLetras) {
+        } else if (letr) {
             return "La contraseña es poco segura.";
         } else {
             return "La contraseña no cumple con los requisitos minimos.";
