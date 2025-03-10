@@ -32,33 +32,85 @@ public class UtilsApp {
     }
 
     public static void deleteAmigo(Usuario root, Scanner sc) {
+        if (root.getAmigos().isEmpty()) {
+            System.out.println("No tienes amigos en tu lista.");
+            return;
+        }
+
         StringBuilder fr = new StringBuilder("Amigos: ");
+        for (Usuario amigo : root.getAmigos()) {
+            fr.append(amigo.getNombre()).append(", ");
+        }
+        System.out.println(fr.substring(0, Math.max(0, fr.length() - 2)));
 
-        for (int i=0; i<root.getAmigos().size(); i++) {
-            fr.append(root.getAmigos().get(i).getNombre()).append(", ");
-        } fr.toString().trim();
-        System.out.println(fr.substring(0,fr.length()-2));
+        while (true) {
+            System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
+            String tempAmig = sc.nextLine().trim();
 
-        System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
+            if (tempAmig.isEmpty()) {
+                System.out.println("\u001B[31mError: Nombre vacío\u001B[0m");
+                continue;
+            }
+            tempAmig = tempAmig.substring(0, 1).toUpperCase() + tempAmig.substring(1).toLowerCase();
 
-        String tempAmig = sc.nextLine();
-        root.removeAmigo(getUsuarioByName(DataBase.getUsuarios(),tempAmig));
+            Usuario amigo = UtilsApp.getUsuarioByName(DataBase.getUsuarios(), tempAmig);
+
+            if (amigo == null || !root.isAmigo(amigo)) {
+                System.out.println("\u001B[31mError: Introduce un nombre válido\u001B[0m");
+            } else {
+                root.removeAmigo(amigo);
+                System.out.println(tempAmig + " ha sido eliminado de tu lista de amigos.");
+                break;
+            }
+        }
     }
+
 
     public static void includeAmigo(Usuario root, Scanner sc) {
         StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
+        boolean haySugerencias = false;
 
-        for (int i=0; i<DataBase.getUsuarios().size(); i++) {
-            if (!root.isAmigo(DataBase.getUsuarios().get(i)) && DataBase.getUsuarios().get(i)!=root) {
-                nfr.append(DataBase.getUsuarios().get(i).getNombre()).append(", ");
+        for (Usuario usuario : DataBase.getUsuarios()) {
+            if (!root.isAmigo(usuario) && usuario != root) {
+                nfr.append(usuario.getNombre()).append(", ");
+                haySugerencias = true;
             }
-        } nfr.toString().trim();
-        System.out.println(nfr.substring(0,nfr.length()-2));
+        }
 
-        System.out.print("Introduce el nombre de la persona que quieres agregar: ");
-        String tempAmig = sc.nextLine();
-        root.addAmigo(getUsuarioByName(DataBase.getUsuarios(),tempAmig));
+        if (haySugerencias) {
+            System.out.println(nfr.substring(0, Math.max(0, nfr.length() - 2)));
+        } else {
+            System.out.println("No hay nuevas personas que puedas agregar.");
+            return;
+        }
+
+        while (true) {
+            System.out.print("Introduce el nombre de la persona que quieres agregar: ");
+            String tempAmig = sc.nextLine().trim();
+
+            if (tempAmig.isEmpty()) {
+                System.out.println("\u001B[31mError: Nombre vacío\u001B[0m");
+                continue;
+            }
+
+            // Corregimos la capitalización
+            tempAmig = tempAmig.substring(0, 1).toUpperCase() + tempAmig.substring(1).toLowerCase();
+
+            // Buscar usuario
+            Usuario amigo = UtilsApp.getUsuarioByName(DataBase.getUsuarios(), tempAmig);
+
+            if (amigo == null) {
+                System.out.println("\u001B[31mError: Usuario no encontrado\u001B[0m");
+            } else if (root.isAmigo(amigo)) {
+                System.out.println("\u001B[31mError: Ya es tu amigo\u001B[0m");
+            } else {
+                root.addAmigo(amigo);
+                System.out.println(tempAmig + " ha sido agregado a tu lista de amigos.");
+                break;
+            }
+        }
     }
+
 
     // DATABASE
     public static int compararId(List<Publicacion> publicaciones) {

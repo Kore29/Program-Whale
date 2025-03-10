@@ -38,8 +38,11 @@ public class Main {
         System.out.println("Tienes una sesión creada? "+c[2]+"y"+r+"/"+c[1]+"n"+r);
 
         String sec = sc.nextLine();
-        if (sec.equals("y")) startRoot();
-        else if (sec.equals("n")) whale.addRoot(createRoot());
+        while (true) {
+            if (sec.equals("y")) {startRoot(); break;}
+            else if (sec.equals("n")) {whale.addRoot(createRoot()); break;}
+            else {System.out.println(c[1]+"Error: Escribe una opción valida"+r);}
+        }
 
         // Página Inicial
         while (true) {
@@ -150,10 +153,18 @@ public class Main {
     }
 
     public static void selectContenido() {
-        System.out.print("Seleciona una de las posibles Publicaciones por el ID: ");
-        int id = sc.nextInt();
+        int id; Publicacion selectPubl;
 
-        Publicacion selectPubl = UtilsApp.getPublicacionById(id);
+        while (true) {
+            System.out.print("Seleciona una de las posibles Publicaciones por el Id: ");
+            id = sc.nextInt();
+            if (DataBase.getPublicaciones().contains(UtilsApp.getPublicacionById(id))) {
+                selectPubl = UtilsApp.getPublicacionById(id); break;
+            } else {
+                System.out.println(c[1]+"Error, escribe un Id valido: "+r);
+            }
+        }
+
         System.out.println("1.Añadir Comentario  2.Dar Like");
 
         while (true) {
