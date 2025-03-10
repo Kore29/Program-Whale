@@ -8,10 +8,10 @@ import java.util.List;
 
 
 public class DataBase {
-    private static List<Usuario> usuarios = new ArrayList<>();
-    private static List<Comentario> comentarios = new ArrayList<>();
-    private static List<Publicacion> publicaciones = new ArrayList<>();
-    private static RedSocial whale;
+    private static final List<Usuario> usuarios = new ArrayList<>();
+    private static final List<Comentario> comentarios = new ArrayList<>();
+    private static final List<Publicacion> publicaciones = new ArrayList<>();
+    private static final RedSocial whale;
 
     static {
         // Crear usuarios
@@ -22,12 +22,12 @@ public class DataBase {
         Usuario pedro = new Usuario("Pedro", "zxcvbn", "pedro@example.com", "2021-11-10", null, null);
         Usuario sofia = new Usuario("Sofía", "12345", "sofia@example.com", "2020-08-05", null, null);
 
-        juan.setAmigos(Arrays.asList(maria, carlos));
-        maria.setAmigos(List.of(juan, ana));
-        carlos.setAmigos(List.of(sofia));
-        ana.setAmigos(List.of(pedro));
-        pedro.setAmigos(List.of(juan));
-        sofia.setAmigos(List.of(carlos, maria));
+        juan.setAmigos(new ArrayList<>(Arrays.asList(maria, carlos)));
+        maria.setAmigos(new ArrayList<>(List.of(juan, ana)));
+        carlos.setAmigos(new ArrayList<>(List.of(sofia)));
+        ana.setAmigos(new ArrayList<>(List.of(pedro)));
+        pedro.setAmigos(new ArrayList<>(List.of(juan)));
+        sofia.setAmigos(new ArrayList<>(List.of(carlos, maria)));
 
         usuarios.addAll(Arrays.asList(juan, maria, carlos, ana, pedro, sofia));
 
@@ -63,7 +63,6 @@ public class DataBase {
     public static void addComentarios(Comentario comentario) {comentarios.add(comentario);}
 
     public static List<Publicacion> getPublicaciones() {return publicaciones;}
-
     public static void addPublicaciones(Publicacion publicacion) {publicaciones.add(publicacion);}
 
     public static RedSocial getRedSocial() {return whale;}

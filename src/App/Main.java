@@ -1,22 +1,21 @@
 package App;
 
 import PageModel.*;
-import Utils.UtilsApp;
-import Utils.UtilsShow;
+import Utils.*;
 import DataBase.DataBase;
 
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.List;
+
+import java.util.Scanner;
 
 
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
-
     public static void main(String[] args) {MenuMain(DataBase.getRedSocial());}
 
     public static void MenuMain(RedSocial whale) {
@@ -36,7 +35,7 @@ public class Main {
             System.out.println("------------------------------");
             UtilsShow.showPublicaciones(DataBase.getPublicaciones());
 
-            NavBar();
+            navBar();
         }
     }
 
@@ -44,14 +43,14 @@ public class Main {
         // Crear el usuario Root con el ID 0
         System.out.print("Como deseas llamarte? ");
         String tempNomb = sc.nextLine();
-        while (UtilsApp.checkNombre(tempNomb).equals("")) {
+        while (UtilsApp.checkNombre(tempNomb).isEmpty()) {
             System.out.print("Escribe un nombre valido: ");
             tempNomb = sc.nextLine();
         }
 
         System.out.println("Escribe una contraseña para tu nuevo usuario: ");
         String tempCont = sc.nextLine();
-        while (UtilsApp.checkContrasena(tempCont).equals("")) {
+        while (UtilsApp.checkContrasena(tempCont).isEmpty()) {
             System.out.print("Escribe una contraseña valida: ");
             tempCont = sc.nextLine();
         }
@@ -59,7 +58,7 @@ public class Main {
 
         System.out.println("Finalmente, escribe un email para asociarlo a tu cuenta: ");
         String tempEmail = sc.nextLine();
-        while (UtilsApp.checkEmail(tempEmail).equals("")) {
+        while (UtilsApp.checkEmail(tempEmail).isEmpty()) {
             System.out.print("Escribe un email valido: ");
             tempEmail = sc.nextLine();
         }
@@ -73,7 +72,7 @@ public class Main {
         System.out.print("Introduce la contraseña del usuario root: ");
         while (true) {
             String tempCont = sc.nextLine();
-            if (!tempCont.equals(DataBase.getUsuarios().get(0).getContrasena())) {
+            if (!tempCont.equals(DataBase.getUsuarios().getFirst().getContrasena())) {
                 System.out.println("Contraseña incorrecta \nPrueba otra vez");
             } else {
                 System.out.println("Contraseña aceptada \nCargando..."); break;
@@ -81,16 +80,16 @@ public class Main {
         }
     }
 
-    public static void NavBar() {
+    public static void navBar() {
 
         System.out.println("Selecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Contenido  4.Filtrar Contenido");
         while (true) {
             int option = sc.nextInt(); sc.nextLine();
 
             if (option==1) {UtilsApp.clearConsole(); perfil(); break;}
-            if (option==2) {UtilsApp.clearConsole(); seleccionarContenido(); break;}
+            if (option==2) {UtilsApp.clearConsole(); selectContenido(); break;}
             else if (option==3) {UtilsApp.clearConsole(); DataBase.addPublicaciones(createPublicacion()); break;}
-            else if (option==4) {UtilsApp.clearConsole(); filtrarContenido(); break;}
+            else if (option==4) {UtilsApp.clearConsole(); filterContenido(); break;}
             else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
 
@@ -98,12 +97,12 @@ public class Main {
 
     public static void perfil() {
         while (true) {
-            Usuario root = DataBase.getUsuarios().get(0);
+            Usuario root = DataBase.getUsuarios().getFirst();
             String nombre = root.getNombre();
             List<Usuario> amigos = root.getAmigos();
 
             System.out.println("BIENVENIDO "+ nombre.toUpperCase());
-            System.out.println("Tienes "+amigos.size()+" amigos.");;
+            System.out.println("Tienes "+amigos.size()+" amigo/s.");
             System.out.println();
 
             System.out.println("TUS PUBLICACIONES");
@@ -117,16 +116,16 @@ public class Main {
             System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menu principal");
             int option = sc.nextInt(); sc.nextLine();
 
-            if (option==1) {UtilsApp.cambiarNombre(root, sc);}
-            else if (option==2) {UtilsApp.eliminarAmigo(root, sc);}
-            else if (option==3) {UtilsApp.anadirAmigo(root, sc);}
+            if (option==1) {UtilsApp.changeNombre(root, sc);}
+            else if (option==2) {UtilsApp.deleteAmigo(root, sc);}
+            else if (option==3) {UtilsApp.includeAmigo(root, sc);}
             else if (option==4) {UtilsApp.clearConsole(); break;}
             else {System.out.println("Escribe un parametro valido");}
         }
     }
 
     public static Publicacion createPublicacion() {
-        int newId = UtilsApp.compararID(DataBase.getPublicaciones())+1;
+        int newId = UtilsApp.compararId(DataBase.getPublicaciones())+1;
 
         System.out.println("Contenido: "); String tempText = sc.nextLine();
         System.out.println("Enlace de contenido: (opcional)"); String tempMult = sc.nextLine();
@@ -137,7 +136,7 @@ public class Main {
         return new Publicacion(newId,tempText,tempFech,null,0,new ArrayList<>(),tempMult);
     }
 
-    public static void seleccionarContenido() {
+    public static void selectContenido() {
         System.out.print("Seleciona una de las posibles Publicaciones por el ID: ");
         int id = sc.nextInt();
 
@@ -146,22 +145,21 @@ public class Main {
 
         while (true) {
             int option = sc.nextInt();
-            if (option == 1) {sc.nextLine(); anadirComentario(selectPubl); break;}
+            if (option == 1) {sc.nextLine(); includeComentario(selectPubl); break;}
             if (option == 2) {selectPubl.addLike(); System.out.println("Like recibido..."); break;}
             if (option == 3) System.out.println("Escribe una opcion valida");
         }
 
     }
 
-    public static void anadirComentario(Publicacion publicacion) {
+    public static void includeComentario(Publicacion publicacion) {
         System.out.print("Añade un comentario: "); String comentario = sc.nextLine();
         if(comentario != null && !comentario.trim().isEmpty()) {
-
+            DataBase.addComentarios(new Comentario(publicacion.getId(),comentario,"12-02-2004",null, DataBase.getUsuarios().getFirst().getNombre()));
         }
-        DataBase.addComentarios(new Comentario(publicacion.getId(),comentario,"12-02-2004",null, DataBase.getUsuarios().get(0).getNombre()));
     }
 
-    public static void filtrarContenido() {
+    public static void filterContenido() {
         System.out.println("Introduce los HashTags del contenido que quieras buscar: (escribe exit para salir)");
         String hashtags = sc.nextLine();
 

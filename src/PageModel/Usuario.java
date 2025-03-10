@@ -39,5 +39,5 @@ public class Usuario {
     // Modificar Amigos
     public void addAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
     public void removeAmigo(Usuario amigo) {amigos.remove(amigo);}
-    public boolean esAmigo(Usuario amigo) {return amigos.contains(amigo);}
+    public boolean isAmigo(Usuario amigo) {return amigos.contains(amigo);}
 }
