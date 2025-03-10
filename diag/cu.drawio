@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1050" dy="669" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1290" dy="669" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -30,7 +30,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="y8FSoUIwy3ZtjOL5Xxnj-7" value="Crear Publicación" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="349" y="355" width="110" height="80" as="geometry" />
+          <mxGeometry x="349" y="320" width="110" height="80" as="geometry" />
         </mxCell>
         <mxCell id="BP5pdJHNpVIhgN1eafTa-16" value="Eliminar Amigos" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="480" y="750" width="110" height="70" as="geometry" />
@@ -51,7 +51,7 @@
         <mxCell id="QDbhRXI9yqIW19a753yx-0" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="199" y="550" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="7RINz16O7kCzUExgoXn0-1" value="Borar Publicación" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="7RINz16O7kCzUExgoXn0-1" value="Borrar Publicación" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="199" y="695" width="110" height="80" as="geometry" />
         </mxCell>
         <mxCell id="7RINz16O7kCzUExgoXn0-2" value="Ver Contenido" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
