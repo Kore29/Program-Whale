@@ -1,6 +1,5 @@
 package PageModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Publicacion extends Contenido {

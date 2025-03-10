@@ -1,7 +1,5 @@
 package PageModel;
 
-import java.util.List;
-
 public class Comentario extends Contenido {
     private String autor;
 

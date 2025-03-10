@@ -1,39 +1,38 @@
 package Utils;
 
+import PageModel.*;
 import DataBase.DataBase;
-import PageModel.Publicacion;
-import PageModel.Usuario;
 
-import javax.xml.crypto.Data;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class UtilsApp {
 
+    // GENERAL
     public static void clearConsole() {
         for (int i = 0; i < 50; i++) {
             System.out.println(); // Imprime líneas en blanco
         }
     }
 
-    public static Usuario buscarUsuario(List<Usuario> usuarios, String nombre) {
-        for (int i=0; i<usuarios.size(); i++) {
-            if(usuarios.get(i).getNombre().equals(nombre)) {
-                return usuarios.get(i);
+    public static Usuario getUsuarioByName(List<Usuario> usuarios, String nombre) {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNombre().equals(nombre)) {
+                return usuario;
             }
         }
         return usuarios.getFirst();
     }
 
-    public static void cambiarNombre(Usuario root, Scanner sc) {
+    // USUARIO ROOT
+    public static void changeNombre(Usuario root, Scanner sc) {
         System.out.println("Introduce el nombre por el que deseas cambiar: ");
         String tempNomb = sc.nextLine();
         root.setNombre(tempNomb);
         System.out.println("Nombre cambiado: " + root.getNombre());
     }
 
-    public static void eliminarAmigo(Usuario root, Scanner sc) {
+    public static void deleteAmigo(Usuario root, Scanner sc) {
         StringBuilder fr = new StringBuilder("Amigos: ");
 
         for (int i=0; i<root.getAmigos().size(); i++) {
@@ -44,14 +43,14 @@ public class UtilsApp {
         System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
 
         String tempAmig = sc.nextLine();
-        root.removeAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
+        root.removeAmigo(getUsuarioByName(DataBase.getUsuarios(),tempAmig));
     }
 
-    public static void anadirAmigo(Usuario root, Scanner sc) {
+    public static void includeAmigo(Usuario root, Scanner sc) {
         StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
 
         for (int i=0; i<DataBase.getUsuarios().size(); i++) {
-            if (!root.esAmigo(root) && DataBase.getUsuarios().get(i)!=root) {
+            if (!root.isAmigo(DataBase.getUsuarios().get(i)) && DataBase.getUsuarios().get(i)!=root) {
                 nfr.append(DataBase.getUsuarios().get(i).getNombre()).append(", ");
             }
         } nfr.toString().trim();
@@ -59,14 +58,15 @@ public class UtilsApp {
 
         System.out.print("Introduce el nombre de la persona que quieres agregar: ");
         String tempAmig = sc.nextLine();
-        root.addAmigo(buscarUsuario(DataBase.getUsuarios(),tempAmig));
+        root.addAmigo(getUsuarioByName(DataBase.getUsuarios(),tempAmig));
     }
 
-    public static int compararID(List<Publicacion> publicaciones) {
+    // DATABASE
+    public static int compararId(List<Publicacion> publicaciones) {
         int maxId = 0;
-        for (int i=0; i<publicaciones.size(); i++) {
-            if (publicaciones.get(i).getId() > maxId) {
-                maxId = publicaciones.get(i).getId();
+        for (Publicacion publicacione : publicaciones) {
+            if (publicacione.getId() > maxId) {
+                maxId = publicacione.getId();
             }
         }
         return maxId;
@@ -80,6 +80,7 @@ public class UtilsApp {
         return null;
     }
 
+    // CHECK
     public static String checkEmail(String email) {
         if (email.length() > 50) {
             return "";
