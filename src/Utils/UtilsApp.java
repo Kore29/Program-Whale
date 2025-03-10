@@ -10,9 +10,8 @@ public class UtilsApp {
 
     // GENERAL
     public static void clearConsole() {
-        for (int i = 0; i < 50; i++) {
-            System.out.println(); // Imprime líneas en blanco
-        }
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public static Usuario getUsuarioByName(List<Usuario> usuarios, String nombre) {

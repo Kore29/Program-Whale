@@ -13,16 +13,29 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
+
+    private static final String r = "\u001B[0m";
+    private static final String[] c = {
+            "\u001B[30m", // Negro
+            "\u001B[31m", // Rojo
+            "\u001B[32m", // Verde
+            "\u001B[33m", // Amarillo
+            "\u001B[34m", // Azul
+            "\u001B[35m", // Magenta
+            "\u001B[36m", // Cian
+            "\u001B[37m"  // Blanco
+    };
+
     public static void main(String[] args) {MenuMain(DataBase.getRedSocial());}
 
     public static void MenuMain(RedSocial whale) {
 
         // Cargar Pagina
-        System.out.println("BIENVENIDOS A WHALE");
-        System.out.println("Tienes una sesión creada? y/n");
+        System.out.println("╔══════════════════════╗\n║ \u001B[34mBIENVENIDOS A WHALE!\u001B[0m ║\n╚══════════════════════╝");
+        System.out.println();
+        System.out.println("Tienes una sesión creada? "+c[2]+"y"+r+"/"+c[1]+"n"+r);
 
         String sec = sc.nextLine();
         if (sec.equals("y")) startRoot();
