@@ -93,4 +93,6 @@ public class Hashtags {
         // Otros
 
     }
+
+    public static void addHashTag(String hashtag) {hashtags.add(hashtag);}
 }

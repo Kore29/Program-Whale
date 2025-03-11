@@ -6,6 +6,9 @@ import DataBase.DataBase;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class UtilsApp {
 
     // GENERAL
@@ -131,65 +134,13 @@ public class UtilsApp {
         return null;
     }
 
-    // CHECK
-    public static String checkEmail(String email) {
-        if (email.length() > 50) {
-            return "";
-        }
-
-        String[] dominiosPermitidos = {"@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@protonmail.com", "@icloud.com"};
-
-        boolean esValido = false;
-        for (String dominio : dominiosPermitidos) {
-            if (email.endsWith(dominio)) {esValido = true; break;}
-        }
-
-        return esValido ? email : "";
-    }
-
-    public static String checkNombre(String nombre) {
-
-        if (nombre.length() > 30) {
-            return "";
-        }
-
-        if (!nombre.matches("[a-zA-ZÀ-ÿ\\s]+")) {
-            return "";
-        }
-
-        StringBuilder nombreFormateado = new StringBuilder();
-        for (String palabra : nombre.split(" ")) {
-            if (!palabra.isEmpty()) {
-                nombreFormateado.append(Character.toUpperCase(palabra.charAt(0)))
-                        .append(palabra.substring(1).toLowerCase())
-                        .append(" ");
+    public static String removeHashTag(String text) {
+        StringBuilder newText = new StringBuilder();
+        for (String e : text.split(" ")) {
+            if (!e.startsWith("#")) {
+                newText.append(e).append(" ");
             }
         }
-
-        return nombreFormateado.toString().trim();
-    }
-
-    public static String checkContrasena(String contrasena) {
-
-        if (contrasena.length() > 18) {
-            return "";
-        }
-        if (contrasena.contains(" ")) {
-            return "";
-        }
-
-        boolean letr = contrasena.matches(".*[a-zA-Z].*");
-        boolean nume = contrasena.matches(".*\\d.*");
-        boolean tn8Cara = contrasena.length() > 8;
-
-        if (letr && nume && tn8Cara) {
-            return "La contraseña es muy segura.";
-        } else if (nume) {
-            return "La contraseña es medianamente segura.";
-        } else if (letr) {
-            return "La contraseña es poco segura.";
-        } else {
-            return "La contraseña no cumple con los requisitos minimos.";
-        }
+        return newText.toString().trim();
     }
 }
