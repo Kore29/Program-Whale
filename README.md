@@ -14,32 +14,38 @@
 - [Guía de Uso](#guia-de-uso)  
 - [Futuras Actualizaciones](#futuras-actualizaciones)  
 
-## Descripción  
+## Descripción
 
-Whale es un proyecto en  [Java](https://www.java.com/es/) para la creación de una red social básica. 
+Whale es un proyecto en [Java](https://www.java.com/es/) para la creación de una red social básica. 🐋🐋
 
-Actualmente, se encuentra en su fase inicial, y su propósito es ofrecer funcionalidades esenciales para los usuarios, como la creación y modificación de perfiles, añadir y eliminar publicaciones y un sistema sencillo de amigos. 
+Actualmente, se encuentra en su fase inicial, y su propósito es ofrecer funcionalidades esenciales para los usuarios, como la creación y modificación de perfiles, añadir y eliminar publicaciones y un sistema sencillo de amigos.
 
 La idea es hacer una mezcla parecida a [reddit](https://www.reddit.com/?rdt=51627), [twitter](https://x.com/?lang=es) y un toque personal y original
-a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas características y actualizaciones originales.  
+a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas características y actualizaciones originales.
 
-### Características principales  
+### Características principales
 
-1. **Creación de perfiles**  
-   - Los usuarios pueden registrarse y personalizar su perfil añadiendo un nombre de usuario.  
-   - Por el momento, no se utiliza ninguna base de datos; los usuarios serán moderados manualmente.  
+#### ¿Qué es Whale? ✅
 
-2. **Conexión entre usuarios**  
-   - Los usuarios tendrán una lista de amigos con el cual podran añadir o eliminar amigos.
+- Es una aplicación en desarrollo con el fin de estar interconectado por hashtags.
+- Puedes gestionar tu lista de amigos tanto para eliminarlos como para añadirlos.
+- Puedes interactuar con las publicaciones (like y comentar) y crear contenido usando hashtag.
+- Todos los datos están en estado privado y únicamente tiene acceso el equipo de desarrollo
+- Los usuarios pueden publicar tanto texto, imágenes o las dos a la vez.
+- Los usuarios pueden personalizar su perfil añadiendo un nombre de usuario.
 
-3. **Publicacion de contenido**
-   - Los usuarios podran publicar tanto texto, imagenes o las dos a la vez.
-   - Una vez subida la publicacion los otros usuarios te podran comentar y dar like.
+#### ¿Qué no es Whale? ❌
 
-## Guia de uso  
+- No tiene una base de datos por el momento por el cual tenemos un script con diferentes datos para probar la aplicación.
+- Damos la opción de registrar un usuario nuevo o iniciar sesión en un usuario ya existente.
+- Ninguno de los datos se guardarán después de finalizar el programa.
+- Por el momento no hay ningún entorno gráfico más allá del terminal por el cual no habrá fotos ni videos, aunque los atributos estén disponibles
 
-Actualmente en desarrollo.  
-Se incluirán instrucciones detalladas en futuras versiones.  
+## Guía de uso
+
+Al iniciar el programa para poder iniciar sesión en el usuario Juan (root) la contraseña será 'root'.
+Siguientes opciones en desarrollo...
+Actualmente en desarrollo.
 
 ### Diagrama de Casos de Uso
 <picture>
@@ -63,14 +69,13 @@ Se incluirán instrucciones detalladas en futuras versiones.
   <img src="./diag/png/dc.drawio.light.png" alt="Imagen adaptable" width="300"/>
 </picture>
 
-## Futuras Actualizaciones  
+## Futuras Actualizaciones
 
-- A pesar de que es difícil, buscar la opción de tener un almacenamiento de toda la información estaria genial en un futuro.
+- A pesar de que es difícil, buscar la opción de tener un almacenamiento de toda la información estaría genial en un futuro.
 - Añadir la posibilidad de ver el contenido en una plataforma o página web.
 
-
-## Creado por  
-- Martí Castaño Rodríguez, 1º DAM  
-- Biel Calvet Colomé, 1º DAM  
+## Creado por
+- Martí Castaño Rodríguez, 1º DAM
+- Biel Calvet Colomé, 1º DAM
 
 Iniciado como marca registrada el 19/02/2025. Whale©.
