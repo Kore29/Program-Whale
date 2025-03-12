@@ -33,7 +33,7 @@ public class UtilsCheck {
     public static String checkInt(String num) {
         for (char e : num.toCharArray()) {
             if (!Character.isDigit(e)) {
-                return "\u001B[31mError: Nombre invalido.\u001B[0m";
+                return "\u001B[31mError: Caracter invalido.\u001B[0m";
             }
         }
         return "";

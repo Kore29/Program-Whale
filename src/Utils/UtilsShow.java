@@ -18,7 +18,7 @@ public class UtilsShow {
             List<Comentario> comentarios = DataBase.getComentarios();
             for (Comentario comentario : comentarios) {
                 if (Objects.equals(comentario.getId(), activePublicacion.getId())) {
-                    System.out.println("- " + comentario.getAutor() + ": " + comentario.getText() + " " + comentario.getHashtag());
+                    System.out.println("- " + comentario.getAutor() + ": " + comentario.getText());
                 }
             }
 
@@ -36,7 +36,7 @@ public class UtilsShow {
                 List<Comentario> comentarios = DataBase.getComentarios();
                 for (Comentario comentario : comentarios) {
                     if (Objects.equals(comentario.getId(), activePublicacion.getId())) {
-                        System.out.println("- " + comentario.getAutor() + ": " + comentario.getText() + " " + comentario.getHashtag());
+                        System.out.println("- " + comentario.getAutor() + ": " + comentario.getText());
                     }
                 }
                 System.out.println("------------------------------------------------------");

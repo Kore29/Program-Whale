@@ -4,6 +4,7 @@ import PageModel.*;
 import Utils.*;
 import DataBase.DataBase;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -138,7 +139,7 @@ public class Main {
             }
 
             System.out.println("CONFIGURACIÓN DE USUARIO");
-            System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menu principal");
+            System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menú principal");
             int option;
 
             while (true) {
@@ -190,7 +191,15 @@ public class Main {
 
         while (true) {
             System.out.print("Seleciona una de las posibles Publicaciones por el Id: ");
-            id = Integer.parseInt(sc.nextLine());
+
+            String id_s = sc.nextLine();
+            if (UtilsCheck.checkInt(id_s).isEmpty()) {
+                id = Integer.parseInt(id_s);
+            } else {
+                System.out.println(UtilsCheck.checkInt(id_s));
+                continue;
+            }
+
             if (DataBase.getPublicaciones().contains(UtilsApp.getPublicacionById(id))) {
                 selectPubl = UtilsApp.getPublicacionById(id); break;
             } else {
@@ -198,7 +207,7 @@ public class Main {
             }
         }
 
-        System.out.println("1.Añadir Comentario  2.Dar Like");
+        System.out.println("1.Añadir Comentario  2.Dar Like  3.Salir al menú principal.");
 
         while (true) {
             int option;
@@ -213,20 +222,29 @@ public class Main {
 
             if (option == 1) {includeComentario(selectPubl); break;}
             if (option == 2) {selectPubl.addLike(); System.out.println("Like recibido..."); break;}
-            if (option == 3) System.out.println("Error: Escribe una opcion valida");
+            if (option == 3) {break;}
+            else System.out.println(c[1]+"Error: Escribe una opción valida"+r);
         }
 
     }
 
     public static void includeComentario(Publicacion publicacion) {
-        System.out.print("Añade un comentario: "); String comentario = sc.nextLine();
-        if(comentario != null && !comentario.trim().isEmpty()) {
-            DataBase.addComentarios(new Comentario(publicacion.getId(),comentario,"12-02-2004",null, DataBase.getUsuarios().getFirst().getNombre()));
+        System.out.println("Escribe 'exit' para salir.");
+        System.out.print("Añade un comentario: "); String tempCome = sc.nextLine();
+
+        if (tempCome.toLowerCase().equals("exit")) return;
+
+        String tempHashTag = UtilsCheck.checkHashtagText(tempCome);
+        tempCome = UtilsApp.removeHashTag(tempCome);
+
+        if(tempCome != null && !tempCome.trim().isEmpty()) {
+            DataBase.addComentarios(new Comentario(publicacion.getId(),tempCome,LocalDate.now().toString(), DataBase.getUsuarios().getFirst().getNombre()));
         }
     }
 
     public static void filterContenido() {
         while (true) {
+            System.out.println("----------------------------------------------");
             System.out.println("Escribe 'exit' para salir.");
             System.out.print("Introduce el HashTag del contenido que quieras buscar:");
             String hashtags = sc.nextLine();
@@ -238,8 +256,10 @@ public class Main {
             System.out.println("Publicaciones con el hashtag a buscar...");
             StringBuilder pubWithHT = new StringBuilder();
             for (int i=0; i<DataBase.getPublicaciones().size(); i++) {
+                int id = i;
                 if (DataBase.getPublicaciones().get(i).getHashtag().equals(hashtags)) {
-                    pubWithHT.append("- ").append(DataBase.getPublicaciones().get(i).getText()).append("\n");
+                    System.out.println("-----------------------------------------------");
+                    UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),id);
                 }
             }
 
@@ -247,17 +267,6 @@ public class Main {
                 System.out.println(pubWithHT.toString());
             }
 
-            System.out.println("Comentarios con el hashtag a buscar...");
-            StringBuilder comWithHT = new StringBuilder();
-            for (int i=0; i<DataBase.getComentarios().size(); i++) {
-                if (DataBase.getComentarios().get(i).getHashtag().equals(hashtags)) {
-                    comWithHT.append("- ").append(DataBase.getComentarios().get(i).getText()).append("\n");
-                }
-            }
-
-            if (comWithHT.isEmpty()) System.out.println("No hay Comentarios con ese HashTag."); else {
-                System.out.println(pubWithHT.toString());
-            }
         }
 
     }

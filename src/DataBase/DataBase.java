@@ -47,12 +47,12 @@ public class DataBase {
         sofia.setContenido(List.of(publicaciones.get(0), publicaciones.get(5)));
 
         // Crear comentarios
-        comentarios.add(new Comentario(0, "Buena publicación", "12-02-2006", Hashtags.hashtags.get(0), juan.getNombre()));
-        comentarios.add(new Comentario(1, "No creo que los aviones nos fumiguen", "13-05-2006", Hashtags.hashtags.get(1), maria.getNombre()));
-        comentarios.add(new Comentario(2, "Hermoso paisaje de montañas", "20-08-2007", Hashtags.hashtags.get(3), ana.getNombre()));
-        comentarios.add(new Comentario(3, "El océano es mi lugar favorito", "10-10-2008", Hashtags.hashtags.get(5), pedro.getNombre()));
-        comentarios.add(new Comentario(4, "Las ciudades tienen un encanto especial", "22-03-2009", Hashtags.hashtags.get(7), sofia.getNombre()));
-        comentarios.add(new Comentario(5, "Los leones son majestuosos", "12-02-2006", Hashtags.hashtags.get(2), carlos.getNombre()));
+        comentarios.add(new Comentario(0, "Buena publicación", "12-02-2006", juan.getNombre()));
+        comentarios.add(new Comentario(1, "No creo que los aviones nos fumiguen", "13-05-2006", maria.getNombre()));
+        comentarios.add(new Comentario(2, "Hermoso paisaje de montañas", "20-08-2007", ana.getNombre()));
+        comentarios.add(new Comentario(3, "El océano es mi lugar favorito", "10-10-2008", pedro.getNombre()));
+        comentarios.add(new Comentario(4, "Las ciudades tienen un encanto especial", "22-03-2009", sofia.getNombre()));
+        comentarios.add(new Comentario(5, "Los leones son majestuosos", "12-02-2006", carlos.getNombre()));
 
         whale = new RedSocial(usuarios, comentarios, publicaciones);
     }
