@@ -33,25 +33,27 @@ a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas cara
 - Todos los datos están en estado privado y únicamente tiene acceso el equipo de desarrollo
 - Los usuarios pueden publicar tanto texto, imágenes o las dos a la vez.
 - Los usuarios pueden personalizar su perfil añadiendo un nombre de usuario.
+- Finalmente Whale es un proyecto de dos pequeños programadores que han empezado con OOP en Java, somos ambiciosos pero realistas. poco a poco conseguiremos una buena Red Social.
 
 #### ¿Qué no es Whale? ❌
 
 - No tiene una base de datos por el momento por el cual tenemos un script con diferentes datos para probar la aplicación.
 - Damos la opción de registrar un usuario nuevo o iniciar sesión en un usuario ya existente.
 - Ninguno de los datos se guardarán después de finalizar el programa.
-- Por el momento no hay ningún entorno gráfico más allá del terminal por el cual no habrá fotos ni videos, aunque los atributos estén disponibles
+- Por el momento no hay ningún entorno gráfico más allá del terminal por el cual no habrá fotos ni videos, aunque los atributos estén disponiblesç
+- Whale no tiene una relación entre amigos por el momento.
 
 ## Guía de uso
 
-Al iniciar el programa para poder iniciar sesión en el usuario Juan (root) la contraseña será 'root'.
+Al iniciar el programa para poder iniciar sesión en el usuario Juan (root) la contraseña será 'root'. Otra opción sería crear un nuevo usuario y por el momento tiene las mismas opciones que el usuario root.
+
 Siguientes opciones en desarrollo...
-Actualmente en desarrollo.
 
 ### Diagrama de Casos de Uso
 <picture>
   <source srcset="./diag/png/cu.drawio.light.png" media="(prefers-color-scheme: light)">
   <source srcset="./diag/png/cu.drawio.black.png" media="(prefers-color-scheme: dark)">
-  <img src="./diag/png/cu.drawio.light.png" alt="Imagen adaptable" width="300"/>
+  <img src="./diag/png/cu.drawio.light.png" alt="Imagen adaptable" width="400"/>
 </picture>
 
 ### Diagrama de Actividades
@@ -59,14 +61,14 @@ Actualmente en desarrollo.
 <picture>
   <source srcset="./diag/png/da.drawio.light.png" media="(prefers-color-scheme: light)">
   <source srcset="./diag/png/da.drawio.black.png" media="(prefers-color-scheme: dark)">
-  <img src="./diag/png/da.drawio.light.png" alt="Imagen adaptable" width="300"/>
+  <img src="./diag/png/da.drawio.light.png" alt="Imagen adaptable" width="400"/>
 </picture>
 
 ### Diagrama de Clases
 <picture>
   <source srcset="./diag/png/dc.drawio.light.png" media="(prefers-color-scheme: light)">
   <source srcset="./diag/png/dc.drawio.black.png" media="(prefers-color-scheme: dark)">
-  <img src="./diag/png/dc.drawio.light.png" alt="Imagen adaptable" width="300"/>
+  <img src="./diag/png/dc.drawio.light.png" alt="Imagen adaptable" width="400"/>
 </picture>
 
 ## Futuras Actualizaciones

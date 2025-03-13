@@ -46,9 +46,9 @@ public class Main {
 
         // Página Inicial
         while (true) {
-            System.out.println("------------------------------");
-            System.out.println("PUBLICACIONES");
-            System.out.println("------------------------------");
+            System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
+            System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
+            System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
             UtilsShow.showPublicaciones(DataBase.getPublicaciones());
 
             navBar();
@@ -57,48 +57,54 @@ public class Main {
 
     public static Usuario createRoot() {
         // Crear el usuario Root con el ID 0
-        System.out.print("Como deseas llamarte? ");
+        System.out.print("¿Cómo deseas llamarte? " + c[6]);
         String tempNomb = sc.nextLine();
+        System.out.print(r);
+
         while (UtilsCheck.checkNombre(tempNomb).isEmpty()) {
             System.out.print(c[3]+"Escribe un nombre valido: "+r);
             tempNomb = sc.nextLine();
         }
 
-        System.out.println("Escribe una contraseña para tu nuevo usuario: ");
+        System.out.print("Escribe una contraseña para tu nuevo usuario: " + c[6]);
         String tempCont = sc.nextLine();
+        System.out.print(r);
+
         while (UtilsCheck.checkContrasena(tempCont).isEmpty()) {
             System.out.print(c[3]+"Escribe una contraseña valida: "+r);
             tempCont = sc.nextLine();
         }
         System.out.println(UtilsCheck.checkContrasena(tempCont));
 
-        System.out.println("Escribe un email para asociarlo a tu cuenta: ");
+        System.out.print("Escribe un email para asociarlo a tu cuenta: " + c[6]);
         String tempEmail = sc.nextLine();
+        System.out.print(r);
+
         while (UtilsCheck.checkEmail(tempEmail).isEmpty()) {
             System.out.print(c[3]+"Escribe un email valido: "+r);
             tempEmail = sc.nextLine();
         }
 
-        String tempCrea = String.valueOf(LocalTime.now());
+        String tempCrea = String.valueOf(LocalDate.now());
 
         return new Usuario(tempNomb,tempCont,tempEmail,tempCrea,null,null);
     }
 
     public static void startRoot() {
-        System.out.print("Introduce la contraseña del usuario root: ");
+        System.out.print("Introduce la contraseña del usuario root: " + c[6]);
         while (true) {
             String tempCont = sc.nextLine();
             if (!tempCont.equals(DataBase.getUsuarios().getFirst().getContrasena())) {
-                System.out.println("Contraseña incorrecta \nPrueba otra vez");
+                System.out.println(c[1] + "Contraseña incorrecta \nPrueba otra vez" + r);
             } else {
-                System.out.println("Contraseña aceptada \nCargando..."); break;
+                System.out.println(c[2] + "Contraseña aceptada \nCargando..." + r);
+                break;
             }
         }
     }
 
     public static void navBar() {
-
-        System.out.println("Selecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Contenido  4.Filtrar Contenido");
+        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
         while (true) {
             int option;
 
@@ -112,9 +118,10 @@ public class Main {
             }
 
             if (option==1) {UtilsApp.clearConsole(); perfil(); break;}
-            if (option==2) {UtilsApp.clearConsole(); selectContenido(); break;}
+            else if (option==2) {UtilsApp.clearConsole(); selectContenido(); break;}
             else if (option==3) {UtilsApp.clearConsole(); Publicacion p = createPublicacion(); DataBase.addPublicaciones(p); DataBase.getUsuarios().getFirst().addPublicacion(p); break;}
             else if (option==4) {UtilsApp.clearConsole(); filterContenido(); break;}
+            else if (option==5) {System.exit(0);;}
             else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
 
@@ -126,7 +133,8 @@ public class Main {
             String nombre = root.getNombre();
             List<Usuario> amigos = root.getAmigos();
 
-            System.out.println("BIENVENIDO "+ nombre.toUpperCase());
+            System.out.println("BIENVENID@ "+ nombre.toUpperCase());
+            System.out.println(root.getEmail() + " | Llevas en Whale desde "+root.getCreacion());
             System.out.println("Tienes "+amigos.size()+" amigo/s.");
             System.out.println();
 
@@ -138,6 +146,7 @@ public class Main {
                     UtilsShow.showPublicaciones(root.getPublicaciones());
                 }
             }
+            System.out.println();
 
             System.out.println("CONFIGURACIÓN DE USUARIO");
             System.out.println("1.Cambiar tu nombre  2.Eliminar amigos  3.Añadir un nuevo amigo  4.Salir al menú principal");
@@ -165,7 +174,7 @@ public class Main {
         String tempText;
 
         while (true) {
-            System.out.println("Escribe el contenido (Máximo un HashTag y 200 caracteres): ");
+            System.out.println("Escribe el publicación (Máximo un HashTag y 200 caracteres): ");
             tempText = sc.nextLine();
 
             if (UtilsCheck.check200Caracteres(tempText).isEmpty()) {
@@ -245,7 +254,7 @@ public class Main {
 
     public static void filterContenido() {
         while (true) {
-            System.out.println("----------------------------------------------");
+            System.out.println("\u001B[33m+---------------------------------------------------------------+\u001B[0m");
             System.out.println("Escribe 'exit' para salir.");
             System.out.print("Introduce el HashTag del contenido que quieras buscar:");
             String hashtags = sc.nextLine();
@@ -258,7 +267,7 @@ public class Main {
             for (int i=0; i<DataBase.getPublicaciones().size(); i++) {
                 int id = i;
                 if (DataBase.getPublicaciones().get(i).getHashtag().equals(hashtags)) {
-                    System.out.println("-----------------------------------------------");
+                    System.out.println("\u001B[33m+---------------------------------------------------------------+\u001B[0m");
                     UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),id);
                 }
             }

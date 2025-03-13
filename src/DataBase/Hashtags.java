@@ -7,17 +7,17 @@ public class Hashtags {
     public static List<String> hashtags = new ArrayList<>();
 
     static {
-        // Tecnología y Programación
-        hashtags.add("#technology");
-        hashtags.add("#programming");
-        hashtags.add("#developerlife");
-        hashtags.add("#coding");
-        hashtags.add("#java");
-        hashtags.add("#python");
-        hashtags.add("#ai");
-        hashtags.add("#machinelearning");
-        hashtags.add("#webdevelopment");
-        hashtags.add("#cybersecurity");
+        // Redes Sociales y Contenido
+        hashtags.add("#socialmedia");
+        hashtags.add("#contentcreator");
+        hashtags.add("#influencer");
+        hashtags.add("#digitalmarketing");
+        hashtags.add("#branding");
+        hashtags.add("#viral");
+        hashtags.add("#reels");
+        hashtags.add("#trending");
+        hashtags.add("#photography");
+        hashtags.add("#videoediting");
 
         // Educación y Aprendizaje
         hashtags.add("#education");
@@ -54,18 +54,6 @@ public class Hashtags {
         hashtags.add("#meditation");
         hashtags.add("#happiness");
 
-        // Redes Sociales y Contenido
-        hashtags.add("#socialmedia");
-        hashtags.add("#contentcreator");
-        hashtags.add("#influencer");
-        hashtags.add("#digitalmarketing");
-        hashtags.add("#branding");
-        hashtags.add("#viral");
-        hashtags.add("#reels");
-        hashtags.add("#trending");
-        hashtags.add("#photography");
-        hashtags.add("#videoediting");
-
         // Ecología y Sustentabilidad
         hashtags.add("#sustainability");
         hashtags.add("#ecofriendly");
@@ -78,19 +66,6 @@ public class Hashtags {
         hashtags.add("#cleanenergy");
         hashtags.add("#savetheplanet");
 
-        // Arte y Creatividad
-        hashtags.add("#art");
-        hashtags.add("#creative");
-        hashtags.add("#design");
-        hashtags.add("#photography");
-        hashtags.add("#music");
-        hashtags.add("#drawing");
-        hashtags.add("#illustration");
-        hashtags.add("#painting");
-        hashtags.add("#creativity");
-        hashtags.add("#handmade");
-
-        // Otros
 
     }
 
