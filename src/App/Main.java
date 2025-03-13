@@ -4,7 +4,6 @@ import PageModel.*;
 import Utils.*;
 import DataBase.DataBase;
 
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -114,7 +113,7 @@ public class Main {
 
             if (option==1) {UtilsApp.clearConsole(); perfil(); break;}
             if (option==2) {UtilsApp.clearConsole(); selectContenido(); break;}
-            else if (option==3) {UtilsApp.clearConsole(); DataBase.addPublicaciones(createPublicacion()); break;}
+            else if (option==3) {UtilsApp.clearConsole(); Publicacion p = createPublicacion(); DataBase.addPublicaciones(p); DataBase.getUsuarios().getFirst().addPublicacion(p); break;}
             else if (option==4) {UtilsApp.clearConsole(); filterContenido(); break;}
             else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
@@ -132,10 +131,12 @@ public class Main {
             System.out.println();
 
             System.out.println("TUS PUBLICACIONES");
-            if (root.getContenido().isEmpty()) {
+            if (root.getPublicaciones().isEmpty()) {
                 System.out.println("Aun no tienes publicaciones");
             } else {
-                UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),0);
+                for (int i=0; i<root.getPublicaciones().size(); i++) {
+                    UtilsShow.showPublicaciones(root.getPublicaciones());
+                }
             }
 
             System.out.println("CONFIGURACIÓN DE USUARIO");
@@ -254,7 +255,6 @@ public class Main {
 
 
             System.out.println("Publicaciones con el hashtag a buscar...");
-            StringBuilder pubWithHT = new StringBuilder();
             for (int i=0; i<DataBase.getPublicaciones().size(); i++) {
                 int id = i;
                 if (DataBase.getPublicaciones().get(i).getHashtag().equals(hashtags)) {
@@ -262,11 +262,6 @@ public class Main {
                     UtilsShow.showPublicacionesById(DataBase.getPublicaciones(),id);
                 }
             }
-
-            if (pubWithHT.isEmpty()) System.out.println("No hay Publicaciones con ese HashTag."); else {
-                System.out.println(pubWithHT.toString());
-            }
-
         }
 
     }

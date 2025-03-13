@@ -96,10 +96,8 @@ public class UtilsApp {
                 continue;
             }
 
-            // Corregimos la capitalización
             tempAmig = tempAmig.substring(0, 1).toUpperCase() + tempAmig.substring(1).toLowerCase();
 
-            // Buscar usuario
             Usuario amigo = UtilsApp.getUsuarioByName(DataBase.getUsuarios(), tempAmig);
 
             if (amigo == null) {

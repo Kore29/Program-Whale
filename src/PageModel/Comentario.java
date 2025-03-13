@@ -10,5 +10,4 @@ public class Comentario extends Contenido {
     }
 
     public String getAutor() {return autor;}
-
 }

@@ -22,12 +22,11 @@ public class DataBase {
         Usuario pedro = new Usuario("Pedro", "zxcvbn", "pedro@example.com", "2021-11-10", null, null);
         Usuario sofia = new Usuario("Sofía", "12345", "sofia@example.com", "2020-08-05", null, null);
 
-        juan.setAmigos(new ArrayList<>(Arrays.asList(maria, carlos)));
-        maria.setAmigos(new ArrayList<>(List.of(juan, ana)));
-        carlos.setAmigos(new ArrayList<>(List.of(sofia)));
-        ana.setAmigos(new ArrayList<>(List.of(pedro)));
-        pedro.setAmigos(new ArrayList<>(List.of(juan)));
-        sofia.setAmigos(new ArrayList<>(List.of(carlos, maria)));
+        maria.setAmigos(new ArrayList<>(Arrays.asList(juan, ana)));
+        carlos.setAmigos(new ArrayList<>(Arrays.asList(sofia)));
+        ana.setAmigos(new ArrayList<>(Arrays.asList(pedro)));
+        pedro.setAmigos(new ArrayList<>(Arrays.asList(juan)));
+        sofia.setAmigos(new ArrayList<>(Arrays.asList(carlos, maria)));
 
         usuarios.addAll(Arrays.asList(juan, maria, carlos, ana, pedro, sofia));
 
@@ -39,12 +38,12 @@ public class DataBase {
         publicaciones.add(new Publicacion(4, "Océano - El vasto océano se extiende hasta el horizonte, su marea constante susurra secretos antiguos. Cada ola es una obra de arte en movimiento.", "10-10-2007", Hashtags.hashtags.get(6), 15, null, "https://oceano"));
         publicaciones.add(new Publicacion(5, "Ciudades - La vibrante vida urbana de una ciudad moderna cobra vida bajo las luces nocturnas. Un lugar donde cada esquina cuenta una historia diferente.", "22-03-2008", Hashtags.hashtags.get(7), 5, null, "https://ciudades"));
 
-        juan.setContenido(List.of(publicaciones.get(0), publicaciones.get(4)));
-        maria.setContenido(List.of(publicaciones.get(1), publicaciones.get(3)));
-        carlos.setContenido(List.of(publicaciones.get(2)));
-        ana.setContenido(List.of(publicaciones.get(5)));
-        pedro.setContenido(List.of(publicaciones.get(3), publicaciones.get(4)));
-        sofia.setContenido(List.of(publicaciones.get(0), publicaciones.get(5)));
+        juan.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(0), publicaciones.get(4))));
+        maria.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(1), publicaciones.get(3))));
+        carlos.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(2))));
+        ana.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(5))));
+        pedro.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(3), publicaciones.get(4))));
+        sofia.setPublicaciones(new ArrayList<>(Arrays.asList(publicaciones.get(0), publicaciones.get(5))));
 
         // Crear comentarios
         comentarios.add(new Comentario(0, "Buena publicación", "12-02-2006", juan.getNombre()));

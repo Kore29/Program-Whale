@@ -9,7 +9,8 @@ public class Usuario {
     private String email;
     private String creacion;
     private List<Usuario> amigos;
-    private List<Contenido> contenido;
+    private List<Publicacion> publicaciones;
+
 
     public Usuario(String nombre, String contrasena, String email, String creacion, List<Usuario> amigos, List<Contenido> contenido) {
         this.nombre = nombre;
@@ -17,8 +18,12 @@ public class Usuario {
         this.email = email;
         this.creacion = creacion;
         this.amigos = amigos != null ? amigos : new ArrayList<>();
-        this.contenido = contenido != null ? contenido : new ArrayList<>();
+        this.publicaciones = new ArrayList<>();
+
     }
+
+    // Add Contenido
+    public void addPublicacion(Publicacion p) {publicaciones.add(p);}
 
     // Get Usuario
     public String getNombre() {return nombre;}
@@ -26,7 +31,7 @@ public class Usuario {
     public String getEmail() {return email;}
     public String getCreacion() {return creacion;}
     public List<Usuario> getAmigos() {return amigos;}
-    public List<Contenido> getContenido() {return contenido;}
+    public List<Publicacion> getPublicaciones() {return publicaciones;}
 
     // Set Usuario
     public void setNombre(String nombre) {this.nombre = nombre;}
@@ -34,7 +39,7 @@ public class Usuario {
     public void setEmail(String email) {this.email = email;}
     public void setCreacion(String creacion) {this.creacion = creacion;}
     public void setAmigos(List<Usuario> amigos) {this.amigos = amigos;}
-    public void setContenido(List<Contenido> contenido) {this.contenido = contenido;}
+    public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
 
     // Modificar Amigos
     public void addAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
