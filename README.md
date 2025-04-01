@@ -8,6 +8,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/)
 [![Visual Studio Code](https://custom-icon-badges.demolab.com/badge/Visual%20Studio%20Code-0078d7.svg?logo=vsc&logoColor=white)](https://code.visualstudio.com/)
 [![Java](https://img.shields.io/badge/Java-%23ED8B00.svg?logo=openjdk&logoColor=white)](https://www.java.com/es/)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=fff)](https://www.mysql.com/)
 
 ## Tabla de Contenidos  
 - [Descripción](#descripción)  
@@ -20,7 +21,7 @@ Whale es un proyecto en [Java](https://www.java.com/es/) para la creación de un
 
 Actualmente, se encuentra en su fase inicial, y su propósito es ofrecer funcionalidades esenciales para los usuarios, como la creación y modificación de perfiles, añadir y eliminar publicaciones y un sistema sencillo de amigos.
 
-La idea es hacer una mezcla parecida a [reddit](https://www.reddit.com/?rdt=51627), [twitter](https://x.com/?lang=es) y un toque personal y original
+La idea es hacer una mezcla parecida a [reddit](https://www.reddit.com/?rdt=51627), [twitter](https://x.com/?lang=es), almacenar los datos en una base de datos de [MySQL](https://www.mysql.com/) y dar un toque personal y original
 a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas características y actualizaciones originales.
 
 ### Características principales
@@ -30,18 +31,14 @@ a [futuro](#futuras-actualizaciones), planeamos mejorarla añadiendo nuevas cara
 - Es una aplicación en desarrollo con el fin de estar interconectado por hashtags.
 - Puedes gestionar tu lista de amigos tanto para eliminarlos como para añadirlos.
 - Puedes interactuar con las publicaciones (like y comentar) y crear contenido usando hashtag.
-- Todos los datos están en estado privado y únicamente tiene acceso el equipo de desarrollo
+- Todos los datos del usuario están en estado privado, guardados en una base de datos de [MySQL](https://www.mysql.com/) y únicamente tiene acceso el equipo de desarrollo
 - Los usuarios pueden publicar tanto texto, imágenes o las dos a la vez.
 - Los usuarios pueden personalizar su perfil añadiendo un nombre de usuario.
 - Finalmente Whale es un proyecto de dos pequeños programadores que han empezado con OOP en Java, somos ambiciosos pero realistas. poco a poco conseguiremos una buena Red Social.
 
 #### ¿Qué no es Whale? ❌
 
-- No tiene una base de datos por el momento por el cual tenemos un script con diferentes datos para probar la aplicación.
-- Damos la opción de registrar un usuario nuevo o iniciar sesión en un usuario ya existente.
-- Ninguno de los datos se guardarán después de finalizar el programa.
-- Por el momento no hay ningún entorno gráfico más allá del terminal por el cual no habrá fotos ni videos, aunque los atributos estén disponiblesç
-- Whale no tiene una relación entre amigos por el momento.
+En proceso...
 
 ## Guía de uso
 
@@ -71,10 +68,20 @@ Siguientes opciones en desarrollo...
   <img src="./diag/png/dc.drawio.light.png" alt="Imagen adaptable" width="400"/>
 </picture>
 
+### Tablas Relacionadas Base de Datos
+
+<picture>
+    <img src="./images/Tablas Relacionadas.png">
+</picture>
+
 ## Futuras Actualizaciones
 
-- A pesar de que es difícil, buscar la opción de tener un almacenamiento de toda la información estaría genial en un futuro.
-- Añadir la posibilidad de ver el contenido en una plataforma o página web.
+Ahora estamos trabajando en la aplicación y tenemos pensado aplicar estos cambios:
+
+- Poder almacenar los datos en una base de datos
+- Poder iniciar sesión con gmail o nombre de usuario
+- MOdificar la seguridad de las contraseñas
+- Eliminar el sistema de usuario root y en un futuro intentar implementar el usuario normal y administrador
 
 ## Creado por
 - Martí Castaño Rodríguez, 1º DAM
