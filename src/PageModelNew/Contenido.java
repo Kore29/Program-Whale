@@ -16,11 +16,11 @@ public class Contenido {
         this.texto = texto;
     }
 
-    public Integer getIdContenido() {
+    public Integer getId() {
         return id_contenido;
     }
 
-    public void setIdContenido(Integer id_contenido) {
+    public void setId(Integer id_contenido) {
         this.id_contenido = id_contenido;
     }
 

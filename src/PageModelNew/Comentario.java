@@ -11,5 +11,5 @@ public class Comentario extends Contenido {
         this.id_referencia = id_referencia;
     }
 
-    public String getIdReferencia() {return autor;}
+    public int getIdReferencia() {return id_referencia;}
 }

@@ -6,6 +6,7 @@ import PageModelNew.Publicacion;
 import java.util.List;
 
 public interface WhaleDao {
+    void getAllPublicaciones();
     Publicacion getPublicacionById(int id);
-    Comentario getComentarioByIds(int id_con, int id_ref);
+    List<Comentario> getComentariosByReferencia(int idRef);
 }

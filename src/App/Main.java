@@ -8,6 +8,6 @@ public class Main {
     static WhaleDao whaleDao = new WhaleDaoMySql();
 
     public static void main(String[] args) {
-        Publicacion user = whaleDao.getPublicacionById(2);
+        whaleDao.getAllPublicaciones();
     }
 }
