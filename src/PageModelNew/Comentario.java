@@ -1,6 +1,6 @@
 package PageModelNew;
 
-import PageModelNew.Contenido;
+import java.util.List;
 
 public class Comentario extends Contenido {
     private Integer id_referencia;

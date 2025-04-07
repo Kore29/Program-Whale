@@ -55,53 +55,7 @@
 //        }
 //    }
 //
-//    public static Usuario createRoot() {
-//        // Crear el usuario Root con el ID 0
-//        System.out.print("¿Cómo deseas llamarte? " + c[6]);
-//        String tempNomb = sc.nextLine();
-//        System.out.print(r);
-//
-//        while (UtilsCheck.checkNombre(tempNomb).isEmpty()) {
-//            System.out.print(c[3]+"Escribe un nombre valido: "+r);
-//            tempNomb = sc.nextLine();
-//        }
-//
-//        System.out.print("Escribe una contraseña para tu nuevo usuario: " + c[6]);
-//        String tempCont = sc.nextLine();
-//        System.out.print(r);
-//
-//        while (UtilsCheck.checkContrasena(tempCont).isEmpty()) {
-//            System.out.print(c[3]+"Escribe una contraseña valida: "+r);
-//            tempCont = sc.nextLine();
-//        }
-//        System.out.println(UtilsCheck.checkContrasena(tempCont));
-//
-//        System.out.print("Escribe un email para asociarlo a tu cuenta: " + c[6]);
-//        String tempEmail = sc.nextLine();
-//        System.out.print(r);
-//
-//        while (UtilsCheck.checkEmail(tempEmail).isEmpty()) {
-//            System.out.print(c[3]+"Escribe un email valido: "+r);
-//            tempEmail = sc.nextLine();
-//        }
-//
-//        String tempCrea = String.valueOf(LocalDate.now());
-//
-//        return new Usuario(tempNomb,tempCont,tempEmail,tempCrea,null,null);
-//    }
-//
-//    public static void startRoot() {
-//        System.out.print("Introduce la contraseña del usuario root: " + c[6]);
-//        while (true) {
-//            String tempCont = sc.nextLine();
-//            if (!tempCont.equals(DataBase.getUsuarios().getFirst().getContrasena())) {
-//                System.out.println(c[1] + "Contraseña incorrecta \nPrueba otra vez" + r);
-//            } else {
-//                System.out.println(c[2] + "Contraseña aceptada \nCargando..." + r);
-//                break;
-//            }
-//        }
-//    }
+
 //
 //    public static void navBar() {
 //        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");

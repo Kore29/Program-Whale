@@ -23,7 +23,7 @@ public class ConexionDataBase {
     }
 
     public static Connection getInstance() throws SQLException {
-        if (connect == null || connect.isClosed()) {
+        if (connect == null) {
             openConnection();
         }
         return connect;

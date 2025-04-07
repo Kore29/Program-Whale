@@ -12,11 +12,6 @@ import java.util.regex.Matcher;
 public class UtilsApp {
 
     // GENERAL
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public static Usuario getUsuarioByName(List<Usuario> usuarios, String nombre) {
         for (Usuario usuario : usuarios) {
             if (usuario.getNombre().equals(nombre)) {
@@ -26,7 +21,15 @@ public class UtilsApp {
         return usuarios.getFirst();
     }
 
-    // USUARIO ROOT
+    // MAIN USUARIO
+    public static int iniciarUsuario() {
+        return 0;
+    }
+
+    public static int registrarUsuario() {
+        return 0;
+    }
+
     public static void changeNombre(Usuario root, Scanner sc) {
         System.out.println("Introduce el nombre por el que deseas cambiar: ");
         String tempNomb = sc.nextLine();
@@ -67,7 +70,6 @@ public class UtilsApp {
             }
         }
     }
-
 
     public static void includeAmigo(Usuario root, Scanner sc) {
         StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");

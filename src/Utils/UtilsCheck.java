@@ -63,17 +63,20 @@ public class UtilsCheck {
     }
 
     public static String checkNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            return "";
+        }
 
         if (nombre.length() > 30) {
             return "";
         }
 
-        if (!nombre.matches("[a-zA-ZÀ-ÿ\\s]+")) {
-            return "";
+        if (!nombre.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
+            return ""; // Contiene caracteres inválidos
         }
 
         StringBuilder nombreFormateado = new StringBuilder();
-        for (String palabra : nombre.split(" ")) {
+        for (String palabra : nombre.trim().split("\\s+")) {
             if (!palabra.isEmpty()) {
                 nombreFormateado.append(Character.toUpperCase(palabra.charAt(0)))
                         .append(palabra.substring(1).toLowerCase())
