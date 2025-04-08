@@ -15,14 +15,6 @@ import java.util.List;
 public class WhaleDaoMySql implements WhaleDao {
     static Connection con;
 
-public WhaleDaoMySql(){
-    try {
-        con = ConexionDataBase.getInstance();
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
-}
-
     @Override
     public Usuario getUsuarioByEmail(String email) {
         Usuario mainUsuario = null;
@@ -59,26 +51,24 @@ public WhaleDaoMySql(){
     public Usuario getUsuarioByName(String name) {
         Usuario mainUsuario = null;
 
-        try {
-            String query = "SELECT * FROM USUARIOS WHERE name = ?";
-            PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, name);
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?")) {
 
+            stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 mainUsuario = new Usuario(
-                    rs.getString("nombre"),
-                    rs.getString("contrasenya"),
-                    rs.getString("email"),
-                    rs.getString("creacion"),
-                    null,
-                    null
+                        rs.getString("nombre"),
+                        rs.getString("contrasenya"),
+                        rs.getString("email"),
+                        rs.getString("creacion"),
+                        null,
+                        null
                 );
             }
 
             rs.close();
-            stmt.close();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -88,11 +78,14 @@ public WhaleDaoMySql(){
     }
 
     @Override
-    public void getAllPublicaciones() {
-        try {
-            String query = "SELECT * FROM CONTENIDO WHERE id_referencia IS NULL ORDER BY creacion DESC";
-            PreparedStatement stmt = con.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+    public List<Publicacion> getAllPublicaciones() {
+        List<Publicacion> publicaciones = new ArrayList<>();
+
+        String query = "SELECT * FROM CONTENIDO WHERE id_referencia IS NULL ORDER BY creacion DESC";
+
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Publicacion tempPubl = new Publicacion(
@@ -106,7 +99,8 @@ public WhaleDaoMySql(){
                     getComentariosById(rs.getInt("id_contenido"))
                 );
 
-                UtilsShow.showPublicacion(tempPubl, tempPubl.getComentarios());
+                publicaciones.add(tempPubl);
+
             }
 
             rs.close();
@@ -116,6 +110,8 @@ public WhaleDaoMySql(){
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return publicaciones;
     }
 
     @Override

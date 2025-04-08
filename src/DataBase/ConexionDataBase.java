@@ -23,15 +23,17 @@ public class ConexionDataBase {
     }
 
     public static Connection getInstance() throws SQLException {
-        if (connect == null) {
+        if (connect == null || connect.isClosed() || !connect.isValid(2)) {
             openConnection();
         }
         return connect;
     }
 
-    public void closeConnection() {
+    public static void closeConnection() {
         try {
-            connect.close();
+            if (connect != null && !connect.isClosed()) {
+                connect.close();
+            }
         } catch (SQLException e) {
             System.out.println("ERROR: " + e.getMessage());
         }

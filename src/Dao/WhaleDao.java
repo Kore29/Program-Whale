@@ -12,7 +12,7 @@ public interface WhaleDao {
     Usuario getUsuarioByName(String name);
 
     //void insertPublicacion();
-    void getAllPublicaciones();
+    List<Publicacion> getAllPublicaciones();
     Publicacion getPublicacionById(int id);
 
     //void insertComentario(int id);

@@ -1,5 +1,7 @@
 package Utils;
 
+import PageModelNew.*;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,27 +89,10 @@ public class UtilsCheck {
         return nombreFormateado.toString().trim();
     }
 
-    public static String checkContrasena(String contrasena) {
-
-        if (contrasena.length() > 18) {
-            return "";
+    public static String checkContrasena(Usuario usuario, String try_cont) {
+        if(try_cont.equals(usuario.getContrasena())) {
+            return try_cont;
         }
-        if (contrasena.contains(" ")) {
-            return "";
-        }
-
-        boolean letr = contrasena.matches(".*[a-zA-Z].*");
-        boolean nume = contrasena.matches(".*\\d.*");
-        boolean tn8Cara = contrasena.length() > 8;
-
-        if (letr && nume && tn8Cara) {
-            return "La contraseña es muy segura.";
-        } else if (nume) {
-            return "La contraseña es medianamente segura.";
-        } else if (letr) {
-            return "La contraseña es poco segura.";
-        } else {
-            return "La contraseña no cumple con los requisitos minimos.";
-        }
+        return "";
     }
 }

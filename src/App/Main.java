@@ -37,7 +37,7 @@ public class Main {
                     usuario = autenticarUsuario();
                     break;
                 case "n":
-                    crearUsuario(); // Imagina que este metodo también retorna el usuario si lo deseas
+                    crearUsuario();
                     break;
                 default:
                     System.out.println(c[1] + "Error: Escribe una opción válida (y/n)" + r);
@@ -66,8 +66,9 @@ public class Main {
             if (usuario == null) {
                 System.out.println(c[1] + "No se encontró ningún usuario con ese nombre o email. Intenta de nuevo." + r);
             } else {
-                // Aquí podrías validar la contraseña
-                return usuario;
+                System.out.println("Introduce la contraseña del Usuario "+usuario.getNombre());
+                String tempCont = "";
+                UtilsCheck.checkContrasena(usuario,sc.nextLine());
             }
         }
     }
@@ -112,7 +113,7 @@ public class Main {
             System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
 
-            whaleDao.getAllPublicaciones();
+            sc.nextLine();
 
             // navBar(); // Descomenta si lo usas
         }
