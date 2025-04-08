@@ -28,24 +28,32 @@ public class Usuario {
     // Add Contenido
     public void addPublicacion(PageModel.Publicacion p) {publicaciones.add(p);}
 
-    // Get Usuario
+    //Usuario
     public String getNombre() {return nombre;}
-    public String getContrasena() {return contrasenya;}
-    public String getEmail() {return email;}
-    public String getCreacion() {return creacion;}
-    public List<Usuario> getAmigos() {return amigos;}
-    public List<PageModel.Publicacion> getPublicaciones() {return publicaciones;}
-
-    // Set Usuario
     public void setNombre(String nombre) {this.nombre = nombre;}
+
+    //Contraseña
+    public String getContrasena() {return contrasenya;}
     public void setContrasena(String contrasena) {this.contrasenya = contrasena;}
+
+    // Email
+    public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
+
+    //Creacion
+    public String getCreacion() {return creacion;}
     public void setCreacion(String creacion) {this.creacion = creacion;}
+
+    //Amigos
+    public List<Usuario> getAmigos() {return amigos;}
     public void setAmigos(List<Usuario> amigos) {this.amigos = amigos;}
-    public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
 
     // Modificar Amigos
     public void addAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
     public void removeAmigo(Usuario amigo) {amigos.remove(amigo);}
     public boolean isAmigo(Usuario amigo) {return amigos.contains(amigo);}
+
+    //Publicaciones
+    public List<PageModel.Publicacion> getPublicaciones() {return publicaciones;}
+    public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
 }

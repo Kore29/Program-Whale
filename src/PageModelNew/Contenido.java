@@ -17,46 +17,32 @@ public class Contenido {
     }
 
 
-    // Getters
+    // ID
     public Integer getId() {
         return id_contenido;
     }
+    public void setId(Integer id_contenido) {this.id_contenido = id_contenido;}
 
+    //Autor
     public String getAutor() {
         return autor;
     }
+    public void setAutor(String autor) {this.autor = autor;}
 
+    //Creacion
     public String getCreacion() {
         return creacion;
     }
+    public void setCreacion(String creacion) {this.creacion = creacion;}
 
+    //Multimedia
     public String getMultimedia() {
         return multimedia;
     }
+    public void setMultimedia(String multimedia) {this.multimedia = multimedia;}
 
-    public String getTexto() {
-        return texto;
-    }
+    //Texto
+    public String getTexto() {return texto;}
+    public void setTexto(String texto) {this.texto = texto;}
 
-    //Setters
-
-    public void setId(Integer id_contenido) {
-        this.id_contenido = id_contenido;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-    public void setCreacion(String creacion) {
-        this.creacion = creacion;
-    }
-
-    public void setMultimedia(String multimedia) {
-        this.multimedia = multimedia;
-    }
-
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
 }

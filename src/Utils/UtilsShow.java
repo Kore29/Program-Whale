@@ -1,12 +1,8 @@
 package Utils;
 
-import Dao.WhaleDao;
-import Dao.WhaleDaoMySql;
-import DataBase.DataBase;
 import PageModelNew.*;
 
 import java.util.List;
-import java.util.Objects;
 
 public class UtilsShow {
     

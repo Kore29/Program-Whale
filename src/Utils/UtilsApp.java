@@ -1,13 +1,9 @@
 package Utils;
 
 import PageModel.*;
-import DataBase.DataBase;
 
 import java.util.List;
 import java.util.Scanner;
-
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class UtilsApp {
 
