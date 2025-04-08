@@ -1,7 +1,7 @@
 package PageModelNew;
 
-import PageModel.Contenido;
-import PageModel.Publicacion;
+import PageModelNew.Contenido;
+import PageModelNew.Publicacion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class Usuario {
     private String email;
     private String creacion;
     private List<Usuario> amigos;
-    private List<PageModel.Publicacion> publicaciones;
+    private List<PageModelNew.Publicacion> publicaciones;
 
 
     public Usuario(String nombre, String contrasena, String email, String creacion, List<Usuario> amigos, List<Contenido> contenido) {
@@ -26,7 +26,7 @@ public class Usuario {
     }
 
     // Add Contenido
-    public void addPublicacion(PageModel.Publicacion p) {publicaciones.add(p);}
+    public void addPublicacion(PageModelNew.Publicacion p) {publicaciones.add(p);}
 
     //Usuario
     public String getNombre() {return nombre;}
@@ -54,6 +54,6 @@ public class Usuario {
     public boolean isAmigo(Usuario amigo) {return amigos.contains(amigo);}
 
     //Publicaciones
-    public List<PageModel.Publicacion> getPublicaciones() {return publicaciones;}
+    public List<PageModelNew.Publicacion> getPublicaciones() {return publicaciones;}
     public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
 }

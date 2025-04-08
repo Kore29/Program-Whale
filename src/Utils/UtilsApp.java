@@ -1,6 +1,6 @@
 package Utils;
 
-import PageModel.*;
+import PageModelNew.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -111,7 +111,7 @@ public class UtilsApp {
     }
 
 
-    // DATABASE
+    /* DATABASE (Arreglar)
     public static int compararId(List<Publicacion> publicaciones) {
         int maxId = 0;
         for (Publicacion publicacione : publicaciones) {
@@ -128,7 +128,7 @@ public class UtilsApp {
             if (tempPubl.getId()==id) {return tempPubl;}
         }
         return null;
-    }
+    }*
 
     public static String removeHashTag(String text) {
         StringBuilder newText = new StringBuilder();
@@ -138,5 +138,5 @@ public class UtilsApp {
             }
         }
         return newText.toString().trim();
-    }
+    }*/
 }
