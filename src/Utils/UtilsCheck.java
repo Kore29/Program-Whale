@@ -6,7 +6,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UtilsCheck {
-    // CHECK
+    // CHECK GENERAL
+    public static String checkInt(String num) {
+        for (char e : num.toCharArray()) {
+            if (!Character.isDigit(e)) {
+                return "\u001B[31mError: Caracter invalido.\u001B[0m";
+            }
+        }
+        return "";
+    }
+
+    //CHECK CONTENIDO
     public static String check200Caracteres(String text) {
         int total = 0;
         for (char e : text.toCharArray()) {
@@ -31,16 +41,15 @@ public class UtilsCheck {
         return "";
     }
 
+    public static String checkLink(String link) {
+        String regex = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/[a-zA-Z0-9#?&%._=-]*)?$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(link);
 
-    public static String checkInt(String num) {
-        for (char e : num.toCharArray()) {
-            if (!Character.isDigit(e)) {
-                return "\u001B[31mError: Caracter invalido.\u001B[0m";
-            }
-        }
-        return "";
+        return matcher.matches() ? link : "";
     }
 
+    //CHECK USUARIO
     public static String checkEmail(String email) {
         if (email.length() > 50) {
             return "";
@@ -56,14 +65,6 @@ public class UtilsCheck {
         return esValido ? email : "";
     }
 
-    public static String checkLink(String link) {
-        String regex = "^(https?://)?(www\\.)?[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,})+(/[a-zA-Z0-9#?&%._=-]*)?$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(link);
-
-        return matcher.matches() ? link : "";
-    }
-
     public static String checkNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             return "";
@@ -73,26 +74,43 @@ public class UtilsCheck {
             return "";
         }
 
-        if (!nombre.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
-            return ""; // Contiene caracteres inválidos
+        if (!nombre.matches("^[a-zA-Z0-9]+$")) {
+            return "";
         }
 
-        StringBuilder nombreFormateado = new StringBuilder();
-        for (String palabra : nombre.trim().split("\\s+")) {
-            if (!palabra.isEmpty()) {
-                nombreFormateado.append(Character.toUpperCase(palabra.charAt(0)))
-                        .append(palabra.substring(1).toLowerCase())
-                        .append(" ");
-            }
-        }
-
-        return nombreFormateado.toString().trim();
+        return nombre;
     }
 
-    public static String checkContrasena(Usuario usuario, String try_cont) {
-        if(try_cont.equals(usuario.getContrasena())) {
-            return try_cont;
+    public static String checkContrasena(String tempCont) {
+        int critCump = 0;
+
+        if (tempCont.length() >= 8) critCump++;
+
+        boolean tieneMayuscula = false;
+        boolean tieneMinuscula = false;
+        boolean tieneNumero = false;
+        boolean tieneEspecial = false;
+
+        for (char c : tempCont.toCharArray()) {
+            if (Character.isUpperCase(c)) tieneMayuscula = true;
+            else if (Character.isLowerCase(c)) tieneMinuscula = true;
+            else if (Character.isDigit(c)) tieneNumero = true;
+            else if ("!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~".contains(String.valueOf(c))) tieneEspecial = true;
         }
-        return "";
+
+        if (tieneMayuscula) critCump++;
+        if (tieneMinuscula) critCump++;
+        if (tieneNumero) critCump++;
+        if (tieneEspecial) critCump++;
+
+        return (critCump >= 4) ? tempCont : "";
     }
+
+    public static String inspectContrasena(Usuario usuario, String tempCont) {
+        if(!tempCont.equals(usuario.getContrasena())) {
+            return "";
+        }
+        return tempCont;
+    }
+
 }
