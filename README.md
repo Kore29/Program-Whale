@@ -42,7 +42,7 @@ En proceso...
 
 ## Guía de uso
 
-Al iniciar el programa para poder iniciar sesión en el usuario Juan (root) la contraseña será 'root'. Otra opción sería crear un nuevo usuario y por el momento tiene las mismas opciones que el usuario root.
+Al iniciar el programa podrás iniciar sesión usando un nombre de usuario o correo electrónico que estén almacenadas en la base de datos de la aplicación y si no tienes cuenta habrá una opción para registrarte.
 
 Siguientes opciones en desarrollo...
 
@@ -71,7 +71,7 @@ Siguientes opciones en desarrollo...
 ### Tablas Relacionadas Base de Datos
 
 <picture>
-    <img src="./images/Tablas Relacionadas.png">
+    <img src="images/Tablas_relacionadas.png">
 </picture>
 
 ## Futuras Actualizaciones
@@ -80,7 +80,7 @@ Ahora estamos trabajando en la aplicación y tenemos pensado aplicar estos cambi
 
 - Poder almacenar los datos en una base de datos
 - Poder iniciar sesión con gmail o nombre de usuario
-- MOdificar la seguridad de las contraseñas
+- Modificar la seguridad de las contraseñas
 - Eliminar el sistema de usuario root y en un futuro intentar implementar el usuario normal y administrador
 
 ## Creado por
