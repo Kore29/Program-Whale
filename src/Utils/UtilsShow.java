@@ -5,6 +5,12 @@ import PageModelNew.*;
 import java.util.List;
 
 public class UtilsShow {
+
+    public static void showPublicaciones(List<Publicacion> publicaciones) {
+        for (Publicacion p : publicaciones) {
+            showPublicacion(p, p.getComentarios());
+        }
+    }
     
     public static void showPublicacion(Publicacion activePublicacion, List<Comentario> activeComentarios) {
 

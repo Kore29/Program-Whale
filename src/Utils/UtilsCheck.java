@@ -73,20 +73,11 @@ public class UtilsCheck {
             return "";
         }
 
-        if (!nombre.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
-            return ""; // Contiene caracteres inválidos
+        if (!nombre.matches("^[a-z0-9áéíóúüñ]+$")) {
+            return "";
         }
 
-        StringBuilder nombreFormateado = new StringBuilder();
-        for (String palabra : nombre.trim().split("\\s+")) {
-            if (!palabra.isEmpty()) {
-                nombreFormateado.append(Character.toUpperCase(palabra.charAt(0)))
-                        .append(palabra.substring(1).toLowerCase())
-                        .append(" ");
-            }
-        }
-
-        return nombreFormateado.toString().trim();
+        return nombre;
     }
 
     public static String checkContrasena(String tempCont) {

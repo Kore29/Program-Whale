@@ -2,26 +2,31 @@ package Dao;
 
 import DataBase.ConexionDataBase;
 import PageModelNew.*;
-import Utils.UtilsShow;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class WhaleDaoMySql implements WhaleDao {
-    static Connection con;
+
+    private static Connection con;
+    public WhaleDaoMySql(){
+        con  = ConexionDataBase.getInstance();
+    }
 
     @Override
     public Usuario getUsuarioByEmail(String email) {
         Usuario mainUsuario = null;
 
         try {
-            String query = "SELECT * FROM USUARIOS WHERE email = ?";
-            PreparedStatement stmt = con.prepareStatement(query);
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE email = ?");
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
@@ -37,9 +42,6 @@ public class WhaleDaoMySql implements WhaleDao {
                 );
             }
 
-            rs.close();
-            stmt.close();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,10 +53,12 @@ public class WhaleDaoMySql implements WhaleDao {
     public Usuario getUsuarioByName(String name) {
         Usuario mainUsuario = null;
 
-        try (Connection con = ConexionDataBase.getInstance();
-             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?")) {
+        try {
+            Connection con = ConexionDataBase.getInstance();
 
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?");
             stmt.setString(1, name);
+
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -68,25 +72,25 @@ public class WhaleDaoMySql implements WhaleDao {
                 );
             }
 
-            rs.close();
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
+                throw new RuntimeException(e);
         }
 
         return mainUsuario;
     }
 
     @Override
-    public List<Publicacion> getSixPublicaciones() {
-        int pagiActual = 1; int offset = (pagiActual-1)*6;
+    public List<Publicacion> getSixPublicaciones(int page) {
+        int offset = (page-1)*6;
         List<Publicacion> publicaciones = new ArrayList<>();
 
-        String query = "SELECT * FROM CONTENIDO ORDER BY creacion DESC LIMIT ? OFFSET ?";
+        try {
+            Connection con = ConexionDataBase.getInstance();
 
-        try (Connection con = ConexionDataBase.getInstance();
-             PreparedStatement stmt = con.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO ORDER BY creacion DESC LIMIT 6 OFFSET ?");
+            stmt.setInt(1, offset);
+
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
 
@@ -105,10 +109,6 @@ public class WhaleDaoMySql implements WhaleDao {
 
             }
 
-            rs.close();
-            stmt.close();
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -121,8 +121,9 @@ public class WhaleDaoMySql implements WhaleDao {
         Publicacion tempPubl = null;
 
         try {
-            String query = "SELECT * FROM CONTENIDO WHERE id_contenido = ?";
-            PreparedStatement stmt = con.prepareStatement(query);
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_contenido = ?");
             stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
@@ -138,8 +139,6 @@ public class WhaleDaoMySql implements WhaleDao {
                     getComentariosById(rs.getInt("id_contenido"))
                 );
             }
-            rs.close();
-            stmt.close();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -153,8 +152,10 @@ public class WhaleDaoMySql implements WhaleDao {
         List<Comentario> comentarios = new ArrayList<>();
 
         try {
-            String query = "SELECT * FROM CONTENIDO WHERE id_referencia = ? ORDER BY creacion ASC";
-            PreparedStatement stmt = con.prepareStatement(query);
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_referencia = ? ORDER BY creacion ASC");
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -168,9 +169,6 @@ public class WhaleDaoMySql implements WhaleDao {
                     rs.getInt("id_referencia")
                 ));
             }
-
-            rs.close();
-            stmt.close();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

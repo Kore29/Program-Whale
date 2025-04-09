@@ -9,6 +9,7 @@ import Utils.*;
 import static Utils.UtilsColors.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -29,7 +30,7 @@ public class Main {
         Usuario mainUsuario = null;
 
         while (mainUsuario == null) {
-            System.out.println("¿Ya tienes un usuario? (y/n): ");
+            System.out.println("Tienes una sesión creada? "+c[2]+"y"+r+"/"+c[1]+"n"+r);
             String opcion = sc.nextLine().trim().toLowerCase();
 
             switch (opcion) {
@@ -114,9 +115,35 @@ public class Main {
             System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
 
-            sc.nextLine();
+            int page = 1;
+            UtilsShow.showPublicaciones(whaleDao.getSixPublicaciones(1));
 
-            // navBar(); Descomenta si lo usas
+            navBar();
         }
+    }
+
+    public static void navBar() {
+        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
+        System.out.println("6.Siguiente página  7.Anterior Página");
+        while (true) {
+            int option;
+
+            while (true) {
+                String opt = sc.nextLine();
+                if (UtilsCheck.checkInt(opt).isEmpty()) {
+                    option = Integer.parseInt(opt); break;
+                } else {
+                    System.out.println(UtilsCheck.checkInt(opt));
+                }
+            }
+
+//            if (option==1) {perfil(); break;}
+//            else if (option==2) {selectContenido(); break;}
+//            else if (option==3) {Publicacion p = createPublicacion(); DataBase.addPublicaciones(p); DataBase.getUsuarios().getFirst().addPublicacion(p); break;}
+//            else if (option==4) {filterContenido(); break;}
+//            else if (option==5) {System.exit(0);;}
+//            else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
+        }
+
     }
 }

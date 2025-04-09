@@ -4,36 +4,36 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import DataBase.ConexioDataInfo;
+
 public class ConexionDataBase {
+
     private static Connection connect;
 
-    private void ConnectionDB() {
+    private ConexionDataBase() {}
 
-    }
 
-    private static void openConnection() {
+    private static void openConection() {
         connect = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connect = DriverManager.getConnection(ConexioDataInfo.getURL(),ConexioDataInfo.getUSR(),ConexioDataInfo.getPWD());
-
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            connect = DriverManager.getConnection(ConexioDataInfo.getURL(), ConexioDataInfo.getUSR(), ConexioDataInfo.getPWD());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public static Connection getInstance() throws SQLException {
-        if (connect == null || connect.isClosed() || !connect.isValid(2)) {
-            openConnection();
+    // Public static method to get the instance of the class
+    public static Connection getInstance() {
+        if (connect == null) {
+            openConection();
         }
         return connect;
     }
 
-    public static void closeConnection() {
+    // Public method to close the connection
+    public void closeConnection() {
         try {
-            if (connect != null && !connect.isClosed()) {
-                connect.close();
-            }
+            connect.close();
         } catch (SQLException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
