@@ -78,16 +78,18 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getAllPublicaciones() {
+    public List<Publicacion> getSixPublicaciones() {
+        int pagiActual = 1; int offset = (pagiActual-1)*6;
         List<Publicacion> publicaciones = new ArrayList<>();
 
-        String query = "SELECT * FROM CONTENIDO WHERE id_referencia IS NULL ORDER BY creacion DESC";
+        String query = "SELECT * FROM CONTENIDO ORDER BY creacion DESC LIMIT ? OFFSET ?";
 
         try (Connection con = ConexionDataBase.getInstance();
              PreparedStatement stmt = con.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+
                 Publicacion tempPubl = new Publicacion(
                     rs.getInt("id_contenido"),
                     rs.getString("autor"),
