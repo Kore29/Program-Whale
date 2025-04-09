@@ -89,10 +89,35 @@ public class UtilsCheck {
         return nombreFormateado.toString().trim();
     }
 
-    public static String checkContrasena(Usuario usuario, String try_cont) {
-        if(try_cont.equals(usuario.getContrasena())) {
-            return try_cont;
+    public static String checkContrasena(String tempCont) {
+        int critCump = 0;
+
+        if (tempCont.length() >= 8) critCump++;
+
+        boolean tieneMayuscula = false;
+        boolean tieneMinuscula = false;
+        boolean tieneNumero = false;
+        boolean tieneEspecial = false;
+
+        for (char c : tempCont.toCharArray()) {
+            if (Character.isUpperCase(c)) tieneMayuscula = true;
+            else if (Character.isLowerCase(c)) tieneMinuscula = true;
+            else if (Character.isDigit(c)) tieneNumero = true;
+            else if ("!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~".contains(String.valueOf(c))) tieneEspecial = true;
         }
-        return "";
+
+        if (tieneMayuscula) critCump++;
+        if (tieneMinuscula) critCump++;
+        if (tieneNumero) critCump++;
+        if (tieneEspecial) critCump++;
+
+        return (critCump >= 4) ? tempCont : "";
+    }
+
+    public static String inspectContrasena(Usuario usuario, String tempCont) {
+        if(!tempCont.equals(usuario.getContrasena())) {
+            return "";
+        }
+        return tempCont;
     }
 }
