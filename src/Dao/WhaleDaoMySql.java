@@ -15,7 +15,7 @@ import java.util.List;
 public class WhaleDaoMySql implements WhaleDao {
 
     private static Connection con;
-    public WhaleDaoMySql(){
+    public WhaleDaoMySql() throws SQLException {
         con  = ConexionDataBase.getInstance();
     }
 
@@ -80,14 +80,36 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
+    public int sizePublicaciones() {
+        try {
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(c.id_contenido) FROM CONTENIDO c");
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
+    }
+
+    @Override
     public List<Publicacion> getSixPublicaciones(int page) {
         int offset = (page-1)*6;
         List<Publicacion> publicaciones = new ArrayList<>();
 
-        try {
-            Connection con = ConexionDataBase.getInstance();
+        PreparedStatement stmt = null;
+        Connection con = null;
 
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO ORDER BY creacion DESC LIMIT 6 OFFSET ?");
+        try {
+            con = ConexionDataBase.getInstance();
+
+            stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_referencia IS NULL ORDER BY creacion DESC LIMIT 6 OFFSET ?");
             stmt.setInt(1, offset);
 
             ResultSet rs = stmt.executeQuery();
@@ -95,22 +117,34 @@ public class WhaleDaoMySql implements WhaleDao {
             while (rs.next()) {
 
                 Publicacion tempPubl = new Publicacion(
-                    rs.getInt("id_contenido"),
-                    rs.getString("autor"),
-                    rs.getString("creacion"),
-                    rs.getString("multimedia"),
-                    rs.getString("texto"),
-                    rs.getInt("likes"),
-                    rs.getString("hashtag"),
-                    getComentariosById(rs.getInt("id_contenido"))
+                        rs.getInt("id_contenido"),
+                        rs.getString("autor"),
+                        rs.getString("creacion"),
+                        rs.getString("multimedia"),
+                        rs.getString("texto"),
+                        rs.getInt("likes"),
+                        rs.getString("hashtag"),
+                        null
                 );
 
                 publicaciones.add(tempPubl);
 
             }
 
+            for (Publicacion activePublciacion : publicaciones) {
+                List<Comentario> comentarios = getComentariosById(activePublciacion.getId());
+                activePublciacion.addComentarios(comentarios);
+            }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if(con != null) con.close();
+                if(stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return publicaciones;
@@ -170,8 +204,10 @@ public class WhaleDaoMySql implements WhaleDao {
                 ));
             }
 
+            stmt.close();
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return comentarios;

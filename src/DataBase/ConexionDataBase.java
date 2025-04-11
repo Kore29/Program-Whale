@@ -22,15 +22,13 @@ public class ConexionDataBase {
         }
     }
 
-    // Public static method to get the instance of the class
-    public static Connection getInstance() {
-        if (connect == null) {
+    public static Connection getInstance() throws SQLException {
+        if (connect == null || connect.isClosed()) {
             openConection();
         }
         return connect;
     }
 
-    // Public method to close the connection
     public void closeConnection() {
         try {
             connect.close();

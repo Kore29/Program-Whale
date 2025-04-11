@@ -12,6 +12,8 @@ public interface WhaleDao {
     Usuario getUsuarioByName(String name);
 
     //void insertPublicacion();
+
+    int sizePublicaciones();
     List<Publicacion> getSixPublicaciones(int page);
     Publicacion getPublicacionById(int id);
 

@@ -1,21 +1,29 @@
 package App;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Scanner;
+
 import Dao.WhaleDao;
 import Dao.WhaleDaoMySql;
-
-import PageModelNew.*;
-import Utils.*;
-
-import static Utils.UtilsColors.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
+import PageModelNew.Usuario;
+import Utils.UtilsCheck;
+import static Utils.UtilsColors.c;
+import static Utils.UtilsColors.r;
+import Utils.UtilsShow;
 
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
-    public static WhaleDao whaleDao = new WhaleDaoMySql();
+    public static WhaleDao whaleDao;
+
+    static {
+        try {
+            whaleDao = new WhaleDaoMySql();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -23,7 +31,7 @@ public class Main {
         System.out.println();
 
         Usuario mainUsuario = startUsuario();
-        showMainMenu(mainUsuario);
+        showMainMenu(mainUsuario, 1);
     }
 
     public static Usuario startUsuario() {
@@ -62,12 +70,13 @@ public class Main {
             if (usuario == null) {
                 System.out.println(c[1]+"No se encontró ningún usuario con ese nombre o email. Intenta de nuevo." + r);
             } else {
-                System.out.println("Introduce la contraseña del Usuario "+usuario.getNombre());
+                System.out.print("Introduce la contraseña del usuario "+usuario.getNombre()+": ");
 
                 String tempCont = "";
                 while (tempCont.isEmpty()) {
-                    tempCont = sc.nextLine();
-                    tempCont = UtilsCheck.inspectContrasena(usuario, tempCont);
+                    tempCont = UtilsCheck.inspectContrasena(usuario, sc.nextLine());
+                    if (!tempCont.isEmpty()) continue;
+                    System.out.println("Contraseña incorrecta");
                 }
 
                 return usuario;
@@ -109,41 +118,59 @@ public class Main {
         return usuario;
     }
 
-    public static void showMainMenu(Usuario mainUsuario) {
+    public static void showMainMenu(Usuario mainUsuario, int page) {
         while (true) {
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
             System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
 
-            int page = 1;
-            UtilsShow.showPublicaciones(whaleDao.getSixPublicaciones(1));
+            int totalPages = whaleDao.sizePublicaciones()/6;
+            UtilsShow.showPublicaciones(whaleDao.getSixPublicaciones(page));
 
-            navBar();
+            int option = navBar();
+
+            switch (option) {
+                case 1:
+                    // perfil(); // pendiente
+                    break;
+                case 2:
+                    // selectContenido(); // pendiente
+                    break;
+                case 3:
+                    // crearPublicacion(); // pendiente
+                    break;
+                case 4:
+                    // filterContenido(); // pendiente
+                    break;
+                case 5:
+                    System.out.println("Hasta pronto :)");
+                    System.exit(0);
+                    break;
+                case 6:
+                    if (page < totalPages-1) page++;
+                    else {System.out.println("Límite de páginas");}
+                    break;
+                case 7:
+                    if (page > 1) page--;
+                    else System.out.println("Límite de páginas");
+                    break;
+                default:
+                    System.out.println(c[1] + "Opción inválida, intenta de nuevo." + r);
+            }
         }
     }
 
-    public static void navBar() {
+    public static int navBar() {
         System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
         System.out.println("6.Siguiente página  7.Anterior Página");
         while (true) {
-            int option;
-
-            while (true) {
-                String opt = sc.nextLine();
-                if (UtilsCheck.checkInt(opt).isEmpty()) {
-                    option = Integer.parseInt(opt); break;
-                } else {
-                    System.out.println(UtilsCheck.checkInt(opt));
-                }
+            String opt = sc.nextLine();
+            if (UtilsCheck.checkInt(opt).isEmpty()) {
+                return Integer.parseInt(opt);
+            } else {
+                System.out.println(UtilsCheck.checkInt(opt));
             }
-
-//            if (option==1) {perfil(); break;}
-//            else if (option==2) {selectContenido(); break;}
-//            else if (option==3) {Publicacion p = createPublicacion(); DataBase.addPublicaciones(p); DataBase.getUsuarios().getFirst().addPublicacion(p); break;}
-//            else if (option==4) {filterContenido(); break;}
-//            else if (option==5) {System.exit(0);;}
-//            else {System.out.println("Porfavor, intenta escribir una parametro adecuado");}
         }
-
     }
+
 }
