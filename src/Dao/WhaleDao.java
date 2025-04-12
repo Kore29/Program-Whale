@@ -10,7 +10,7 @@ public interface WhaleDao {
     //void insertUsuario();
     Usuario getUsuarioByEmail(String email);
     Usuario getUsuarioByName(String name);
-
+    List<String> getAmigos(String nombre);
     //void insertPublicacion();
 
     int sizePublicaciones();
@@ -19,4 +19,6 @@ public interface WhaleDao {
 
     //void insertComentario(int id);
     List<Comentario> getComentariosById(int idRef);
+
+
 }

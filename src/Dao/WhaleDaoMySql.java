@@ -229,4 +229,29 @@ public class WhaleDaoMySql implements WhaleDao {
 
         return comentarios;
     }
+
+    @Override
+    public List<String> getAmigos(String nombre) {
+        List<String> amigos = new ArrayList<>();
+        try {
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT AMIGOS FROM AMIGOS WHERE usuario = ?");
+            stmt.setString(1, nombre);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                amigos.add(rs.getString("amigo"));
+            }
+
+            rs.close();
+            stmt.close();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return amigos;
+    }
 }
