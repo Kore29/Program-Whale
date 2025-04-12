@@ -17,14 +17,6 @@ public class Main {
     private static final Scanner sc = new Scanner(System.in);
     public static WhaleDao whaleDao;
 
-    static {
-        try {
-            whaleDao = new WhaleDaoMySql();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void main(String[] args) {
 
         System.out.println("╔══════════════════════╗\n║ \u001B[34mBIENVENIDOS A WHALE!\u001B[0m ║\n╚══════════════════════╝");
@@ -127,6 +119,7 @@ public class Main {
             int totalPages = whaleDao.sizePublicaciones()/6;
             UtilsShow.showPublicaciones(whaleDao.getSixPublicaciones(page));
 
+            System.out.print("Página "+page+"/"+totalPages+" | ");
             int option = navBar();
 
             switch (option) {
@@ -147,7 +140,7 @@ public class Main {
                     System.exit(0);
                     break;
                 case 6:
-                    if (page < totalPages-1) page++;
+                    if (page < totalPages) page++;
                     else {System.out.println("Límite de páginas");}
                     break;
                 case 7:
@@ -161,8 +154,8 @@ public class Main {
     }
 
     public static int navBar() {
-        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
         System.out.println("6.Siguiente página  7.Anterior Página");
+        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
         while (true) {
             String opt = sc.nextLine();
             if (UtilsCheck.checkInt(opt).isEmpty()) {

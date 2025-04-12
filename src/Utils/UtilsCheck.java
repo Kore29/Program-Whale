@@ -46,7 +46,7 @@ public class UtilsCheck {
             return "";
         }
 
-        String[] dominiosPermitidos = {"@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@protonmail.com", "@icloud.com"};
+        String[] dominiosPermitidos = {"@gmail.com", "@hotmail.com", "@yahoo.com", "@outlook.com", "@protonmail.com", "@icloud.com", "@example.com"};
 
         boolean esValido = false;
         for (String dominio : dominiosPermitidos) {

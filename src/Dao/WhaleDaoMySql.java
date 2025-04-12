@@ -14,19 +14,17 @@ import java.util.List;
 
 public class WhaleDaoMySql implements WhaleDao {
 
-    private static Connection con;
-    public WhaleDaoMySql() throws SQLException {
-        con  = ConexionDataBase.getInstance();
-    }
-
     @Override
     public Usuario getUsuarioByEmail(String email) {
         Usuario mainUsuario = null;
 
-        try {
-            Connection con = ConexionDataBase.getInstance();
+        Connection con = null;
+        PreparedStatement stmt = null;
 
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE email = ?");
+        try {
+            con = ConexionDataBase.getInstance();
+
+            stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE email = ?");
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
@@ -44,6 +42,13 @@ public class WhaleDaoMySql implements WhaleDao {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(con != null) con.close();
+                if(stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return mainUsuario;
@@ -53,10 +58,13 @@ public class WhaleDaoMySql implements WhaleDao {
     public Usuario getUsuarioByName(String name) {
         Usuario mainUsuario = null;
 
-        try {
-            Connection con = ConexionDataBase.getInstance();
+        Connection con = null;
+        PreparedStatement stmt = null;
 
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?");
+        try {
+            con = ConexionDataBase.getInstance();
+
+            stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?");
             stmt.setString(1, name);
 
             ResultSet rs = stmt.executeQuery();
@@ -74,6 +82,13 @@ public class WhaleDaoMySql implements WhaleDao {
 
         } catch (Exception e) {
                 throw new RuntimeException(e);
+        } finally {
+            try {
+                if(con != null) con.close();
+                if(stmt != null) stmt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return mainUsuario;
@@ -103,8 +118,8 @@ public class WhaleDaoMySql implements WhaleDao {
         int offset = (page-1)*6;
         List<Publicacion> publicaciones = new ArrayList<>();
 
-        PreparedStatement stmt = null;
         Connection con = null;
+        PreparedStatement stmt = null;
 
         try {
             con = ConexionDataBase.getInstance();
@@ -135,6 +150,8 @@ public class WhaleDaoMySql implements WhaleDao {
                 List<Comentario> comentarios = getComentariosById(activePublciacion.getId());
                 activePublciacion.addComentarios(comentarios);
             }
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();
