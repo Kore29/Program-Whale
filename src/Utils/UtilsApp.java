@@ -120,13 +120,13 @@ public class UtilsApp {
 //        return null;
 //    }*
 //
-//    public static String removeHashTag(String text) {
-//        StringBuilder newText = new StringBuilder();
-//        for (String e : text.split(" ")) {
-//            if (!e.startsWith("#")) {
-//                newText.append(e).append(" ");
-//            }
-//        }
-//        return newText.toString().trim();
-//    }
+    public static String removeHashTag(String text) {
+        StringBuilder newText = new StringBuilder();
+        for (String e : text.split(" ")) {
+            if (!e.startsWith("#")) {
+                newText.append(e).append(" ");
+            }
+        }
+        return newText.toString().trim();
+    }
 }

@@ -13,20 +13,12 @@ public class ConexionDataBase {
     private ConexionDataBase() {}
 
 
-    private static void openConection() {
-        connect = null;
-        try {
-            connect = DriverManager.getConnection(ConexioDataInfo.getURL(), ConexioDataInfo.getUSR(), ConexioDataInfo.getPWD());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Connection getInstance() throws SQLException {
-        if (connect == null || connect.isClosed()) {
-            openConection();
-        }
-        return connect;
+        return DriverManager.getConnection(
+            ConexioDataInfo.getURL(),
+            ConexioDataInfo.getUSR(),
+            ConexioDataInfo.getPWD()
+        );
     }
 
     public void closeConnection() {

@@ -17,81 +17,74 @@ public class WhaleDaoMySql implements WhaleDao {
     @Override
     public Usuario getUsuarioByEmail(String email) {
         Usuario mainUsuario = null;
-
-        Connection con = null;
-        PreparedStatement stmt = null;
-
-        try {
-            con = ConexionDataBase.getInstance();
-
-            stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE email = ?");
+    
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE email = ?")) {
+    
             stmt.setString(1, email);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if(rs.next()) {
-                mainUsuario = new Usuario(
-                    rs.getString("nombre"),
-                    rs.getString("contrasenya"),
-                    rs.getString("email"),
-                    rs.getString("creacion"),
-                    null,
-                    null
-                );
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(con != null) con.close();
-                if(stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return mainUsuario;
-    }
-
-    @Override
-    public Usuario getUsuarioByName(String name) {
-        Usuario mainUsuario = null;
-
-        Connection con = null;
-        PreparedStatement stmt = null;
-
-        try {
-            con = ConexionDataBase.getInstance();
-
-            stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?");
-            stmt.setString(1, name);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                mainUsuario = new Usuario(
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    mainUsuario = new Usuario(
                         rs.getString("nombre"),
                         rs.getString("contrasenya"),
                         rs.getString("email"),
                         rs.getString("creacion"),
                         null,
                         null
-                );
+                    );
+                }
             }
-
-        } catch (Exception e) {
-                throw new RuntimeException(e);
-        } finally {
-            try {
-                if(con != null) con.close();
-                if(stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener usuario por email", e);
         }
-
+    
         return mainUsuario;
+    }
+
+    @Override
+    public Usuario getUsuarioByName(String name) {
+        Usuario mainUsuario = null;
+    
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS WHERE nombre = ?")) {
+    
+            stmt.setString(1, name);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    mainUsuario = new Usuario(
+                        rs.getString("nombre"),
+                        rs.getString("contrasenya"),
+                        rs.getString("email"),
+                        rs.getString("creacion"),
+                        null,
+                        null
+                    );
+                }
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener usuario por nombre", e);
+        }
+    
+        return mainUsuario;
+    }
+
+    @Override
+    public void insertPublicacion(Publicacion publicacion) {
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("INSERT INTO CONTENIDO (autor,creacion,likes,multimedia,hashtag,texto) VALUES (?,?,?,?,?,?)")) {
+            stmt.setString(1, publicacion.getAutor());
+            stmt.setString(2, publicacion.getCreacion());
+            stmt.setInt(3, publicacion.getLikes());
+            stmt.setString(4, publicacion.getMultimedia());
+            stmt.setString(5,publicacion.getHashtag());
+            stmt.setString(6, publicacion.getTexto());
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -151,17 +144,8 @@ public class WhaleDaoMySql implements WhaleDao {
                 activePublciacion.addComentarios(comentarios);
             }
 
-
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if(con != null) con.close();
-                if(stmt != null) stmt.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         return publicaciones;

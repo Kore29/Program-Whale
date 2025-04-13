@@ -11,11 +11,12 @@ public interface WhaleDao {
     Usuario getUsuarioByEmail(String email);
     Usuario getUsuarioByName(String name);
     List<String> getAmigos(String nombre);
-    //void insertPublicacion();
 
+    void insertPublicacion(Publicacion publicacion);
     int sizePublicaciones();
     List<Publicacion> getSixPublicaciones(int page);
     Publicacion getPublicacionById(int id);
+
 
     //void insertComentario(int id);
     List<Comentario> getComentariosById(int idRef);

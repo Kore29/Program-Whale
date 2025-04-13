@@ -1,21 +1,23 @@
 package App;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Dao.WhaleDao;
 import Dao.WhaleDaoMySql;
-import PageModelNew.Usuario;
-import Utils.UtilsCheck;
+import PageModelNew.*;
+
+
+import Utils.*;
 import static Utils.UtilsColors.c;
 import static Utils.UtilsColors.r;
-import Utils.UtilsShow;
+
 
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
-    public static WhaleDao whaleDao;
+    public static WhaleDao whaleDao = new WhaleDaoMySql();
 
     public static void main(String[] args) {
 
@@ -130,7 +132,7 @@ public class Main {
                     // selectContenido(); // pendiente
                     break;
                 case 3:
-                    // crearPublicacion(); // pendiente
+                    whaleDao.insertPublicacion(createPublicacion(mainUsuario)); // pendiente
                     break;
                 case 4:
                     // filterContenido(); // pendiente
@@ -164,6 +166,32 @@ public class Main {
                 System.out.println(UtilsCheck.checkInt(opt));
             }
         }
+    }
+
+        public static Publicacion createPublicacion(Usuario mainUsuario) {
+        String tempText;
+
+        while (true) {
+            System.out.println("Escribe el publicación (Máximo un HashTag y 200 caracteres): ");
+            tempText = sc.nextLine();
+
+            if (UtilsCheck.check200Caracteres(tempText).isEmpty()) {
+                break;
+            } else {
+                System.out.println(UtilsCheck.check200Caracteres(tempText));
+            }
+        }
+
+        String tempHashTag = UtilsCheck.checkHashtagText(tempText);
+        tempText = UtilsApp.removeHashTag(tempText);
+
+        System.out.println("Enlace de contenido: (opcional)");
+        String tempMult = UtilsCheck.checkLink(sc.nextLine());
+
+        String tempFech = String.valueOf(LocalDate.now());
+        if (tempMult.isEmpty()) tempMult = null;
+
+        return new Publicacion(0, mainUsuario.getNombre(), tempFech, tempMult, tempText, 0, tempHashTag, null);
     }
 
 }
