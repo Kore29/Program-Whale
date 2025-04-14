@@ -18,14 +18,15 @@ import static Utils.UtilsColors.r;
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
     public static WhaleDao whaleDao = new WhaleDaoMySql();
+    public static Usuario mainUsuario;
 
     public static void main(String[] args) {
 
         System.out.println("╔══════════════════════╗\n║ \u001B[34mBIENVENIDOS A WHALE!\u001B[0m ║\n╚══════════════════════╝");
         System.out.println();
 
-        Usuario mainUsuario = startUsuario();
-        showMainMenu(mainUsuario, 1);
+        mainUsuario = startUsuario();
+        showMainMenu(1);
     }
 
     public static Usuario startUsuario() {
@@ -112,7 +113,7 @@ public class Main {
         return usuario;
     }
 
-    public static void showMainMenu(Usuario mainUsuario, int page) {
+    public static void showMainMenu(int page) {
         while (true) {
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
             System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
@@ -129,10 +130,10 @@ public class Main {
                     // perfil(); // pendiente
                     break;
                 case 2:
-                    // selectContenido(); // pendiente
+                    selectContenido();
                     break;
                 case 3:
-                    whaleDao.insertPublicacion(createPublicacion(mainUsuario)); // pendiente
+                    whaleDao.insertPublicacion(createPublicacion()); // pendiente
                     break;
                 case 4:
                     // filterContenido(); // pendiente
@@ -168,7 +169,7 @@ public class Main {
         }
     }
 
-        public static Publicacion createPublicacion(Usuario mainUsuario) {
+    public static Publicacion createPublicacion() {
         String tempText;
 
         while (true) {
@@ -192,6 +193,67 @@ public class Main {
         if (tempMult.isEmpty()) tempMult = null;
 
         return new Publicacion(0, mainUsuario.getNombre(), tempFech, tempMult, tempText, 0, tempHashTag, null);
+    }
+
+    public static void selectContenido() {
+        int id; Publicacion selectPublicacion;
+
+        while (true) {
+            System.out.print("Seleciona una de las posibles Publicaciones por el Id: ");
+
+            String id_s = sc.nextLine();
+            if (UtilsCheck.checkInt(id_s).isEmpty()) {
+                id = Integer.parseInt(id_s);
+            } else {
+                System.out.println(UtilsCheck.checkInt(id_s));
+                continue;
+            }
+
+            selectPublicacion = whaleDao.getPublicacionById(Integer.parseInt(id_s));
+
+            if (selectPublicacion != null) {
+                break;
+            } else {
+                System.out.println(c[1]+"Error, escribe un Id valido: "+r);
+            }
+        }
+
+        System.out.println("1.Añadir Comentario  2.Dar Like  3.Salir al menú principal.");
+
+        while (true) {
+            int option;
+            while (true) {
+                String opt = sc.nextLine();
+                if (UtilsCheck.checkInt(opt).isEmpty()) {
+                    option = Integer.parseInt(opt); break;
+                } else {
+                    System.out.println(UtilsCheck.checkInt(opt));
+                }
+            }
+
+            if (option == 1) {whaleDao.insertComentario(includeComentario(id)); break;}
+            if (option == 2) {whaleDao.updateLikes(id); System.out.println("Like recibido..."); break;}
+            if (option == 3) {break;}
+            else System.out.println(c[1]+"Error: Escribe una opción valida"+r);
+        }
+
+    }
+
+    public static Comentario includeComentario(int id) {
+        System.out.println("Escribe 'exit' para salir.");
+        System.out.print("Añade un comentario: "); String tempCome = sc.nextLine();
+
+        if (tempCome.toLowerCase().equals("exit")) return null;
+
+        String tempHashTag = UtilsCheck.checkHashtagText(tempCome);
+        tempCome = UtilsApp.removeHashTag(tempCome);
+
+        String tempFech = String.valueOf(LocalDate.now());
+
+        if(tempCome != null && !tempCome.trim().isEmpty()) {
+            return new Comentario(0,mainUsuario.getNombre(),tempFech,null,tempCome,id);
+        }
+        return null;
     }
 
 }

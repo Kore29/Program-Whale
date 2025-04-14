@@ -88,22 +88,30 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public int sizePublicaciones() {
-        try {
-            Connection con = ConexionDataBase.getInstance();
-
-            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(c.id_contenido) FROM CONTENIDO c");
-            ResultSet rs = stmt.executeQuery();
-
-            if(rs.next()) {
-                return rs.getInt(1);
-            }
+    public void updateLikes(int id) {
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("UPDATE CONTENIDO c SET c.likes = c.likes +1 WHERE c.id_contenido = ?")) {
+            stmt.setInt(1, id);
+            stmt.execute();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return 0;
+    @Override
+    public void insertComentario(Comentario comentario) {
+        try (Connection con = ConexionDataBase.getInstance();
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO CONTENIDO (id_referencia,autor,creacion,likes,multimedia,texto) VALUES (?,?,?,null,?,?)")) {
+            stmt.setInt(1, comentario.getIdReferencia());
+            stmt.setString(2, comentario.getAutor());
+            stmt.setString(3, comentario.getCreacion());
+            stmt.setString(5,comentario.getMultimedia());
+            stmt.setString(6, comentario.getTexto());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -158,7 +166,7 @@ public class WhaleDaoMySql implements WhaleDao {
         try {
             Connection con = ConexionDataBase.getInstance();
 
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_contenido = ?");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_contenido IS NULL AND id_contenido = ?");
             stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
@@ -173,13 +181,34 @@ public class WhaleDaoMySql implements WhaleDao {
                     rs.getString("hashtag"),
                     getComentariosById(rs.getInt("id_contenido"))
                 );
+
+                return tempPubl;
+            } else {
+                return null;
             }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return tempPubl;
+    @Override
+    public int sizePublicaciones() {
+        try {
+            Connection con = ConexionDataBase.getInstance();
+
+            PreparedStatement stmt = con.prepareStatement("SELECT COUNT(c.id_contenido) FROM CONTENIDO c");
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -238,4 +267,5 @@ public class WhaleDaoMySql implements WhaleDao {
 
         return amigos;
     }
+
 }

@@ -13,13 +13,14 @@ public interface WhaleDao {
     List<String> getAmigos(String nombre);
 
     void insertPublicacion(Publicacion publicacion);
-    int sizePublicaciones();
+    void updateLikes(int id);
+
     List<Publicacion> getSixPublicaciones(int page);
     Publicacion getPublicacionById(int id);
+    int sizePublicaciones();
 
-
-    //void insertComentario(int id);
-    List<Comentario> getComentariosById(int idRef);
+    void insertComentario(Comentario comentario);
+    List<Comentario> getComentariosById(int id);
 
 
 }

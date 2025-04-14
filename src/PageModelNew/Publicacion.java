@@ -19,7 +19,6 @@ public class Publicacion extends Contenido {
     public String getHashtag() {return hashtag;}
 
     public int getLikes() {return likes;}
-    public void addLike() {this.likes++;}
 
     public List<Comentario> getComentarios() {return comentarios;}
     public void removeComentarios(int id) {comentarios.remove(id);}

@@ -7,16 +7,7 @@ import java.util.Scanner;
 
 public class UtilsApp {
 
-//    // GENERAL
-//    public static Usuario getUsuarioByName(List<Usuario> usuarios, String nombre) {
-//        for (Usuario usuario : usuarios) {
-//            if (usuario.getNombre().equals(nombre)) {
-//                return usuario;
-//            }
-//        }
-//        return usuarios.getFirst();
-//    }
-//
+
 //    public static void changeNombre(Usuario root, Scanner sc) {
 //        System.out.println("Introduce el nombre por el que deseas cambiar: ");
 //        String tempNomb = sc.nextLine();
