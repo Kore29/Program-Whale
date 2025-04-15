@@ -21,7 +21,5 @@ public class Publicacion extends Contenido {
     public int getLikes() {return likes;}
 
     public List<Comentario> getComentarios() {return comentarios;}
-    public void removeComentarios(int id) {comentarios.remove(id);}
-    public void addComentario(Comentario comentario) {comentarios.add(comentario);}
     public void addComentarios(List<Comentario> comentarios) {this.comentarios =  comentarios;}
 }

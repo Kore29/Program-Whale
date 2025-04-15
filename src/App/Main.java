@@ -1,7 +1,7 @@
 package App;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import Dao.WhaleDao;
@@ -18,7 +18,9 @@ import static Utils.UtilsColors.r;
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
     public static WhaleDao whaleDao = new WhaleDaoMySql();
+
     public static Usuario mainUsuario;
+    public static List<Publicacion> pagePublicaciones;
 
     public static void main(String[] args) {
 
@@ -120,7 +122,8 @@ public class Main {
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
 
             int totalPages = whaleDao.sizePublicaciones()/6;
-            UtilsShow.showPublicaciones(whaleDao.getSixPublicaciones(page));
+            pagePublicaciones = whaleDao.getSixPublicaciones(page);
+            UtilsShow.showPublicaciones(pagePublicaciones);
 
             System.out.print("Página "+page+"/"+totalPages+" | ");
             int option = navBar();
@@ -133,7 +136,8 @@ public class Main {
                     selectContenido();
                     break;
                 case 3:
-                    whaleDao.insertPublicacion(createPublicacion()); // pendiente
+                    whaleDao.insertPublicacion(createPublicacion());
+                    totalPages = 1; // Para volver al principio si creas una publicación
                     break;
                 case 4:
                     // filterContenido(); // pendiente
@@ -186,6 +190,8 @@ public class Main {
         String tempHashTag = UtilsCheck.checkHashtagText(tempText);
         tempText = UtilsApp.removeHashTag(tempText);
 
+        if (tempHashTag.isEmpty()) tempHashTag = "#whale";
+
         System.out.println("Enlace de contenido: (opcional)");
         String tempMult = UtilsCheck.checkLink(sc.nextLine());
 
@@ -209,9 +215,11 @@ public class Main {
                 continue;
             }
 
-            selectPublicacion = whaleDao.getPublicacionById(Integer.parseInt(id_s));
+            int finalId = id;
+            boolean valid = pagePublicaciones.stream()
+                    .anyMatch(p -> p.getId() == finalId);
 
-            if (selectPublicacion != null) {
+            if (valid) {
                 break;
             } else {
                 System.out.println(c[1]+"Error, escribe un Id valido: "+r);

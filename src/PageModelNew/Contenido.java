@@ -27,22 +27,18 @@ public class Contenido {
     public String getAutor() {
         return autor;
     }
-    public void setAutor(String autor) {this.autor = autor;}
 
     //Creacion
     public String getCreacion() {
         return creacion;
     }
-    public void setCreacion(String creacion) {this.creacion = creacion;}
 
     //Multimedia
     public String getMultimedia() {
         return multimedia;
     }
-    public void setMultimedia(String multimedia) {this.multimedia = multimedia;}
 
     //Texto
     public String getTexto() {return texto;}
-    public void setTexto(String texto) {this.texto = texto;}
 
 }

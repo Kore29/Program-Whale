@@ -106,8 +106,9 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setInt(1, comentario.getIdReferencia());
             stmt.setString(2, comentario.getAutor());
             stmt.setString(3, comentario.getCreacion());
-            stmt.setString(5,comentario.getMultimedia());
-            stmt.setString(6, comentario.getTexto());
+            stmt.setString(4,comentario.getMultimedia());
+            stmt.setString(5, comentario.getTexto());
+            stmt.execute();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
