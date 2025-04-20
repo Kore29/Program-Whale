@@ -5,16 +5,18 @@ import PageModelNew.*;
 import java.util.List;
 import java.util.Scanner;
 
+import static App.Main.sc;
+
 public class UtilsApp {
 
 
-//    public static void changeNombre(Usuario root, Scanner sc) {
-//        System.out.println("Introduce el nombre por el que deseas cambiar: ");
-//        String tempNomb = sc.nextLine();
-//        root.setNombre(tempNomb);
-//        System.out.println("Nombre cambiado: " + root.getNombre());
-//    }
-//
+    public static String changeNombre(Usuario usuario) {
+        System.out.println("Introduce el nombre por el que deseas cambiar: ");
+        String tempNomb = sc.nextLine();
+        System.out.println("Nombre cambiado: " + tempNomb);
+        return tempNomb;
+    }
+
 //    public static void deleteAmigo(Usuario root, Scanner sc) {
 //        if (root.getAmigos().isEmpty()) {
 //            System.out.println("No tienes amigos en tu lista.");
