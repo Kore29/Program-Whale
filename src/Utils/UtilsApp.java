@@ -2,13 +2,10 @@ package Utils;
 
 import PageModelNew.*;
 
-import java.util.List;
-import java.util.Scanner;
-
 import static App.Main.sc;
+import static App.Main.mainUsuario;
 
 public class UtilsApp {
-
 
     public static String changeNombre(Usuario usuario) {
         System.out.println("Introduce el nombre por el que deseas cambiar: ");
@@ -17,14 +14,14 @@ public class UtilsApp {
         return tempNomb;
     }
 
-//    public static void deleteAmigo(Usuario root, Scanner sc) {
-//        if (root.getAmigos().isEmpty()) {
+//    public static void deleteAmigo(String amigo) {
+//        if (usuario.getAmigos().isEmpty()) {
 //            System.out.println("No tienes amigos en tu lista.");
 //            return;
 //        }
 //
 //        StringBuilder fr = new StringBuilder("Amigos: ");
-//        for (Usuario amigo : root.getAmigos()) {
+//        for (Usuario amigo : usuario.getAmigos()) {
 //            fr.append(amigo.getNombre()).append(", ");
 //        }
 //        System.out.println(fr.substring(0, Math.max(0, fr.length() - 2)));
@@ -41,22 +38,22 @@ public class UtilsApp {
 //
 //            Usuario amigo = UtilsApp.getUsuarioByName(DataBase.getUsuarios(), tempAmig);
 //
-//            if (amigo == null || !root.isAmigo(amigo)) {
+//            if (amigo == null || !usuario.isAmigo(amigo)) {
 //                System.out.println("\u001B[31mError: Introduce un nombre válido\u001B[0m");
 //            } else {
-//                root.removeAmigo(amigo);
+//                usuario.removeAmigo(amigo);
 //                System.out.println(tempAmig + " ha sido eliminado de tu lista de amigos.");
 //                break;
 //            }
 //        }
 //    }
 //
-//    public static void includeAmigo(Usuario root, Scanner sc) {
+//    public static void includeAmigo(String amigo) {
 //        StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
 //        boolean haySugerencias = false;
 //
 //        for (Usuario usuario : DataBase.getUsuarios()) {
-//            if (!root.isAmigo(usuario) && usuario != root) {
+//            if (!usuario.isAmigo(usuario) && usuario != usuario) {
 //                nfr.append(usuario.getNombre()).append(", ");
 //                haySugerencias = true;
 //            }
@@ -84,10 +81,10 @@ public class UtilsApp {
 //
 //            if (amigo == null) {
 //                System.out.println("\u001B[31mError: Usuario no encontrado\u001B[0m");
-//            } else if (root.isAmigo(amigo)) {
+//            } else if (usuario.isAmigo(amigo)) {
 //                System.out.println("\u001B[31mError: Ya es tu amigo\u001B[0m");
 //            } else {
-//                root.addAmigo(amigo);
+//                usuario.addAmigo(amigo);
 //                System.out.println(tempAmig + " ha sido agregado a tu lista de amigos.");
 //                break;
 //            }

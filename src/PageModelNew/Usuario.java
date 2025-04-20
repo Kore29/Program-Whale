@@ -11,11 +11,11 @@ public class Usuario {
     private String contrasenya;
     private String email;
     private String creacion;
-    private List<Usuario> amigos;
-    private List<PageModelNew.Publicacion> publicaciones;
+    private List<String> amigos;
+    private List<Publicacion> publicaciones;
 
 
-    public Usuario(String nombre, String contrasena, String email, String creacion, List<Usuario> amigos, List<Contenido> contenido) {
+    public Usuario(String nombre, String contrasena, String email, String creacion, List<String> amigos, List<Publicacion> publicaciones) {
         this.nombre = nombre;
         this.contrasenya = contrasena;
         this.email = email;
@@ -45,15 +45,15 @@ public class Usuario {
     public void setCreacion(String creacion) {this.creacion = creacion;}
 
     //Amigos
-    public List<Usuario> getAmigos() {return amigos;}
-    public void setAmigos(List<Usuario> amigos) {this.amigos = amigos;}
+    public List<String> getAmigos() {return amigos;}
+    public void setAmigos(List<String> amigos) {this.amigos = amigos;}
 
     // Modificar Amigos
-    public void addAmigo(Usuario amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
-    public void removeAmigo(Usuario amigo) {amigos.remove(amigo);}
-    public boolean isAmigo(Usuario amigo) {return amigos.contains(amigo);}
+    public void addAmigo(String amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
+    public void removeAmigo(String amigo) {amigos.remove(amigo);}
+    public boolean isAmigo(String amigo) {return amigos.contains(amigo);}
 
     //Publicaciones
-    public List<PageModelNew.Publicacion> getPublicaciones() {return publicaciones;}
+    public List<Publicacion> getPublicaciones() {return publicaciones;}
     public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
 }

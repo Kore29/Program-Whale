@@ -10,14 +10,17 @@ public interface WhaleDao {
     void insertUsuario(Usuario usuario);
     Usuario getUsuarioByEmail(String email);
     Usuario getUsuarioByName(String name);
-    List<String> getAmigos(String nombre);
+
     void changeName(Usuario usuario, String name);
+
+    List<String> getAmigos(String nombre);
 
     void insertPublicacion(Publicacion publicacion);
     void updateLikes(int id);
 
     List<Publicacion> getSixPublicaciones(int page);
     List<Publicacion> getFilterPublicaciones(String hashtag);
+    List<Publicacion> getUsuarioPublicaciones(String nombre);
     Publicacion getPublicacionById(int id);
     int sizePublicaciones();
 

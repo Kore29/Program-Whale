@@ -112,7 +112,7 @@ public class Main {
 
         String tempCrea = String.valueOf(LocalDate.now());
 
-        usuario = new Usuario(tempNomb,tempCont,tempEmail,tempCrea,null,null);
+        usuario = new Usuario(tempNomb,tempCont,tempEmail,tempCrea,whaleDao.getAmigos(tempNomb),whaleDao.getUsuarioPublicaciones(tempNomb));
         return usuario;
     }
 
@@ -177,10 +177,10 @@ public class Main {
         }
     }
 
-        public static void perfil() {
+    public static void perfil() {
         while (true) {
             String nombre = mainUsuario.getNombre();
-            List<Usuario> amigos = mainUsuario.getAmigos();
+            List<String> amigos = mainUsuario.getAmigos();
 
             System.out.println("BIENVENID@ "+ nombre.toUpperCase());
             System.out.println(mainUsuario.getEmail() + " | Llevas en Whale desde "+mainUsuario.getCreacion());
@@ -191,9 +191,7 @@ public class Main {
             if (mainUsuario.getPublicaciones().isEmpty()) {
                 System.out.println("Aun no tienes publicaciones");
             } else {
-                for (int i=0; i<mainUsuario.getPublicaciones().size(); i++) {
-                    UtilsShow.showPublicaciones(mainUsuario.getPublicaciones());
-                }
+                UtilsShow.showPublicaciones(mainUsuario.getPublicaciones());
             }
             System.out.println();
 
@@ -210,9 +208,13 @@ public class Main {
                 }
             }
 
-            if (option==1) {whaleDao.changeName(mainUsuario, UtilsApp.changeNombre(mainUsuario));}
-//            else if (option==2) {UtilsApp.deleteAmigo(mainUsuario, sc);}
-//            else if (option==3) {UtilsApp.includeAmigo(mainUsuario, sc);}
+            if (option==1) {
+                String newName = UtilsApp.changeNombre(mainUsuario);
+                whaleDao.changeName(mainUsuario, newName);
+                mainUsuario = whaleDao.getUsuarioByName(newName);
+            }
+//            else if (option==2) {UtilsApp.deleteAmigo(mainUsuario);}
+//            else if (option==3) {UtilsApp.includeAmigo(mainUsuario);}
             else if (option==4) {break;}
             else {System.out.println("Escribe un parametro valido");}
         }
