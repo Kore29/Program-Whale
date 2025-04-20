@@ -58,17 +58,17 @@ public class Main {
         while (true) {
             Usuario usuario;
 
-            System.out.print(c[6]+"Introduce el nombre o email de tu usuario: "+r);
+            System.out.print(c[4]+"Introduce el nombre o email de tu usuario: "+r);
             String input = sc.nextLine().trim();
 
             if (!UtilsCheck.checkEmail(input).isEmpty()) usuario = whaleDao.getUsuarioByEmail(input);
             else if (!UtilsCheck.checkNombre(input).isEmpty()) usuario = whaleDao.getUsuarioByName(input);
-            else {System.out.println(c[1]+"Formato inválido. Introduce un nombre o email válido." + r); continue;}
+            else {System.out.println(c[3]+"Formato inválido. Introduce un nombre o email válido." + r); continue;}
 
             if (usuario == null) {
-                System.out.println(c[1]+"No se encontró ningún usuario con ese nombre o email. Intenta de nuevo." + r);
+                System.out.println(c[3]+"No se encontró ningún usuario con ese nombre o email. Intenta de nuevo." + r);
             } else {
-                System.out.print("Introduce la contraseña del usuario "+usuario.getNombre()+": ");
+                System.out.print(c[4]+"Introduce la contraseña del usuario "+c[6]+usuario.getNombre()+c[4]+": "+r);
 
                 String tempCont = "";
                 while (tempCont.isEmpty()) {
@@ -129,34 +129,34 @@ public class Main {
             pagePublicaciones = whaleDao.getSixPublicaciones(page);
             UtilsShow.showPublicaciones(pagePublicaciones);
 
+            System.out.println(c[6]+"Selecciona una de las siguientes opciones"+r);
             System.out.print("Página "+page+"/"+totalPages+" | ");
             int option = navBar();
 
             switch (option) {
                 case 1:
-                    perfil(); // pendiente
+                    if (page > 1) page--;
+                    else System.out.println("Límite de páginas");
                     break;
                 case 2:
-                    selectContenido();
-                    break;
-                case 3:
-                    whaleDao.insertPublicacion(createPublicacion());
-                    totalPages = 1; // Para volver al principio si creas una publicación
-                    break;
-                case 4:
-                    filterContenido();
-                    break;
-                case 5:
-                    System.out.println("Hasta pronto :)");
-                    System.exit(0);
-                    break;
-                case 6:
                     if (page < totalPages) page++;
                     else {System.out.println("Límite de páginas");}
                     break;
+                case 3:
+                    perfil();
+                    break;
+                case 4:
+                    selectContenido();
+                    break;
+                case 5:
+                    whaleDao.insertPublicacion(createPublicacion());
+                    break;
+                case 6:
+                    filterContenido();
+                    break;
                 case 7:
-                    if (page > 1) page--;
-                    else System.out.println("Límite de páginas");
+                    System.out.println("Hasta pronto :)");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println(c[1] + "Opción inválida, intenta de nuevo." + r);
@@ -165,8 +165,9 @@ public class Main {
     }
 
     public static int navBar() {
-        System.out.println("6.Siguiente página  7.Anterior Página");
-        System.out.println("\u001B[34mSelecciona una de las siguientes opciones\n1.Perfil  2.Seleccionar Contenido  3.Crear Publicación  4.Filtrar Contenido  5.Salir de Whale\u001B[0m");
+        System.out.println(c[4] + "1" + r + ".Anterior página   " + c[4] + "2" + r + ".Siguiente página");
+        System.out.println(c[4] + "3" + r + ".Perfil   " + c[4] + "4" + r + ".Seleccionar Contenido   " + c[4] + "5" + r + ".Crear Publicación   " + c[4] + "6" + r + ".Filtrar Contenido   " + c[4] + "7" + r + ".Salir de Whale");
+
         while (true) {
             String opt = sc.nextLine();
             if (UtilsCheck.checkInt(opt).isEmpty()) {
@@ -179,6 +180,7 @@ public class Main {
 
     public static void perfil() {
         while (true) {
+            mainUsuario = whaleDao.getUsuarioByEmail(mainUsuario.getEmail());
             String nombre = mainUsuario.getNombre();
             List<String> amigos = mainUsuario.getAmigos();
 
@@ -211,10 +213,9 @@ public class Main {
             if (option==1) {
                 String newName = UtilsApp.changeNombre(mainUsuario);
                 whaleDao.changeName(mainUsuario, newName);
-                mainUsuario = whaleDao.getUsuarioByName(newName);
             }
-//            else if (option==2) {UtilsApp.deleteAmigo(mainUsuario);}
-//            else if (option==3) {UtilsApp.includeAmigo(mainUsuario);}
+            else if (option==2) {whaleDao.removeAmigo(mainUsuario, UtilsApp.deleteAmigo(mainUsuario));}
+//            else if (option==3) {UtilsApp.includeAmigo(mainUsuario, UtilsApp.in);}
             else if (option==4) {break;}
             else {System.out.println("Escribe un parametro valido");}
         }

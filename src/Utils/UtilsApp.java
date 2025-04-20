@@ -14,39 +14,32 @@ public class UtilsApp {
         return tempNomb;
     }
 
-//    public static void deleteAmigo(String amigo) {
-//        if (usuario.getAmigos().isEmpty()) {
-//            System.out.println("No tienes amigos en tu lista.");
-//            return;
-//        }
-//
-//        StringBuilder fr = new StringBuilder("Amigos: ");
-//        for (Usuario amigo : usuario.getAmigos()) {
-//            fr.append(amigo.getNombre()).append(", ");
-//        }
-//        System.out.println(fr.substring(0, Math.max(0, fr.length() - 2)));
-//
-//        while (true) {
-//            System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
-//            String tempAmig = sc.nextLine().trim();
-//
-//            if (tempAmig.isEmpty()) {
-//                System.out.println("\u001B[31mError: Nombre vacío\u001B[0m");
-//                continue;
-//            }
-//            tempAmig = tempAmig.substring(0, 1).toUpperCase() + tempAmig.substring(1).toLowerCase();
-//
-//            Usuario amigo = UtilsApp.getUsuarioByName(DataBase.getUsuarios(), tempAmig);
-//
-//            if (amigo == null || !usuario.isAmigo(amigo)) {
-//                System.out.println("\u001B[31mError: Introduce un nombre válido\u001B[0m");
-//            } else {
-//                usuario.removeAmigo(amigo);
-//                System.out.println(tempAmig + " ha sido eliminado de tu lista de amigos.");
-//                break;
-//            }
-//        }
-//    }
+    public static String deleteAmigo(Usuario usuario) {
+        if (usuario.getAmigos().isEmpty()) {
+            System.out.println("No tienes amigos en tu lista.");
+            return "";
+        }
+
+        StringBuilder fr = new StringBuilder("Amigos: ");
+        for (String iter : usuario.getAmigos()) {
+            fr.append(iter).append(", ");
+        }
+        System.out.println(fr.substring(0, Math.max(0, fr.length() - 2)));
+
+        while (true) {
+            System.out.print("Introduce el nombre del amigo que quieras eliminar: ");
+            String tempAmig = sc.nextLine().trim();
+
+            if (tempAmig.isEmpty()) {
+                System.out.println("\u001B[31mError: Nombre vacío\u001B[0m");
+                continue;
+            }
+
+            if (usuario.isAmigo(tempAmig)) {
+                return tempAmig;
+            }
+        }
+    }
 //
 //    public static void includeAmigo(String amigo) {
 //        StringBuilder nfr = new StringBuilder("Gente que quizás conoces: ");
