@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 import Dao.WhaleDao;
 import Dao.WhaleDaoMySql;
+import Dao.WhaleCSV;
 import PageModelNew.*;
-
 
 import Utils.*;
 import static Utils.UtilsColors.c;
@@ -17,7 +17,17 @@ import static Utils.UtilsColors.r;
 
 public class Main {
     public static final Scanner sc = new Scanner(System.in);
-    public static WhaleDao whaleDao = new WhaleDaoMySql();
+    public static WhaleDao whaleDao = getDaoInstance();
+
+    private static WhaleDao getDaoInstance() {
+        try {
+            // Primero intenta con MySQL
+            return new WhaleDaoMySql();
+        } catch (Exception e) {
+            System.out.println("Error al conectar con MySQL. Usando CSV como respaldo.");
+            return new WhaleCSV();
+        }
+    }
 
     public static Usuario mainUsuario;
     public static List<Publicacion> pagePublicaciones;
