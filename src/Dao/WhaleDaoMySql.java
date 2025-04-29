@@ -3,27 +3,43 @@ package Dao;
 import DataBase.ConexionDataBase;
 import PageModelNew.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class WhaleDaoMySql implements WhaleDao {
+
+    public boolean testConnection() {
+        try {
+            Connection conn = ConexionDataBase.getInstance();
+
+            if (conn != null && !conn.isClosed()) return true;
+            else return false;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public WhaleDaoMySql() {testConnection();}
+
     @Override
     public void insertUsuario(Usuario usuario) {
         try (Connection con = ConexionDataBase.getInstance();
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO USUARIOS (nombre, contrasenya, email, creacion) VALUES(?, ?, ?, ?)")) {
+             PreparedStatement stmt = con.prepareStatement(
+                     "INSERT INTO USUARIOS (nombre, contrasenya, email, creacion) VALUES (?, ?, ?, ?)")) {
+
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getContrasena());
             stmt.setString(3, usuario.getEmail());
             stmt.setString(4, usuario.getCreacion());
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar usuario", e);
         }
     }
 

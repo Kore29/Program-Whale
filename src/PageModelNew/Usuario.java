@@ -56,4 +56,5 @@ public class Usuario {
     //Publicaciones
     public List<Publicacion> getPublicaciones() {return publicaciones;}
     public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
+
 }

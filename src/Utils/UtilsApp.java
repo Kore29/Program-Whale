@@ -47,126 +47,118 @@ public class UtilsApp {
 
 
 
-    public static void includeAmigo(Usuario usuario) {
-        // 1) cargar amigos actuales desde DAO
-        List<String> amigosActuales = whaleDao.getAmigos(usuario.getNombre());
-        usuario.setAmigos(amigosActuales);
-
-        // 2) obtener todos y filtrar
-        List<Usuario> todosUsuarios = whaleDao.getAllUsuarios().stream()
-                .filter(u -> !u.getNombre().equalsIgnoreCase(usuario.getNombre()))   // no tú mismo
-                .filter(u -> !amigosActuales.contains(u.getNombre()))                // ni quienes ya son tu amigo
-                .collect(Collectors.toList());
-
-        if (todosUsuarios.isEmpty()) {
-            System.out.println(UtilsColors.c[1] + "No hay usuarios disponibles para agregar como amigos." + UtilsColors.r);
-            return;
-        }
-
-        // Seleccionar 5 usuarios aleatorios
-        Collections.shuffle(todosUsuarios);
-        List<Usuario> recomendados = todosUsuarios.subList(0, Math.min(5, todosUsuarios.size()));
-
-        // Mostrar encabezado
-        System.out.println(" USUARIOS QUE TE PUEDEN INTERESAR ");
-
-        for (int i = 0; i < recomendados.size(); i++) {
-            Usuario recomendado = recomendados.get(i);
-            System.out.printf("%s%d%s. %s%s%s - Miembro desde: %s\n",
-                    UtilsColors.c[4], (i + 1), UtilsColors.r,
-                    UtilsColors.c[6], recomendado.getNombre(), UtilsColors.r,
-                    recomendado.getCreacion());
-        }
-
-        // Proceso de selección
-        while (true) {
-            System.out.print("\nIntroduce el nombre del usuario a agregar (o 'salir' para cancelar): ");
-            String input = sc.nextLine().trim();
-
-            if (input.equalsIgnoreCase("salir")) {
-                System.out.println("Operación cancelada.");
-                return;
-            }
-
-            if (input.isEmpty() || UtilsCheck.checkNombre(input).isEmpty()) {
-                System.out.println(UtilsColors.c[1] + "Error: Nombre inválido" + UtilsColors.r);
-                continue;
-            }
-
-            Optional<Usuario> seleccionado = recomendados.stream()
-                    .filter(u -> u.getNombre().equalsIgnoreCase(input))
-                    .findFirst();
-
-            if (seleccionado.isPresent()) {
-                Usuario amigo = seleccionado.get();
-                System.out.printf("%s¿Agregar a %s como amigo? (s/n): %s",
-                        UtilsColors.c[4], amigo.getNombre(), UtilsColors.r);
-
-                String confirm = sc.nextLine().trim();
-                if (confirm.equalsIgnoreCase("s")) {
-                    whaleDao.insertAmigo(usuario, amigo.getNombre());
-                    whaleDao.insertAmigo(amigo, usuario.getNombre());
-                    System.out.println(UtilsColors.c[2] + "¡Amigo agregado con éxito!" + UtilsColors.r);
-                } else {
-                    System.out.println("Operación cancelada.");
-                }
-                break;
-            } else {
-                System.out.println(UtilsColors.c[1] + "Error: El nombre no coincide con las opciones mostradas" + UtilsColors.r);
-            }
-        }
-    }
-
-
-
-    public static String eliminarAmigo(Usuario usuario) {
-        // 1) Recarga la lista de amigos desde la base
-        List<String> amigos = whaleDao.getAmigos(usuario.getNombre());
-        usuario.setAmigos(amigos);
-
-        if (amigos.isEmpty()) {
-            System.out.println("No tienes amigos en tu lista.");
-            return "";
-        }
-
-        // 2) Muestra la lista numerada
-        System.out.println(" TUS AMIGOS ");
-        for (int i = 0; i < amigos.size(); i++) {
-            System.out.printf("%d. %s\n", i + 1, amigos.get(i));
-        }
-
-        // 3) Bucle de selección
-        while (true) {
-            System.out.print("\nIntroduce el número del amigo a eliminar (o 'salir' para cancelar): ");
-            String input = sc.nextLine().trim();
-
-            if (input.equalsIgnoreCase("salir")) {
-                System.out.println("Operación cancelada.");
-                return "";
-            }
-
-            try {
-                int idx = Integer.parseInt(input) - 1;
-                if (idx < 0 || idx >= amigos.size()) {
-                    System.out.println("Error: Índice fuera de rango.");
-                    continue;
-                }
-                String nombreAmigo = amigos.get(idx);
-
-                // 4) Confirmación
-                System.out.printf("¿Eliminar a %s de tu lista de amigos? (s/n): ", nombreAmigo);
-                String confirm = sc.nextLine().trim();
-                if (confirm.equalsIgnoreCase("s")) {
-                    return nombreAmigo;
-                } else {
-                    System.out.println("Operación cancelada.");
-                    return "";
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Debes introducir un número válido.");
-            }
-        }
-    }
+//    public static void includeAmigo(Usuario usuario) {
+//        List<String> amigosActuales = whaleDao.getAmigos(usuario.getNombre());
+//        usuario.setAmigos(amigosActuales);
+//
+//        List<Usuario> todosUsuarios = whaleDao.getAllUsuarios().stream()
+//                .filter(u -> !u.getNombre().equalsIgnoreCase(usuario.getNombre()))   // no tú mismo
+//                .filter(u -> !amigosActuales.contains(u.getNombre()))                // ni quienes ya son tu amigo
+//                .collect(Collectors.toList());
+//
+//        if (todosUsuarios.isEmpty()) {
+//            System.out.println(UtilsColors.c[1] + "No hay usuarios disponibles para agregar como amigos." + UtilsColors.r);
+//            return;
+//        }
+//
+//        Collections.shuffle(todosUsuarios);
+//        List<Usuario> recomendados = todosUsuarios.subList(0, Math.min(5, todosUsuarios.size()));
+//
+//        System.out.println(" USUARIOS QUE TE PUEDEN INTERESAR ");
+//
+//        for (int i = 0; i < recomendados.size(); i++) {
+//            Usuario recomendado = recomendados.get(i);
+//            System.out.printf("%s%d%s. %s%s%s - Miembro desde: %s\n",
+//                    UtilsColors.c[4], (i + 1), UtilsColors.r,
+//                    UtilsColors.c[6], recomendado.getNombre(), UtilsColors.r,
+//                    recomendado.getCreacion());
+//        }
+//
+//        while (true) {
+//            System.out.print("\nIntroduce el nombre del usuario a agregar (o 'salir' para cancelar): ");
+//            String input = sc.nextLine().trim();
+//
+//            if (input.equalsIgnoreCase("salir")) {
+//                System.out.println("Operación cancelada.");
+//                return;
+//            }
+//
+//            if (input.isEmpty() || UtilsCheck.checkNombre(input).isEmpty()) {
+//                System.out.println(UtilsColors.c[1] + "Error: Nombre inválido" + UtilsColors.r);
+//                continue;
+//            }
+//
+//            Optional<Usuario> seleccionado = recomendados.stream()
+//                    .filter(u -> u.getNombre().equalsIgnoreCase(input))
+//                    .findFirst();
+//
+//            if (seleccionado.isPresent()) {
+//                Usuario amigo = seleccionado.get();
+//                System.out.printf("%s¿Agregar a %s como amigo? (s/n): %s",
+//                        UtilsColors.c[4], amigo.getNombre(), UtilsColors.r);
+//
+//                String confirm = sc.nextLine().trim();
+//                if (confirm.equalsIgnoreCase("s")) {
+//                    whaleDao.insertAmigo(usuario, amigo.getNombre());
+//                    whaleDao.insertAmigo(amigo, usuario.getNombre());
+//                    System.out.println(UtilsColors.c[2] + "¡Amigo agregado con éxito!" + UtilsColors.r);
+//                } else {
+//                    System.out.println("Operación cancelada.");
+//                }
+//                break;
+//            } else {
+//                System.out.println(UtilsColors.c[1] + "Error: El nombre no coincide con las opciones mostradas" + UtilsColors.r);
+//            }
+//        }
+//    }
+//
+//
+//
+//    public static String eliminarAmigo(Usuario usuario) {
+//        List<String> amigos = whaleDao.getAmigos(usuario.getNombre());
+//        usuario.setAmigos(amigos);
+//
+//        if (amigos.isEmpty()) {
+//            System.out.println("No tienes amigos en tu lista.");
+//            return "";
+//        }
+//
+//        System.out.println(" TUS AMIGOS ");
+//        for (int i = 0; i < amigos.size(); i++) {
+//            System.out.printf("%d. %s\n", i + 1, amigos.get(i));
+//        }
+//
+//        while (true) {
+//            System.out.print("\nIntroduce el número del amigo a eliminar (o 'salir' para cancelar): ");
+//            String input = sc.nextLine().trim();
+//
+//            if (input.equalsIgnoreCase("salir")) {
+//                System.out.println("Operación cancelada.");
+//                return "";
+//            }
+//
+//            try {
+//                int idx = Integer.parseInt(input) - 1;
+//                if (idx < 0 || idx >= amigos.size()) {
+//                    System.out.println("Error: Índice fuera de rango.");
+//                    continue;
+//                }
+//                String nombreAmigo = amigos.get(idx);
+//
+//                // 4) Confirmación
+//                System.out.printf("¿Eliminar a %s de tu lista de amigos? (s/n): ", nombreAmigo);
+//                String confirm = sc.nextLine().trim();
+//                if (confirm.equalsIgnoreCase("s")) {
+//                    return nombreAmigo;
+//                } else {
+//                    System.out.println("Operación cancelada.");
+//                    return "";
+//                }
+//            } catch (NumberFormatException e) {
+//                System.out.println("Error: Debes introducir un número válido.");
+//            }
+//        }
+//    }
 
     /*
     public static void includeAmigo(String amigo) {

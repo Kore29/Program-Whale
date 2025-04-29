@@ -2,75 +2,66 @@ package Dao;
 
 import PageModelNew.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhaleCSV implements WhaleDao {
-    private static Path usuariosPath = Paths.get("files", "usuarios.csv");
-    private static Path contenidoPath = Paths.get("files", "contenido.csv");
-    private static Path amigosPath = Paths.get("files", "amigos.csv");
+public class WhaleDaoCSV implements WhaleDao {
 
-    // Metodo para inicializar archivos CSV con encabezados
+    private static Path basePath = Paths.get("src", "DataBase", "CSV");
+    private static Path usuariosPath = basePath.resolve("usuarios.csv");
+    private static Path contenidoPath = basePath.resolve("contenido.csv");
+    private static Path amigosPath   = basePath.resolve("amigos.csv");
+
+
     private void initializeCSVFiles() {
         try {
-            // Crear directorio si no existe
-            new File("files").mkdirs();
+            Files.createDirectories(basePath);  // Esto crea la carpeta CSV si no existe
 
-            // Inicializar archivo de usuarios
-            if (!new File(usuariosPath.toString()).exists()) {
+            if (!Files.exists(usuariosPath)) {
                 writeToCSV(usuariosPath, "nombre,contrasena,email,creacion", "", false);
             }
 
-            // Inicializar archivo de contenido
-            if (!new File(contenidoPath.toString()).exists()) {
+            if (!Files.exists(contenidoPath)) {
                 writeToCSV(contenidoPath, "id_contenido,autor,creacion,multimedia,texto,likes,hashtag,id_referencia", "", false);
             }
 
-            // Inicializar archivo de amigos
-            if (!new File(amigosPath.toString()).exists()) {
+            if (!Files.exists(amigosPath)) {
                 writeToCSV(amigosPath, "usuario,amigo", "", false);
             }
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             System.out.println("Error al inicializar archivos CSV");
             e.printStackTrace();
         }
     }
 
-    // Metodo generico para escribir en CSV
     private void writeToCSV(Path path, String header, String data, boolean append) {
         try {
             File file = new File(path.toString());
             boolean fileExists = file.exists();
 
-            FileWriter writer = new FileWriter(file, append);
-            BufferedWriter bw = new BufferedWriter(writer);
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, append))) {
+                if ((!fileExists || file.length() == 0) && header != null) {
+                    bw.write(header);
+                    bw.newLine();
+                }
 
-            // Escribir encabezado si el archivo está vacío o no existe
-            if ((!fileExists || file.length() == 0) && header != null) {
-                bw.write(header);
-                bw.newLine();
+                if (!data.isEmpty()) {
+                    bw.write(data);
+                    bw.newLine();
+                }
             }
 
-            if (!data.isEmpty()) {
-                bw.write(data);
-                bw.newLine();
-            }
-
-            bw.close();
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo CSV: " + path);
             e.printStackTrace();
         }
     }
 
-    // Constructor
-    public WhaleCSV() {
-        initializeCSVFiles();
-    }
-
-    // Implementación de los metodos de WhaleDao
+    public WhaleDaoCSV() {initializeCSVFiles();}
 
     @Override
     public void insertUsuario(Usuario usuario) {
@@ -86,7 +77,6 @@ public class WhaleCSV implements WhaleDao {
     @Override
     public Usuario getUsuarioByEmail(String email) {
         try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
-            // Saltar encabezado
             reader.readLine();
 
             String line;
@@ -113,7 +103,6 @@ public class WhaleCSV implements WhaleDao {
     @Override
     public Usuario getUsuarioByName(String name) {
         try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
-            // Saltar encabezado
             reader.readLine();
 
             String line;
@@ -147,7 +136,7 @@ public class WhaleCSV implements WhaleDao {
     public List<String> getAmigos(String nombre) {
         List<String> amigos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
@@ -201,7 +190,7 @@ public class WhaleCSV implements WhaleDao {
     public List<Publicacion> getSixPublicaciones(int page) {
         List<Publicacion> publicaciones = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             int start = (page - 1) * 6;
@@ -230,7 +219,7 @@ public class WhaleCSV implements WhaleDao {
     public List<Publicacion> getFilterPublicaciones(String hashtag) {
         List<Publicacion> publicaciones = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
@@ -252,7 +241,7 @@ public class WhaleCSV implements WhaleDao {
     public List<Publicacion> getUsuarioPublicaciones(String nombre) {
         List<Publicacion> publicaciones = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
@@ -273,7 +262,7 @@ public class WhaleCSV implements WhaleDao {
     @Override
     public Publicacion getPublicacionById(int id) {
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
@@ -307,7 +296,7 @@ public class WhaleCSV implements WhaleDao {
     public int sizePublicaciones() {
         int count = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
@@ -343,7 +332,7 @@ public class WhaleCSV implements WhaleDao {
     public List<Comentario> getComentariosById(int id) {
         List<Comentario> comentarios = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
-            // Saltar encabezado
+
             reader.readLine();
 
             String line;
