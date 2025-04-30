@@ -4,9 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-import Dao.WhaleDao;
+import Dao.*;
 
-import Dao.WhaleDaoGlobal;
 import PageModelNew.*;
 
 import Utils.*;
@@ -15,7 +14,7 @@ import static Utils.UtilsColors.r;
 
 public class Main {
     public static final Scanner sc = new Scanner(System.in);
-    public static WhaleDao whaleDao = new WhaleDaoGlobal();
+    public static WhaleDao whaleDao = WhaleDaoFactory.getDao(WhaleDaoFactory.TipoDao.GLOBAL);
 
     public static Usuario mainUsuario;
     public static List<Publicacion> pagePublicaciones;

@@ -27,9 +27,14 @@ public class WhaleDaoGlobal implements WhaleDao {
         if (!mysqlUp){
             if(daoMySql.testConnection()){
                 //TODO: restaurar BBDD desde CSV
+                getBackDataBase();
                 mysqlUp = true;
             }
         }
+    }
+
+    private void getBackDataBase() {
+
     }
 
     @Override
@@ -58,6 +63,13 @@ public class WhaleDaoGlobal implements WhaleDao {
         checkConnection();
         if(mysqlUp) daoMySql.changeName(usuario, name);
         daoCsv.changeName(usuario, name);
+    }
+
+    @Override
+    public List<Usuario> getAllUsuarios() {
+        checkConnection();
+        if(mysqlUp) return daoMySql.getAllUsuarios();
+        return daoCsv.getAllUsuarios();
     }
 
     @Override

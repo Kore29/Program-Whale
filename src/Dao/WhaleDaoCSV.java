@@ -133,6 +133,31 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
+    public List<Usuario> getAllUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
+            reader.readLine(); // Saltar cabecera
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] campos = line.split(",");
+                usuarios.add(new Usuario(
+                        campos[0], // nombre
+                        campos[1], // contrasena
+                        campos[2], // email
+                        campos[3], // creacion
+                        getAmigos(campos[0]), // amigos
+                        getUsuarioPublicaciones(campos[0]) // publicaciones
+                ));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer todos los usuarios desde CSV");
+            e.printStackTrace();
+        }
+        return usuarios;
+    }
+
+    @Override
     public List<String> getAmigos(String nombre) {
         List<String> amigos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {

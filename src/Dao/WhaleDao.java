@@ -5,6 +5,7 @@ import PageModelNew.Publicacion;
 import PageModelNew.Usuario;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WhaleDao {
     void insertUsuario(Usuario usuario);
@@ -13,6 +14,7 @@ public interface WhaleDao {
 
     void changeName(Usuario usuario, String name);
 
+    List<Usuario> getAllUsuarios();
     List<String> getAmigos(String nombre);
     void insertAmigo(Usuario usuario, String nombre);
     void removeAmigo(Usuario usuario, String nombre);
@@ -28,6 +30,4 @@ public interface WhaleDao {
 
     void insertComentario(Comentario comentario);
     List<Comentario> getComentariosById(int id);
-
-
 }

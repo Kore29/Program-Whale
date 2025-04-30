@@ -123,6 +123,40 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
+    public List<Usuario> getAllUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS");
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getString("nombre"),
+                        rs.getString("contrasena"),
+                        rs.getString("email"),
+                        rs.getString("creacion"),
+                        null,
+                        null
+                );
+
+                if (usuario != null) {
+                    usuario.setAmigos(getAmigos(usuario.getNombre()));
+                    usuario.setPublicaciones(getUsuarioPublicaciones(usuario.getNombre()));
+                }
+
+                usuarios.add(usuario);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return usuarios;
+    }
+
+
+    @Override
     public List<String> getAmigos(String nombre) {
         List<String> amigos = new ArrayList<>();
         try (Connection con = ConexionDataBase.getInstance();
