@@ -74,6 +74,13 @@ Siguientes opciones en desarrollo...
     <img src="images/Tablas_relacionadas.png">
 </picture>
 
+### Representación gráfica evolucion Whale
+
+<picture>
+<img src="./images/Strong%20dog%20vs%20weak%20dog.png" alt="Imagen adaptable" width="350"/>
+</picture>
+
+
 ## Futuras Actualizaciones
 
 Ahora estamos trabajando en la aplicación y tenemos pensado aplicar estos cambios:
