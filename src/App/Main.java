@@ -24,8 +24,8 @@ public class Main {
         System.out.println("╔══════════════════════╗\n║ \u001B[34mBIENVENIDOS A WHALE!\u001B[0m ║\n╚══════════════════════╝");
         System.out.println();
 
-        mainUsuario = startUsuario();
-        showMainMenu(1);
+//        mainUsuario = startUsuario();
+//        showMainMenu(1);
     }
 
     public static Usuario startUsuario() {
@@ -109,7 +109,7 @@ public class Main {
 
         String tempCrea = String.valueOf(LocalDate.now());
 
-        usuario = new Usuario(tempNomb,tempCont,tempEmail,tempCrea,whaleDao.getAmigos(tempNomb),whaleDao.getUsuarioPublicaciones(tempNomb));
+        usuario = new Usuario(tempNomb,tempCont,tempEmail,tempCrea,whaleDao.getAllAmigos(tempNomb),whaleDao.getPublicacionesByUsuario(tempNomb));
         return usuario;
     }
 
@@ -122,7 +122,7 @@ public class Main {
             System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
             System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
 
-            int totalPages = whaleDao.sizePublicaciones()/6;
+            int totalPages = whaleDao.getSizePublicaciones()/6;
             pagePublicaciones = whaleDao.getSixPublicaciones(page);
             UtilsShow.showPublicaciones(pagePublicaciones);
 
@@ -256,7 +256,7 @@ public class Main {
             if (hashtags.equalsIgnoreCase("exit")) break;
             hashtags = UtilsCheck.checkIsHashTag(hashtags);
 
-            List<Publicacion> activePublicaciones = whaleDao.getFilterPublicaciones(hashtags);
+            List<Publicacion> activePublicaciones = whaleDao.getPublicacionesByHashTag(hashtags);
 
             System.out.println("Publicaciones con el hashtag a buscar...");
             System.out.println("\u001B[33m+---------------------------------------------------------------+\u001B[0m");

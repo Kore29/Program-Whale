@@ -46,7 +46,7 @@ public class UtilsApp {
     }
 
     public static void includeAmigo(Usuario usuario) {
-        List<String> amigosActuales = whaleDao.getAmigos(usuario.getNombre());
+        List<String> amigosActuales = whaleDao.getAllAmigos(usuario.getNombre());
         usuario.setAmigos(amigosActuales);
 
         List<Usuario> todosUsuarios = whaleDao.getAllUsuarios().stream()

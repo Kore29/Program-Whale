@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WhaleDaoCSV implements WhaleDao {
 
@@ -64,6 +66,102 @@ public class WhaleDaoCSV implements WhaleDao {
     public WhaleDaoCSV() {initializeCSVFiles();}
 
     @Override
+    public List<Usuario> getAllUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
+            reader.readLine(); // Saltar cabecera
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] campos = line.split(",");
+                usuarios.add(new Usuario(
+                        campos[0], // nombre
+                        campos[1], // contrasena
+                        campos[2], // email
+                        campos[3], // creacion
+                        getAllAmigos(campos[0]), // amigos
+                        getPublicacionesByUsuario(campos[0]) // publicaciones
+                ));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer todos los usuarios desde CSV");
+            e.printStackTrace();
+        }
+        return usuarios;
+    }
+
+    @Override
+    public List<Publicacion> getAllContenido() {
+        List<Publicacion> contenido = new ArrayList<>();
+        Map<Integer, Publicacion> mapaPublicaciones = new HashMap<>();
+        List<Comentario> comentariosPendientes = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] campos = line.split(",", -1);
+
+                int id_contenido = Integer.parseInt(campos[0]);
+                String autor = campos[1];
+                String creacion = campos[2];
+                String multimedia = campos[3].isEmpty() ? null : campos[3];
+                String texto = campos[4];
+
+                if (campos[7].isEmpty()) {
+                    int likes = campos[5].isEmpty() ? 0 : Integer.parseInt(campos[5]);
+                    String hashtag = campos[6];
+
+                    Publicacion pub = new Publicacion(id_contenido, autor, creacion, multimedia, texto, likes, hashtag, new ArrayList<>());
+                    contenido.add(pub);
+                    mapaPublicaciones.put(id_contenido, pub);
+                } else {
+                    int id_referencia = Integer.parseInt(campos[7]);
+                    Comentario comentario = new Comentario(id_contenido, autor, creacion, multimedia, texto, id_referencia);
+                    comentariosPendientes.add(comentario);
+                }
+            }
+
+            // asociar comentarios a publicaciones
+            for (Comentario comentario : comentariosPendientes) {
+                Publicacion pub = mapaPublicaciones.get(comentario.getIdReferencia());
+                if (pub != null) {
+                    pub.getComentarios().add(comentario);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al leer todo el contenido desde CSV");
+            e.printStackTrace();
+        }
+
+        return contenido;
+    }
+
+
+
+    @Override
+    public List<String> getAllAmigos(String nombre) {
+        List<String> amigos = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
+
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] campos = line.split(",");
+                if (campos[0].equals(nombre)) {
+                    amigos.add(campos[1]);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer amigos desde CSV");
+            e.printStackTrace();
+        }
+        return amigos;
+    }
+
+    @Override
     public void insertUsuario(Usuario usuario) {
         String data = String.join(",",
                 usuario.getNombre(),
@@ -88,8 +186,8 @@ public class WhaleDaoCSV implements WhaleDao {
                             campos[1], // contrasena
                             campos[2], // email
                             campos[3], // creacion
-                            getAmigos(campos[0]), // amigos
-                            getUsuarioPublicaciones(campos[0]) // publicaciones
+                            getAllAmigos(campos[0]), // amigos
+                            getPublicacionesByUsuario(campos[0]) // publicaciones
                     );
                 }
             }
@@ -114,8 +212,8 @@ public class WhaleDaoCSV implements WhaleDao {
                             campos[1], // contrasena
                             campos[2], // email
                             campos[3], // creacion
-                            getAmigos(campos[0]), // amigos
-                            getUsuarioPublicaciones(campos[0]) // publicaciones
+                            getAllAmigos(campos[0]), // amigos
+                            getPublicacionesByUsuario(campos[0]) // publicaciones
                     );
                 }
             }
@@ -130,52 +228,6 @@ public class WhaleDaoCSV implements WhaleDao {
     public void changeName(Usuario usuario, String newName) {
         // Implementación compleja para CSV - necesitaríamos reescribir todo el archivo
         System.out.println("Cambiar nombre no implementado para CSV");
-    }
-
-    @Override
-    public List<Usuario> getAllUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
-            reader.readLine(); // Saltar cabecera
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
-                usuarios.add(new Usuario(
-                        campos[0], // nombre
-                        campos[1], // contrasena
-                        campos[2], // email
-                        campos[3], // creacion
-                        getAmigos(campos[0]), // amigos
-                        getUsuarioPublicaciones(campos[0]) // publicaciones
-                ));
-            }
-        } catch (IOException e) {
-            System.out.println("Error al leer todos los usuarios desde CSV");
-            e.printStackTrace();
-        }
-        return usuarios;
-    }
-
-    @Override
-    public List<String> getAmigos(String nombre) {
-        List<String> amigos = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
-
-            reader.readLine();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
-                if (campos[0].equals(nombre)) {
-                    amigos.add(campos[1]);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error al leer amigos desde CSV");
-            e.printStackTrace();
-        }
-        return amigos;
     }
 
     @Override
@@ -241,7 +293,7 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getFilterPublicaciones(String hashtag) {
+    public List<Publicacion> getPublicacionesByHashTag(String hashtag) {
         List<Publicacion> publicaciones = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
 
@@ -263,7 +315,7 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getUsuarioPublicaciones(String nombre) {
+    public List<Publicacion> getPublicacionesByUsuario(String nombre) {
         List<Publicacion> publicaciones = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
 
@@ -318,7 +370,7 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
-    public int sizePublicaciones() {
+    public int getSizePublicaciones() {
         int count = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
 

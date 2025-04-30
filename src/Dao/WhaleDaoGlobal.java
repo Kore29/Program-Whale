@@ -27,14 +27,95 @@ public class WhaleDaoGlobal implements WhaleDao {
         if (!mysqlUp){
             if(daoMySql.testConnection()){
                 //TODO: restaurar BBDD desde CSV
-                getBackDataBase();
+
                 mysqlUp = true;
             }
         }
     }
 
-    private void getBackDataBase() {
+    public void moveCsvToMySql() {
+        if (!daoMySql.testConnection()) {
+            System.err.println(c[1] + "No se pudo conectar a MySQL. Operación cancelada." + r);
+            return;
+        }
 
+        // Limpiar base de datos MySQL
+//        daoMySql.clearAllData();
+
+        // Insertar usuarios y amigos
+        for (Usuario usuario : daoCsv.getAllUsuarios()) {
+            daoMySql.insertUsuario(usuario);
+            for (String amigo : daoCsv.getAllAmigos(usuario.getNombre())) {
+                daoMySql.insertAmigo(usuario, amigo);
+            }
+        }
+
+        // Insertar publicaciones y comentarios
+        int total = daoCsv.getSizePublicaciones();
+        for (int i = 0; i < total; i++) {
+            List<Publicacion> publicaciones = daoCsv.getSixPublicaciones(i);
+            for (Publicacion p : publicaciones) {
+                daoMySql.insertPublicacion(p);
+                daoMySql.updateLikes(p.getId());
+                for (Comentario c : daoCsv.getComentariosById(p.getId())) {
+                    daoMySql.insertComentario(c);
+                }
+            }
+        }
+
+        System.out.println(c[2] + "Transferencia CSV → MySQL completada y datos originales de MySQL eliminados." + r);
+    }
+
+    public void moveMySqlToCsv() {
+        if (!daoMySql.testConnection()) {
+            System.err.println(c[1] + "No se pudo conectar a MySQL. Operación cancelada." + r);
+            return;
+        }
+
+        // Limpiar CSV
+//        daoCsv.clearAllData();
+
+        // Insertar usuarios y amigos
+        for (Usuario usuario : daoMySql.getAllUsuarios()) {
+            daoCsv.insertUsuario(usuario);
+            for (String amigo : daoMySql.getAllAmigos(usuario.getNombre())) {
+                daoCsv.insertAmigo(usuario, amigo);
+            }
+        }
+
+        // Insertar publicaciones y comentarios
+        int total = daoMySql.getSizePublicaciones();
+        for (int i = 0; i < total; i++) {
+            List<Publicacion> publicaciones = daoMySql.getSixPublicaciones(i);
+            for (Publicacion p : publicaciones) {
+                daoCsv.insertPublicacion(p);
+                daoCsv.updateLikes(p.getId());
+                for (Comentario c : daoMySql.getComentariosById(p.getId())) {
+                    daoCsv.insertComentario(c);
+                }
+            }
+        }
+
+        System.out.println(c[2] + "Transferencia MySQL → CSV completada y datos originales del CSV eliminados." + r);
+    }
+
+    @Override
+    public List<Usuario> getAllUsuarios() {
+        checkConnection();
+        if(mysqlUp) return daoMySql.getAllUsuarios();
+        return daoCsv.getAllUsuarios();
+    }
+
+    @Override
+    public List<Publicacion> getAllContenido() {
+        return List.of();
+    }
+
+    @Override
+    public List<String> getAllAmigos(String nombre) {
+        checkConnection();
+        if(mysqlUp) return daoMySql.getAllAmigos(nombre);
+        return daoCsv.getAllAmigos(nombre);
     }
 
     @Override
@@ -63,20 +144,6 @@ public class WhaleDaoGlobal implements WhaleDao {
         checkConnection();
         if(mysqlUp) daoMySql.changeName(usuario, name);
         daoCsv.changeName(usuario, name);
-    }
-
-    @Override
-    public List<Usuario> getAllUsuarios() {
-        checkConnection();
-        if(mysqlUp) return daoMySql.getAllUsuarios();
-        return daoCsv.getAllUsuarios();
-    }
-
-    @Override
-    public List<String> getAmigos(String nombre) {
-        checkConnection();
-        if(mysqlUp) return daoMySql.getAmigos(nombre);
-        return daoCsv.getAmigos(nombre);
     }
 
     @Override
@@ -115,17 +182,17 @@ public class WhaleDaoGlobal implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getFilterPublicaciones(String hashtag) {
+    public List<Publicacion> getPublicacionesByHashTag(String hashtag) {
         checkConnection();
-        if(mysqlUp) return daoMySql.getFilterPublicaciones(hashtag);
-        return daoCsv.getFilterPublicaciones(hashtag);
+        if(mysqlUp) return daoMySql.getPublicacionesByHashTag(hashtag);
+        return daoCsv.getPublicacionesByHashTag(hashtag);
     }
 
     @Override
-    public List<Publicacion> getUsuarioPublicaciones(String nombre) {
+    public List<Publicacion> getPublicacionesByUsuario(String nombre) {
         checkConnection();
-        if(mysqlUp) return daoMySql.getUsuarioPublicaciones(nombre);
-        return daoCsv.getUsuarioPublicaciones(nombre);
+        if(mysqlUp) return daoMySql.getPublicacionesByUsuario(nombre);
+        return daoCsv.getPublicacionesByUsuario(nombre);
     }
 
     @Override
@@ -136,10 +203,10 @@ public class WhaleDaoGlobal implements WhaleDao {
     }
 
     @Override
-    public int sizePublicaciones() {
+    public int getSizePublicaciones() {
         checkConnection();
-        if(mysqlUp) return daoMySql.sizePublicaciones();
-        return daoCsv.sizePublicaciones();
+        if(mysqlUp) return daoMySql.getSizePublicaciones();
+        return daoCsv.getSizePublicaciones();
     }
 
     @Override

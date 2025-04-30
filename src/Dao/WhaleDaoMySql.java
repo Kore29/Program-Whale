@@ -6,7 +6,9 @@ import PageModelNew.*;
 import java.sql.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class WhaleDaoMySql implements WhaleDao {
@@ -24,6 +26,110 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     public WhaleDaoMySql() {testConnection();}
+
+    @Override
+    public List<Usuario> getAllUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS");
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getString("nombre"),
+                        rs.getString("contrasena"),
+                        rs.getString("email"),
+                        rs.getString("creacion"),
+                        null,
+                        null
+                );
+
+                if (usuario != null) {
+                    usuario.setAmigos(getAllAmigos(usuario.getNombre()));
+                    usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
+                }
+
+                usuarios.add(usuario);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return usuarios;
+    }
+
+    @Override
+    public List<Publicacion> getAllContenido() {
+        List<Publicacion> publicaciones = new ArrayList<>();
+        Map<Integer, Publicacion> mapaPublicaciones = new HashMap<>();
+        List<Comentario> comentariosPendientes = new ArrayList<>();
+
+        String query = "SELECT * FROM CONTENIDO";
+
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id_contenido = rs.getInt("id_contenido");
+                String autor = rs.getString("autor");
+                String creacion = rs.getString("creacion");
+                String multimedia = rs.getString("multimedia");
+                String texto = rs.getString("texto");
+                Integer likes = rs.getObject("likes") != null ? rs.getInt("likes") : 0;
+                String hashtag = rs.getString("hashtag");
+                Integer id_referencia = rs.getObject("id_referencia") != null ? rs.getInt("id_referencia") : null;
+
+                if (id_referencia == null) {
+                    // Es una publicación
+                    Publicacion pub = new Publicacion(id_contenido, autor, creacion, multimedia, texto, likes, hashtag, new ArrayList<>());
+                    publicaciones.add(pub);
+                    mapaPublicaciones.put(id_contenido, pub);
+                } else {
+                    // Es un comentario
+                    Comentario comentario = new Comentario(id_contenido, autor, creacion, multimedia, texto, id_referencia);
+                    comentariosPendientes.add(comentario);
+                }
+            }
+
+            // Asociar los comentarios a las publicaciones correspondientes
+            for (Comentario comentario : comentariosPendientes) {
+                Publicacion pub = mapaPublicaciones.get(comentario.getIdReferencia());
+                if (pub != null) {
+                    pub.getComentarios().add(comentario);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al leer todo el contenido desde la base de datos MySQL");
+            e.printStackTrace();
+        }
+
+        return publicaciones;
+    }
+
+
+    @Override
+    public List<String> getAllAmigos(String nombre) {
+        List<String> amigos = new ArrayList<>();
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("SELECT amigo FROM AMIGOS WHERE usuario = ?")) {
+
+            stmt.setString(1, nombre);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                amigos.add(rs.getString("amigo"));
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return amigos;
+    }
 
     @Override
     public void insertUsuario(Usuario usuario) {
@@ -65,8 +171,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
             if (usuario != null) {
-                usuario.setAmigos(getAmigos(usuario.getNombre()));
-                usuario.setPublicaciones(getUsuarioPublicaciones(usuario.getNombre()));
+                usuario.setAmigos(getAllAmigos(usuario.getNombre()));
+                usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
             }
     
         } catch (SQLException e) {
@@ -98,8 +204,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
             if (usuario != null) {
-                usuario.setAmigos(getAmigos(usuario.getNombre()));
-                usuario.setPublicaciones(getUsuarioPublicaciones(usuario.getNombre()));
+                usuario.setAmigos(getAllAmigos(usuario.getNombre()));
+                usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
             }
     
         } catch (SQLException e) {
@@ -120,60 +226,6 @@ public class WhaleDaoMySql implements WhaleDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public List<Usuario> getAllUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
-
-        try (Connection con = ConexionDataBase.getInstance();
-             PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS");
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Usuario usuario = new Usuario(
-                        rs.getString("nombre"),
-                        rs.getString("contrasena"),
-                        rs.getString("email"),
-                        rs.getString("creacion"),
-                        null,
-                        null
-                );
-
-                if (usuario != null) {
-                    usuario.setAmigos(getAmigos(usuario.getNombre()));
-                    usuario.setPublicaciones(getUsuarioPublicaciones(usuario.getNombre()));
-                }
-
-                usuarios.add(usuario);
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return usuarios;
-    }
-
-
-    @Override
-    public List<String> getAmigos(String nombre) {
-        List<String> amigos = new ArrayList<>();
-        try (Connection con = ConexionDataBase.getInstance();
-            PreparedStatement stmt = con.prepareStatement("SELECT amigo FROM AMIGOS WHERE usuario = ?")) {
-
-            stmt.setString(1, nombre);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                amigos.add(rs.getString("amigo"));
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return amigos;
     }
 
     @Override
@@ -291,7 +343,7 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getFilterPublicaciones(String hashtag) {
+    public List<Publicacion> getPublicacionesByHashTag(String hashtag) {
         List<Publicacion> publicaciones = new ArrayList<>();
 
         try (Connection con = ConexionDataBase.getInstance();
@@ -323,7 +375,7 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public List<Publicacion> getUsuarioPublicaciones(String nombre) {
+    public List<Publicacion> getPublicacionesByUsuario(String nombre) {
         List<Publicacion> publicaciones = new ArrayList<>();
 
         try (Connection con = ConexionDataBase.getInstance();
@@ -387,7 +439,7 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public int sizePublicaciones() {
+    public int getSizePublicaciones() {
         try {
             Connection con = ConexionDataBase.getInstance();
 
