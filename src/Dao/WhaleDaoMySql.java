@@ -27,6 +27,20 @@ public class WhaleDaoMySql implements WhaleDao {
 
     public WhaleDaoMySql() {testConnection();}
 
+    public void clearAllData() {
+        try (Connection con = ConexionDataBase.getInstance();
+             Statement stmt = con.createStatement()) {
+
+            stmt.executeUpdate("DELETE FROM AMIGOS");
+            stmt.executeUpdate("DELETE FROM CONTENIDO");
+            stmt.executeUpdate("DELETE FROM USUARIOS");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al borrar los datos", e);
+        }
+    }
+
+
     @Override
     public List<Usuario> getAllUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
@@ -38,7 +52,7 @@ public class WhaleDaoMySql implements WhaleDao {
             while (rs.next()) {
                 Usuario usuario = new Usuario(
                         rs.getString("nombre"),
-                        rs.getString("contrasena"),
+                        rs.getString("contrasenya"),
                         rs.getString("email"),
                         rs.getString("creacion"),
                         null,
@@ -134,8 +148,7 @@ public class WhaleDaoMySql implements WhaleDao {
     @Override
     public void insertUsuario(Usuario usuario) {
         try (Connection con = ConexionDataBase.getInstance();
-             PreparedStatement stmt = con.prepareStatement(
-                     "INSERT INTO USUARIOS (nombre, contrasenya, email, creacion) VALUES (?, ?, ?, ?)")) {
+             PreparedStatement stmt = con.prepareStatement("INSERT INTO USUARIOS (nombre, contrasenya, email, creacion) VALUES (?, ?, ?, ?)")) {
 
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getContrasena());
@@ -143,6 +156,7 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(4, usuario.getCreacion());
 
             stmt.execute();
+
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar usuario", e);
@@ -229,11 +243,11 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public void removeAmigo(Usuario usuario, String nombre) {
+    public void removeAmigo(String usuario, String nombre) {
         try (Connection con = ConexionDataBase.getInstance();
              PreparedStatement stmt = con.prepareStatement("DELETE FROM AMIGOS a WHERE a.usuario = ? AND a.amigo = ?")) {
 
-            stmt.setString(1, usuario.getNombre());
+            stmt.setString(1, usuario);
             stmt.setString(2, nombre);
             stmt.execute();
 
@@ -243,11 +257,11 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public void insertAmigo(Usuario usuario, String nombre) {
+    public void insertAmigo(String usuario, String nombre) {
         try (Connection con = ConexionDataBase.getInstance();
              PreparedStatement stmt = con.prepareStatement("INSERT INTO AMIGOS VALUES (?,?)")) {
 
-            stmt.setString(1, usuario.getNombre());
+            stmt.setString(1, usuario);
             stmt.setString(2, nombre);
             stmt.execute();
 

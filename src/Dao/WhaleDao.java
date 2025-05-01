@@ -18,8 +18,8 @@ public interface WhaleDao {
 
     void changeName(Usuario usuario, String name);
 
-    void insertAmigo(Usuario usuario, String nombre);
-    void removeAmigo(Usuario usuario, String nombre);
+    void insertAmigo(String usuario, String nombre);
+    void removeAmigo(String usuario, String nombre);
 
     void insertPublicacion(Publicacion publicacion);
     void updateLikes(int id);

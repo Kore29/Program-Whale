@@ -12,10 +12,10 @@ import java.util.Map;
 
 public class WhaleDaoCSV implements WhaleDao {
 
-    private static Path basePath = Paths.get("src", "DataBase", "CSV");
-    private static Path usuariosPath = basePath.resolve("usuarios.csv");
-    private static Path contenidoPath = basePath.resolve("contenido.csv");
-    private static Path amigosPath   = basePath.resolve("amigos.csv");
+    private static final Path basePath = Paths.get("src", "DataBase", "CSV");
+    private static final Path usuariosPath = basePath.resolve("usuarios.csv");
+    private static final Path contenidoPath = basePath.resolve("contenido.csv");
+    private static final Path amigosPath   = basePath.resolve("amigos.csv");
 
 
     private void initializeCSVFiles() {
@@ -63,7 +63,15 @@ public class WhaleDaoCSV implements WhaleDao {
         }
     }
 
+
+
     public WhaleDaoCSV() {initializeCSVFiles();}
+
+    public void clearAllData() {
+        writeToCSV(usuariosPath, "nombre,contrasena,email,creacion", "", false);
+        writeToCSV(contenidoPath, "id_contenido,autor,creacion,multimedia,texto,likes,hashtag,id_referencia", "", false);
+        writeToCSV(amigosPath, "usuario,amigo", "", false);
+    }
 
     @Override
     public List<Usuario> getAllUsuarios() {
@@ -231,16 +239,39 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
-    public void insertAmigo(Usuario usuario, String amigo) {
-        String data = String.join(",", usuario.getNombre(), amigo);
+    public void insertAmigo(String usuario, String amigo) {
+        String data = String.join(",", usuario, amigo);
         writeToCSV(amigosPath, null, data, true);
     }
 
     @Override
-    public void removeAmigo(Usuario usuario, String amigo) {
-        // Implementación compleja para CSV - necesitaríamos reescribir todo el archivo
-        System.out.println("Eliminar amigo no implementado para CSV");
+    public void removeAmigo(String nombre, String amigo) {
+        List<String> nuevasLineas = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                if (!linea.equals(nombre + "," + amigo)) {
+                    nuevasLineas.add(linea);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error leyendo amigos.csv para eliminar amigo");
+            e.printStackTrace();
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(amigosPath.toString(), false))) {
+            for (String linea : nuevasLineas) {
+                writer.write(linea);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error escribiendo amigos.csv tras eliminar amigo");
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     public void insertPublicacion(Publicacion publicacion) {
@@ -259,8 +290,36 @@ public class WhaleDaoCSV implements WhaleDao {
 
     @Override
     public void updateLikes(int id) {
-        // Implementación compleja para CSV - necesitaríamos reescribir todo el archivo
-        System.out.println("Actualizar likes no implementado para CSV");
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
+            String header = reader.readLine();
+            lines.add(header);
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] campos = line.split(",", -1);
+                if (Integer.parseInt(campos[0]) == id && campos[7].isEmpty()) {
+                    int likes = Integer.parseInt(campos[5]) + 1;
+                    campos[5] = String.valueOf(likes);
+                    line = String.join(",", campos);
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al actualizar likes");
+            e.printStackTrace();
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(contenidoPath.toString(), false))) {
+            for (String l : lines) {
+                writer.write(l);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error al escribir contenido actualizado");
+            e.printStackTrace();
+        }
     }
 
     @Override

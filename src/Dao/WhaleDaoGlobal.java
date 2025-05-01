@@ -26,8 +26,7 @@ public class WhaleDaoGlobal implements WhaleDao {
     private void checkConnection() {
         if (!mysqlUp){
             if(daoMySql.testConnection()){
-                //TODO: restaurar BBDD desde CSV
-
+                moveCsvToMySql();
                 mysqlUp = true;
             }
         }
@@ -39,14 +38,13 @@ public class WhaleDaoGlobal implements WhaleDao {
             return;
         }
 
-        // Limpiar base de datos MySQL
-//        daoMySql.clearAllData();
+        daoMySql.clearAllData();
 
         // Insertar usuarios y amigos
         for (Usuario usuario : daoCsv.getAllUsuarios()) {
             daoMySql.insertUsuario(usuario);
             for (String amigo : daoCsv.getAllAmigos(usuario.getNombre())) {
-                daoMySql.insertAmigo(usuario, amigo);
+                daoMySql.insertAmigo(usuario.getNombre(), amigo);
             }
         }
 
@@ -63,7 +61,7 @@ public class WhaleDaoGlobal implements WhaleDao {
             }
         }
 
-        System.out.println(c[2] + "Transferencia CSV → MySQL completada y datos originales de MySQL eliminados." + r);
+        System.out.println(c[5] + "Transferencia CSV → MySQL completada y datos originales de MySQL eliminados." + r);
     }
 
     public void moveMySqlToCsv() {
@@ -72,14 +70,13 @@ public class WhaleDaoGlobal implements WhaleDao {
             return;
         }
 
-        // Limpiar CSV
-//        daoCsv.clearAllData();
+        daoCsv.clearAllData();
 
         // Insertar usuarios y amigos
         for (Usuario usuario : daoMySql.getAllUsuarios()) {
             daoCsv.insertUsuario(usuario);
             for (String amigo : daoMySql.getAllAmigos(usuario.getNombre())) {
-                daoCsv.insertAmigo(usuario, amigo);
+                daoCsv.insertAmigo(usuario.getNombre(), amigo);
             }
         }
 
@@ -96,7 +93,7 @@ public class WhaleDaoGlobal implements WhaleDao {
             }
         }
 
-        System.out.println(c[2] + "Transferencia MySQL → CSV completada y datos originales del CSV eliminados." + r);
+        System.out.println(c[5] + "Transferencia MySQL → CSV completada y datos originales del CSV eliminados." + r);
     }
 
     @Override
@@ -147,14 +144,14 @@ public class WhaleDaoGlobal implements WhaleDao {
     }
 
     @Override
-    public void insertAmigo(Usuario usuario, String nombre) {
+    public void insertAmigo(String usuario, String nombre) {
         checkConnection();
         if(mysqlUp) daoMySql.insertAmigo(usuario, nombre);
         daoCsv.insertAmigo(usuario, nombre);
     }
 
     @Override
-    public void removeAmigo(Usuario usuario, String nombre) {
+    public void removeAmigo(String usuario, String nombre) {
         checkConnection();
         if(mysqlUp) daoMySql.removeAmigo(usuario, nombre);
         daoCsv.removeAmigo(usuario, nombre);

@@ -31,7 +31,6 @@ public class UtilsCheck {
         return "";
     }
 
-
     public static String checkInt(String num) {
         for (char e : num.toCharArray()) {
             if (!Character.isDigit(e)) {

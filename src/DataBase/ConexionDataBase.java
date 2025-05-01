@@ -17,15 +17,15 @@ public class ConexionDataBase {
      * @throws SQLException Si ocurre un error al establecer la conexión.
      */
     public static Connection getInstance() throws SQLException {
-        if (connection == null || connection.isClosed()) {
+        if (!isConnectionActive()) {
             try {
                 connection = DriverManager.getConnection(
                         ConexioDataInfo.getURL(),
                         ConexioDataInfo.getUSR(),
                         ConexioDataInfo.getPWD()
                 );
-            } catch (SQLException _) {
-
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
         return connection;
