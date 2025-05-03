@@ -17,13 +17,17 @@ public class WhaleDaoMySql implements WhaleDao {
         try {
             Connection conn = ConexionDataBase.getInstance();
 
-            if (conn != null && !conn.isClosed()) return true;
-            else return false;
+            if (conn != null && !conn.isClosed()) {
+                return true;
+            } else {
+                return false;
+            }
 
         } catch (SQLException e) {
             return false;
         }
     }
+
 
     public WhaleDaoMySql() {testConnection();}
 
@@ -32,8 +36,9 @@ public class WhaleDaoMySql implements WhaleDao {
              Statement stmt = con.createStatement()) {
 
             stmt.executeUpdate("DELETE FROM AMIGOS");
-            stmt.executeUpdate("DELETE FROM CONTENIDO");
+            stmt.executeUpdate("TRUNCATE TABLE CONTENIDO");
             stmt.executeUpdate("DELETE FROM USUARIOS");
+
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al borrar los datos", e);
@@ -128,8 +133,28 @@ public class WhaleDaoMySql implements WhaleDao {
 
     @Override
     public List<String> getAllAmigos() {
-        return List.of();
+        List<String> amigos = new ArrayList<>();
+
+        String query = "SELECT usuario, amigo FROM AMIGOS";
+
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String usuario = rs.getString("usuario");
+                String amigo = rs.getString("amigo");
+                amigos.add(usuario + ":" + amigo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener amigos desde MySQL");
+            e.printStackTrace();
+        }
+
+        return amigos;
     }
+
 
 
     @Override
@@ -370,7 +395,7 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
             for (Publicacion activePublciacion : publicaciones) {
-                List<Comentario> comentarios = getComentariosById(activePublciacion.getId());
+                List<Comentario> comentarios = getComentariosByPublicacion(activePublciacion.getId());
                 activePublciacion.addComentarios(comentarios);
             }
 
@@ -464,7 +489,7 @@ public class WhaleDaoMySql implements WhaleDao {
                     rs.getString("texto"),
                     rs.getInt("likes"),
                     rs.getString("hashtag"),
-                    getComentariosById(rs.getInt("id_contenido"))
+                    getComentariosByPublicacion(rs.getInt("id_contenido"))
                 );
 
                 return tempPubl;
@@ -497,7 +522,7 @@ public class WhaleDaoMySql implements WhaleDao {
     }
 
     @Override
-    public List<Comentario> getComentariosById(int id) {
+    public List<Comentario> getComentariosByPublicacion(int id) {
         List<Comentario> comentarios = new ArrayList<>();
 
         try {

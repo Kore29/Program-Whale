@@ -251,6 +251,8 @@ public class Main {
             }
         }
 
+        int tempId = whaleDao.getSizePublicaciones() + 1;
+
         String tempHashTag = UtilsCheck.checkHashtagText(tempText);
         tempText = UtilsApp.removeHashTag(tempText);
 
@@ -262,7 +264,7 @@ public class Main {
         String tempFech = String.valueOf(LocalDate.now());
         if (tempMult.isEmpty()) tempMult = null;
 
-        return new Publicacion(0, mainUsuario.getNombre(), tempFech, tempMult, tempText, 0, tempHashTag, null);
+        return new Publicacion(tempId, mainUsuario.getNombre(), tempFech, tempMult, tempText, 0, tempHashTag, null);
     }
 
         public static void filterContenido() {
@@ -336,13 +338,15 @@ public class Main {
 
         if (tempCome.equalsIgnoreCase("salir")) return null;
 
+        int tempId = whaleDao.getSizePublicaciones() + 1;
+
         String tempHashTag = UtilsCheck.checkHashtagText(tempCome);
         tempCome = UtilsApp.removeHashTag(tempCome);
 
         String tempFech = String.valueOf(LocalDate.now());
 
         if(!tempCome.trim().isEmpty()) {
-            return new Comentario(0,mainUsuario.getNombre(),tempFech,null,tempCome,id);
+            return new Comentario(tempId,mainUsuario.getNombre(),tempFech,null,tempCome,id);
         }
         return null;
     }

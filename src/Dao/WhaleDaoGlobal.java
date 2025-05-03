@@ -18,7 +18,8 @@ public class WhaleDaoGlobal implements WhaleDao {
         daoCsv = new WhaleDaoCSV();
         daoMySql = new WhaleDaoMySql();
 
-        moveCsvToMySql();
+        // TODO: Si deseas añadir los datos de la base de datos al csv, descomenta el código de abajo
+        // moveMySqlToCsv();
 
         mysqlUp = daoMySql.testConnection();
         if (mysqlUp) System.out.println(c[2]+"Conexión a la base de datos establecida correctamente."+r);
@@ -40,31 +41,31 @@ public class WhaleDaoGlobal implements WhaleDao {
             return;
         }
 
+        System.out.println(c[5] + "Transferencia CSV → MySql en curso... Puede tardar un rato..." + r);
+
         daoMySql.clearAllData();
 
-        // Insertar usuarios y amigos
+        // Insertar usuarios
         for (Usuario usuario : daoCsv.getAllUsuarios()) {
             daoMySql.insertUsuario(usuario);
         }
 
-        for (String usuario : daoCsv.getAllAmigos()) {
-
+        // Insertar amigos
+        for (String amigos : daoCsv.getAllAmigos()) {
+            daoMySql.insertAmigo(amigos.split(":")[0],amigos.split(":")[1]);
         }
 
         // Insertar publicaciones y comentarios
-        int total = daoCsv.getSizePublicaciones();
-        for (int i = 0; i < total; i++) {
-            List<Publicacion> publicaciones = daoCsv.getSixPublicaciones(i);
-            for (Publicacion p : publicaciones) {
-                daoMySql.insertPublicacion(p);
-                daoMySql.updateLikes(p.getId());
-                for (Comentario c : daoCsv.getComentariosById(p.getId())) {
+        for (Publicacion p : daoCsv.getAllContenido()) {
+            daoMySql.insertPublicacion(p);
+            if (!p.getComentarios().isEmpty()) {
+                for (Comentario c : p.getComentarios()) {
                     daoMySql.insertComentario(c);
                 }
             }
         }
 
-        System.out.println(c[5] + "Transferencia CSV → MySQL completada y datos originales de MySQL eliminados." + r);
+        System.out.println(c[5] + "Transferencia completada." + r);
     }
 
     public void moveMySqlToCsv() {
@@ -72,6 +73,8 @@ public class WhaleDaoGlobal implements WhaleDao {
             System.err.println(c[1] + "No se pudo conectar a MySQL. Operación cancelada." + r);
             return;
         }
+
+        System.out.println(c[5] + "Transferencia MySql → CSV en curso... Puede tardar un rato..." + r);
 
         daoCsv.clearAllData();
 
@@ -90,13 +93,13 @@ public class WhaleDaoGlobal implements WhaleDao {
             for (Publicacion p : publicaciones) {
                 daoCsv.insertPublicacion(p);
                 daoCsv.updateLikes(p.getId());
-                for (Comentario c : daoMySql.getComentariosById(p.getId())) {
+                for (Comentario c : daoMySql.getComentariosByPublicacion(p.getId())) {
                     daoCsv.insertComentario(c);
                 }
             }
         }
 
-        System.out.println(c[5] + "Transferencia MySQL → CSV completada y datos originales del CSV eliminados." + r);
+        System.out.println(c[5] + "Transferencia completada." + r);
     }
 
     @Override
@@ -108,12 +111,16 @@ public class WhaleDaoGlobal implements WhaleDao {
 
     @Override
     public List<Publicacion> getAllContenido() {
-        return List.of();
+        checkConnection();
+        if(mysqlUp) return daoMySql.getAllContenido();
+        return daoCsv.getAllContenido();
     }
 
     @Override
     public List<String> getAllAmigos() {
-        return List.of();
+        checkConnection();
+        if(mysqlUp) return daoMySql.getAllAmigos();
+        return daoCsv.getAllAmigos();
     }
 
     @Override
@@ -229,9 +236,9 @@ public class WhaleDaoGlobal implements WhaleDao {
     }
 
     @Override
-    public List<Comentario> getComentariosById(int id) {
+    public List<Comentario> getComentariosByPublicacion(int id) {
         checkConnection();
-        if(mysqlUp) return daoMySql.getComentariosById(id);
-        return daoCsv.getComentariosById(id);
+        if(mysqlUp) return daoMySql.getComentariosByPublicacion(id);
+        return daoCsv.getComentariosByPublicacion(id);
     }
 }

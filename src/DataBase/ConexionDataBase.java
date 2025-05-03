@@ -25,7 +25,7 @@ public class ConexionDataBase {
                         ConexioDataInfo.getPWD()
                 );
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                return null;
             }
         }
         return connection;

@@ -33,6 +33,5 @@ public interface WhaleDao {
 
     void insertComentario(Comentario comentario);
 
-    List<Comentario> getComentariosById(int id);
-    // List<Comentario> getComentariosByPublicaciones(Publicacion publicacion);
+    List<Comentario> getComentariosByPublicacion(int id);
 }

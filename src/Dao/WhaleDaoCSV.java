@@ -153,9 +153,25 @@ public class WhaleDaoCSV implements WhaleDao {
 
     @Override
     public List<String> getAllAmigos() {
-        return List.of();
-    }
+        List<String> amigos = new ArrayList<>();
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
+            String linea = reader.readLine(); // Saltar cabecera
+
+            while ((linea = reader.readLine()) != null) {
+                String[] partes = linea.split(",", -1);
+                if (partes.length >= 2) {
+                    amigos.add(partes[0] + ":" + partes[1]);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error leyendo amigos desde CSV");
+            e.printStackTrace();
+        }
+
+        return amigos;
+    }
 
     @Override
     public List<String> getAmigosByUsuario(String nombre) {
@@ -473,7 +489,7 @@ public class WhaleDaoCSV implements WhaleDao {
                 campos[4], // texto
                 Integer.parseInt(campos[5]), // likes
                 campos[6], // hashtag
-                getComentariosById(Integer.parseInt(campos[0])) // comentarios
+                getComentariosByPublicacion(Integer.parseInt(campos[0])) // comentarios
         );
     }
 
@@ -514,7 +530,7 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
     @Override
-    public List<Comentario> getComentariosById(int id) {
+    public List<Comentario> getComentariosByPublicacion(int id) {
         List<Comentario> comentarios = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
 
