@@ -22,7 +22,7 @@ public class UtilsShow {
                 System.out.println("- No hay comentarios");
             }
 
-            System.out.println("\u001B[35m+---------------------------------------------------------------+\u001B[0m");
+            System.out.println("\u001B[35m+-----------------------------------------------------------------------------------------------------+\u001B[0m");
         }
     }
 
@@ -34,6 +34,6 @@ public class UtilsShow {
             for (Comentario comentario : activePublicacion.getComentarios()) {
                 System.out.println("- " + comentario.getAutor() + ": " + comentario.getTexto());
             }
-            System.out.println("\u001B[35m+---------------------------------------------------------------+\u001B[0m");
+            System.out.println("\u001B[35m+-----------------------------------------------------------------------------------------------------+\u001B[0m");
     }
 }

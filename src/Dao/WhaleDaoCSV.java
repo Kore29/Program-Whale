@@ -2,12 +2,15 @@ package Dao;
 
 import PageModelNew.*;
 import java.io.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class WhaleDaoCSV implements WhaleDao {
@@ -16,7 +19,6 @@ public class WhaleDaoCSV implements WhaleDao {
     private static final Path usuariosPath = basePath.resolve("usuarios.csv");
     private static final Path contenidoPath = basePath.resolve("contenido.csv");
     private static final Path amigosPath   = basePath.resolve("amigos.csv");
-
 
     private void initializeCSVFiles() {
         try {
@@ -81,15 +83,18 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
-                usuarios.add(new Usuario(
+                String[] campos = line.split(",", -1);
+                Usuario usuario = new Usuario(
                         campos[0], // nombre
                         campos[1], // contrasena
                         campos[2], // email
                         campos[3], // creacion
-                        getAllAmigos(campos[0]), // amigos
-                        getPublicacionesByUsuario(campos[0]) // publicaciones
-                ));
+                        getAmigosByUsuario(campos[0]), // amigos
+                        null // publicaciones
+                );
+
+                usuario.setPublicaciones(getPublicacionesByUsuario(campos[0]));
+                usuarios.add(usuario);
             }
         } catch (IOException e) {
             System.out.println("Error al leer todos los usuarios desde CSV");
@@ -146,10 +151,14 @@ public class WhaleDaoCSV implements WhaleDao {
         return contenido;
     }
 
+    @Override
+    public List<String> getAllAmigos() {
+        return List.of();
+    }
 
 
     @Override
-    public List<String> getAllAmigos(String nombre) {
+    public List<String> getAmigosByUsuario(String nombre) {
         List<String> amigos = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
 
@@ -157,7 +166,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (campos[0].equals(nombre)) {
                     amigos.add(campos[1]);
                 }
@@ -183,20 +192,26 @@ public class WhaleDaoCSV implements WhaleDao {
     @Override
     public Usuario getUsuarioByEmail(String email) {
         try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
+            Usuario usuario;
             reader.readLine();
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (campos[2].equals(email)) {
-                    return new Usuario(
+                    usuario = new Usuario(
                             campos[0], // nombre
                             campos[1], // contrasena
                             campos[2], // email
                             campos[3], // creacion
-                            getAllAmigos(campos[0]), // amigos
-                            getPublicacionesByUsuario(campos[0]) // publicaciones
+                            null,
+                            null
                     );
+
+                    usuario.setAmigos(getAmigosByUsuario(campos[0]));
+                    usuario.setPublicaciones(getPublicacionesByUsuario(campos[0]));
+
+                    return usuario;
                 }
             }
         } catch (IOException e) {
@@ -209,20 +224,26 @@ public class WhaleDaoCSV implements WhaleDao {
     @Override
     public Usuario getUsuarioByName(String name) {
         try (BufferedReader reader = new BufferedReader(new FileReader(usuariosPath.toString()))) {
+            Usuario usuario;
             reader.readLine();
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (campos[0].equals(name)) {
-                    return new Usuario(
+                    usuario = new Usuario(
                             campos[0], // nombre
                             campos[1], // contrasena
                             campos[2], // email
                             campos[3], // creacion
-                            getAllAmigos(campos[0]), // amigos
-                            getPublicacionesByUsuario(campos[0]) // publicaciones
+                            null,
+                            null
                     );
+
+                    usuario.setAmigos(getAmigosByUsuario(campos[0]));
+                    usuario.setPublicaciones(getPublicacionesByUsuario(campos[0]));
+
+                    return usuario;
                 }
             }
         } catch (IOException e) {
@@ -234,7 +255,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
     @Override
     public void changeName(Usuario usuario, String newName) {
-        // Implementación compleja para CSV - necesitaríamos reescribir todo el archivo
+        // Implementación compleja para CSV - necesitaríamos reescribir
         System.out.println("Cambiar nombre no implementado para CSV");
     }
 
@@ -273,20 +294,48 @@ public class WhaleDaoCSV implements WhaleDao {
     }
 
 
-    @Override
     public void insertPublicacion(Publicacion publicacion) {
-        String data = String.join(",",
+        String[] campos = new String[] {
                 String.valueOf(publicacion.getId()),
                 publicacion.getAutor(),
                 publicacion.getCreacion(),
                 publicacion.getMultimedia() != null ? publicacion.getMultimedia() : "",
                 publicacion.getTexto(),
                 String.valueOf(publicacion.getLikes()),
-                publicacion.getHashtag(),
-                "" // id_referencia vacío para publicaciones
-        );
+                publicacion.getHashtag() != null ? publicacion.getHashtag() : "",
+                ""
+        };
+
+        String data = String.join(",", campos) + ",";
+
         writeToCSV(contenidoPath, null, data, true);
     }
+
+    @Override
+    public void removePublicacion(Publicacion publicacion) {
+        try {
+            List<String> publicaciones = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(contenidoPath.toString()))) {
+                String linea;
+                while ((linea = reader.readLine()) != null) {
+                    if (!linea.startsWith(publicacion.getId() + ",")) {
+                        publicaciones.add(linea);
+                    }
+                }
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(contenidoPath.toString(), false))) {
+                for (String linea : publicaciones) {
+                    writer.write(linea);
+                    writer.newLine();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al eliminar publicación");
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void updateLikes(int id) {
@@ -335,7 +384,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null && current < end) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 // Solo publicaciones (id_referencia vacío)
                 if (campos[7].isEmpty()) {
                     if (current >= start) {
@@ -360,7 +409,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 // Solo publicaciones (id_referencia vacío) con el hashtag buscado
                 if (campos[7].isEmpty() && campos[6].equals(hashtag)) {
                     publicaciones.add(createPublicacionFromCSV(campos));
@@ -382,7 +431,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 // Solo publicaciones (id_referencia vacío) del usuario
                 if (campos[7].isEmpty() && campos[1].equals(nombre)) {
                     publicaciones.add(createPublicacionFromCSV(campos));
@@ -403,7 +452,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (Integer.parseInt(campos[0]) == id && campos[7].isEmpty()) {
                     return createPublicacionFromCSV(campos);
                 }
@@ -437,7 +486,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (campos[7].isEmpty()) { // Solo contar publicaciones
                     count++;
                 }
@@ -473,7 +522,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] campos = line.split(",");
+                String[] campos = line.split(",", -1);
                 if (!campos[7].isEmpty() && Integer.parseInt(campos[7]) == id) {
                     comentarios.add(new Comentario(
                             Integer.parseInt(campos[0]), // id_contenido

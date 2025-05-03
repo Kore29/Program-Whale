@@ -4,10 +4,11 @@ import PageModelNew.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static App.Main.*;
+import static Utils.UtilsColors.c;
+import static Utils.UtilsColors.r;
 
 public class UtilsApp {
 
@@ -17,6 +18,56 @@ public class UtilsApp {
         System.out.println("Nombre cambiado: " + tempNomb);
         return tempNomb;
     }
+
+    public static Publicacion deletePublicacion(List<Publicacion> publicacions) {
+        while (true) {
+            System.out.println("("+c[4]+"'salir'"+r+" para cancelar)");
+            System.out.print("Introduce el ID de la publicación que deseas eliminar: ");
+
+            String input = sc.nextLine().trim();
+
+            if (input.equalsIgnoreCase("salir")) {
+                System.out.println("Operación cancelada.");
+                break;
+            }
+
+            int id = 0;
+            if (UtilsCheck.checkInt(input).isEmpty()) id = Integer.parseInt(input);
+            else {
+                System.out.println("Caracter Invalido");
+                continue;
+            }
+
+            Publicacion publicacionAEliminar = null;
+            for (Publicacion publicacion : publicacions) {
+                if (publicacion.getId() == id) {
+                    publicacionAEliminar = publicacion;
+                    break;
+                }
+            }
+
+            if (publicacionAEliminar == null) {
+                System.out.println("No se encontró ninguna publicación con ese ID.");
+                continue;
+            }
+
+            System.out.print("¿Estás seguro de que quieres eliminar la publicación con ID " + id + "? (s/n): ");
+            String confirm = sc.nextLine().trim();
+
+            if (confirm.equalsIgnoreCase("s")) {
+
+                publicacions.remove(publicacionAEliminar);
+                System.out.println("Publicación eliminada con éxito.");
+                return publicacionAEliminar;
+            } else {
+                System.out.println("Operación cancelada.");
+                break;
+            }
+        }
+
+        return null;
+    }
+
 
     public static String deleteAmigo(Usuario usuario) {
         if (usuario.getAmigos().isEmpty()) {
@@ -46,69 +97,54 @@ public class UtilsApp {
     }
 
     public static String includeAmigo(Usuario usuario) {
-        List<String> amigosActuales = whaleDao.getAllAmigos(usuario.getNombre());
-        usuario.setAmigos(amigosActuales);
+        List<String> amigos = whaleDao.getAmigosByUsuario(usuario.getNombre());
+        usuario.setAmigos(amigos);
 
-        List<Usuario> todosUsuarios = whaleDao.getAllUsuarios().stream()
-                .filter(u -> !u.getNombre().equalsIgnoreCase(usuario.getNombre()))   // no tú mismo
-                .filter(u -> !amigosActuales.contains(u.getNombre()))                // ni quienes ya son tu amigo
+        List<Usuario> candidatos = whaleDao.getAllUsuarios().stream()
+                .filter(u -> !u.getNombre().equalsIgnoreCase(usuario.getNombre()))
+                .filter(u -> !amigos.contains(u.getNombre()))
                 .collect(Collectors.toList());
 
-        if (todosUsuarios.isEmpty()) {
-            System.out.println(UtilsColors.c[1] + "No hay usuarios disponibles para agregar como amigos." + UtilsColors.r);
+        if (candidatos.isEmpty()) {
+            System.out.println("No hay usuarios disponibles para agregar como amigos.");
             return "";
         }
 
-        Collections.shuffle(todosUsuarios);
-        List<Usuario> recomendados = todosUsuarios.subList(0, Math.min(5, todosUsuarios.size()));
+        Collections.shuffle(candidatos);
+        List<Usuario> recomendados = candidatos.subList(0, Math.min(5, candidatos.size()));
 
-        System.out.println(" USUARIOS QUE TE PUEDEN INTERESAR ");
-
-        for (int i = 0; i < recomendados.size(); i++) {
-            Usuario recomendado = recomendados.get(i);
-            System.out.printf("%s%d%s. %s%s%s - Miembro desde: %s\n",
-                    UtilsColors.c[4], (i + 1), UtilsColors.r,
-                    UtilsColors.c[6], recomendado.getNombre(), UtilsColors.r,
-                    recomendado.getCreacion());
+        System.out.println("Usuarios recomendados:");
+        for (Usuario u : recomendados) {
+            System.out.println("- " + u.getNombre() + ", desde: " + u.getCreacion());
         }
 
-        while (true) {
-            System.out.print("\nIntroduce el nombre del usuario a agregar ('salir' para cancelar): ");
-            String input = sc.nextLine().trim();
+        System.out.println("("+c[4]+"'salir'"+r+" para cancelar)");
+        System.out.print("\nIntroduce el nombre del usuario a agregar: ");
+        String input = sc.nextLine().trim();
 
-            if (input.equalsIgnoreCase("salir")) {
-                System.out.println("Operación cancelada.");
-                return "";
-            }
+        if (input.equalsIgnoreCase("salir")) {
+            System.out.println("Operación cancelada.");
+            return "";
+        }
 
-            if (input.isEmpty() || UtilsCheck.checkNombre(input).isEmpty()) {
-                System.out.println(UtilsColors.c[1] + "Error: Nombre inválido" + UtilsColors.r);
-                continue;
-            }
-
-            Optional<Usuario> seleccionado = recomendados.stream()
-                    .filter(u -> u.getNombre().equalsIgnoreCase(input))
-                    .findFirst();
-
-            if (seleccionado.isPresent()) {
-                Usuario amigo = seleccionado.get();
-                System.out.printf("%s¿Agregar a %s como amigo? (s/n): %s",
-                        UtilsColors.c[4], amigo.getNombre(), UtilsColors.r);
-
+        for (Usuario u : recomendados) {
+            if (u.getNombre().equalsIgnoreCase(input)) {
+                System.out.print("¿Agregar a " + u.getNombre() + " como amigo? (s/n): ");
                 String confirm = sc.nextLine().trim();
                 if (confirm.equalsIgnoreCase("s")) {
-                    System.out.println(UtilsColors.c[2] + "¡Amigo agregado con éxito!" + UtilsColors.r);
-                    return amigo.getNombre();
+                    System.out.println("¡Amigo agregado con éxito!");
+                    return u.getNombre();
                 } else {
                     System.out.println("Operación cancelada.");
+                    return "";
                 }
-                break;
-            } else {
-                System.out.println(UtilsColors.c[1] + "Error: El nombre no coincide con las opciones mostradas" + UtilsColors.r);
             }
         }
-        return null;
+
+        System.out.println("Nombre no válido.");
+        return "";
     }
+
 public static String removeHashTag(String text) {
         StringBuilder newText = new StringBuilder();
         for (String e : text.split(" ")) {

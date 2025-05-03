@@ -44,6 +44,7 @@ public class WhaleDaoMySql implements WhaleDao {
     @Override
     public List<Usuario> getAllUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
+        List<String> nombresUsuarios = new ArrayList<>();
 
         try (Connection con = ConexionDataBase.getInstance();
              PreparedStatement stmt = con.prepareStatement("SELECT * FROM USUARIOS");
@@ -58,13 +59,14 @@ public class WhaleDaoMySql implements WhaleDao {
                         null,
                         null
                 );
-
-                if (usuario != null) {
-                    usuario.setAmigos(getAllAmigos(usuario.getNombre()));
-                    usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
-                }
-
                 usuarios.add(usuario);
+                nombresUsuarios.add(usuario.getNombre());
+            }
+
+            for (int i = 0; i < usuarios.size(); i++) {
+                Usuario usuario = usuarios.get(i);
+                usuario.setAmigos(getAmigosByUsuario(nombresUsuarios.get(i)));
+                usuario.setPublicaciones(getPublicacionesByUsuario(nombresUsuarios.get(i)));
             }
 
         } catch (Exception e) {
@@ -124,9 +126,14 @@ public class WhaleDaoMySql implements WhaleDao {
         return publicaciones;
     }
 
+    @Override
+    public List<String> getAllAmigos() {
+        return List.of();
+    }
+
 
     @Override
-    public List<String> getAllAmigos(String nombre) {
+    public List<String> getAmigosByUsuario(String nombre) {
         List<String> amigos = new ArrayList<>();
         try (Connection con = ConexionDataBase.getInstance();
              PreparedStatement stmt = con.prepareStatement("SELECT amigo FROM AMIGOS WHERE usuario = ?")) {
@@ -185,7 +192,7 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
             if (usuario != null) {
-                usuario.setAmigos(getAllAmigos(usuario.getNombre()));
+                usuario.setAmigos(getAmigosByUsuario(usuario.getNombre()));
                 usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
             }
     
@@ -218,7 +225,7 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
             if (usuario != null) {
-                usuario.setAmigos(getAllAmigos(usuario.getNombre()));
+                usuario.setAmigos(getAmigosByUsuario(usuario.getNombre()));
                 usuario.setPublicaciones(getPublicacionesByUsuario(usuario.getNombre()));
             }
     
@@ -286,6 +293,24 @@ public class WhaleDaoMySql implements WhaleDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void removePublicacion(Publicacion publicacion) {
+        try (Connection con = ConexionDataBase.getInstance();
+             PreparedStatement stmt = con.prepareStatement("DELETE FROM CONTENIDO WHERE id_contenido = ?")) {
+
+            stmt.setInt(1, publicacion.getId());
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                System.out.println("No se encontró ninguna publicación con ese ID.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public void updateLikes(int id) {

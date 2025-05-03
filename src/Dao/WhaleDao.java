@@ -5,12 +5,11 @@ import PageModelNew.Publicacion;
 import PageModelNew.Usuario;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface WhaleDao {
     List<Usuario> getAllUsuarios();
     List<Publicacion> getAllContenido();
-    List<String> getAllAmigos(String nombre);
+    List<String> getAllAmigos();
 
     void insertUsuario(Usuario usuario);
     Usuario getUsuarioByEmail(String email);
@@ -18,10 +17,12 @@ public interface WhaleDao {
 
     void changeName(Usuario usuario, String name);
 
+    List<String> getAmigosByUsuario(String nombre);
     void insertAmigo(String usuario, String nombre);
     void removeAmigo(String usuario, String nombre);
 
     void insertPublicacion(Publicacion publicacion);
+    void removePublicacion(Publicacion publicacion);
     void updateLikes(int id);
 
     List<Publicacion> getSixPublicaciones(int page);

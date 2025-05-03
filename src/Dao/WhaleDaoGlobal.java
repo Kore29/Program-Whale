@@ -18,6 +18,8 @@ public class WhaleDaoGlobal implements WhaleDao {
         daoCsv = new WhaleDaoCSV();
         daoMySql = new WhaleDaoMySql();
 
+        moveCsvToMySql();
+
         mysqlUp = daoMySql.testConnection();
         if (mysqlUp) System.out.println(c[2]+"Conexión a la base de datos establecida correctamente."+r);
         else System.err.println(c[1]+"ERROR al conectar a la base de datos: "+r);
@@ -43,9 +45,10 @@ public class WhaleDaoGlobal implements WhaleDao {
         // Insertar usuarios y amigos
         for (Usuario usuario : daoCsv.getAllUsuarios()) {
             daoMySql.insertUsuario(usuario);
-            for (String amigo : daoCsv.getAllAmigos(usuario.getNombre())) {
-                daoMySql.insertAmigo(usuario.getNombre(), amigo);
-            }
+        }
+
+        for (String usuario : daoCsv.getAllAmigos()) {
+
         }
 
         // Insertar publicaciones y comentarios
@@ -75,7 +78,7 @@ public class WhaleDaoGlobal implements WhaleDao {
         // Insertar usuarios y amigos
         for (Usuario usuario : daoMySql.getAllUsuarios()) {
             daoCsv.insertUsuario(usuario);
-            for (String amigo : daoMySql.getAllAmigos(usuario.getNombre())) {
+            for (String amigo : daoMySql.getAmigosByUsuario(usuario.getNombre())) {
                 daoCsv.insertAmigo(usuario.getNombre(), amigo);
             }
         }
@@ -109,10 +112,15 @@ public class WhaleDaoGlobal implements WhaleDao {
     }
 
     @Override
-    public List<String> getAllAmigos(String nombre) {
+    public List<String> getAllAmigos() {
+        return List.of();
+    }
+
+    @Override
+    public List<String> getAmigosByUsuario(String nombre) {
         checkConnection();
-        if(mysqlUp) return daoMySql.getAllAmigos(nombre);
-        return daoCsv.getAllAmigos(nombre);
+        if(mysqlUp) return daoMySql.getAmigosByUsuario(nombre);
+        return daoCsv.getAmigosByUsuario(nombre);
     }
 
     @Override
@@ -162,6 +170,13 @@ public class WhaleDaoGlobal implements WhaleDao {
         checkConnection();
         if(mysqlUp) daoMySql.insertPublicacion(publicacion);
         daoCsv.insertPublicacion(publicacion);
+    }
+
+    @Override
+    public void removePublicacion(Publicacion publicacion) {
+        checkConnection();
+        if(mysqlUp) daoMySql.removePublicacion(publicacion);
+        daoCsv.removePublicacion(publicacion);
     }
 
     @Override

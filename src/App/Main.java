@@ -27,7 +27,7 @@ public class Main {
         mainUsuario = startUsuario();
         showMainMenu(1);
     }
-
+    
     public static Usuario startUsuario() {
         Usuario mainUsuario = null;
 
@@ -44,7 +44,7 @@ public class Main {
                     whaleDao.insertUsuario(mainUsuario);
                     break;
                 default:
-                    System.out.println(c[1]+"Error: Escribe una opción válida (y/n)"+r);
+                    System.out.println(c[1]+"Error: Escribe una opción válida"+r);
             }
         }
 
@@ -57,6 +57,8 @@ public class Main {
 
             System.out.print(c[6]+"Introduce el nombre o email de tu usuario: "+r);
             String input = sc.nextLine().trim();
+
+            usuario = whaleDao.getUsuarioByName(input);
 
             if (!UtilsCheck.checkEmail(input).isEmpty()) usuario = whaleDao.getUsuarioByEmail(input);
             else if (!UtilsCheck.checkNombre(input).isEmpty()) usuario = whaleDao.getUsuarioByName(input);
@@ -120,9 +122,9 @@ public class Main {
         mainUsuario = whaleDao.getUsuarioByName(mainUsuario.getNombre());
 
         while (true) {
-            System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
-            System.out.println(c[5] + "|                          PUBLICACIONES                        |" + r);
-            System.out.println(c[5] + "+---------------------------------------------------------------+" + r);
+            System.out.println(c[5] + "+-----------------------------------------------------------------------------------------------------+" + r);
+            System.out.println(c[5] + "|                                            PUBLICACIONES                                            |" + r);
+            System.out.println(c[5] + "+-----------------------------------------------------------------------------------------------------+" + r);
 
             int totalPages = whaleDao.getSizePublicaciones()/6;
             pagePublicaciones = whaleDao.getSixPublicaciones(page);
@@ -183,12 +185,12 @@ public class Main {
             String nombre = mainUsuario.getNombre();
             List<String> amigos = mainUsuario.getAmigos();
 
-            System.out.println(c[4]+"BIENVENID@ "+ nombre.toUpperCase()+r);
-            System.out.println(mainUsuario.getEmail() + " | Llevas en Whale desde "+mainUsuario.getCreacion());
-            System.out.println("Tienes "+amigos.size()+" amigo/s.");
+            System.out.println(c[4] + "BIENVENID@ " + nombre.toUpperCase() + r);
+            System.out.println(mainUsuario.getEmail() + " | Llevas en Whale desde " + mainUsuario.getCreacion());
+            System.out.println("Tienes " + amigos.size() + " amigo/s.");
             System.out.println();
 
-            System.out.println(c[4]+"TUS PUBLICACIONES"+r);
+            System.out.println(c[4] + "TUS PUBLICACIONES" + r);
             if (mainUsuario.getPublicaciones().isEmpty()) {
                 System.out.println("Aun no tienes publicaciones");
             } else {
@@ -196,29 +198,40 @@ public class Main {
             }
             System.out.println();
 
-            System.out.println(c[4]+"CONFIGURACIÓN DE USUARIO"+r);
-            System.out.println(c[4]+"1"+r+".Cambiar tu nombre  "+c[4]+"2"+r+".Eliminar amigos  "+c[4]+"3"+r+".Añadir un nuevo amigo  "+c[4]+"4"+r+".Salir al menú principal");
+            System.out.println(c[4] + "CONFIGURACIÓN DE USUARIO" + r);
+            System.out.println(c[4] + "1" + r + ".Cambiar tu nombre  " + c[4] + "2" + r + ".Eliminar publicación  " + c[4] + "3" + r + ".Eliminar amigos  " + c[4] + "4" + r + ".Añadir un nuevo amigo  " + c[4] + "5" + r + ".Salir al menú principal");
             int option;
 
             while (true) {
                 String opt = sc.nextLine();
                 if (UtilsCheck.checkInt(opt).isEmpty()) {
-                    option = Integer.parseInt(opt); break;
+                    option = Integer.parseInt(opt);
+                    break;
                 } else {
                     System.out.println(UtilsCheck.checkInt(opt));
                 }
             }
 
-            String amigo = UtilsApp.includeAmigo(mainUsuario);
-
-            if (option==1) {
-                String newName = UtilsApp.changeNombre(mainUsuario);
-                whaleDao.changeName(mainUsuario, newName);
+            switch (option) {
+                case 1:
+                    String newName = UtilsApp.changeNombre(mainUsuario);
+                    whaleDao.changeName(mainUsuario, newName);
+                    break;
+                case 2:
+                    Publicacion publicacion = UtilsApp.deletePublicacion(mainUsuario.getPublicaciones());
+                    if (publicacion != null) whaleDao.removePublicacion(publicacion);
+                    break;
+                case 3:
+                    whaleDao.removeAmigo(mainUsuario.getNombre(), UtilsApp.deleteAmigo(mainUsuario));
+                    break;
+                case 4:
+                    whaleDao.insertAmigo(mainUsuario.getNombre(), UtilsApp.includeAmigo(mainUsuario));
+                    break;
+                case 5:
+                    break;
+                default:
+                    System.out.println("Escribe un parámetro válido");
             }
-            else if (option==2) {whaleDao.removeAmigo(mainUsuario.getNombre(), UtilsApp.deleteAmigo(mainUsuario));}
-            else if (option==3) {whaleDao.insertAmigo(mainUsuario.getNombre(), UtilsApp.includeAmigo(mainUsuario));}
-            else if (option==4) {break;}
-            else {System.out.println("Escribe un parametro valido");}
         }
     }
 
@@ -228,6 +241,8 @@ public class Main {
         while (true) {
             System.out.println("Escribe el publicación (Máximo un HashTag y 200 caracteres): ");
             tempText = sc.nextLine();
+
+            tempText = tempText.replace(",",";"); // Para evitar problemas con el csv ;)
 
             if (UtilsCheck.check200Caracteres(tempText).isEmpty()) {
                 break;
@@ -253,11 +268,11 @@ public class Main {
         public static void filterContenido() {
         while (true) {
             System.out.println("\u001B[33m+---------------------------------------------------------------+\u001B[0m");
-            System.out.println("Escribe "+c[4]+"'exit'"+r+" para salir.");
             System.out.print("Introduce el HashTag del contenido que quieras buscar:");
+            System.out.println("("+c[4]+"'salir'"+r+" para cancelar)");
             String hashtags = sc.nextLine();
 
-            if (hashtags.equalsIgnoreCase("exit")) break;
+            if (hashtags.equalsIgnoreCase("salir")) break;
             hashtags = UtilsCheck.checkIsHashTag(hashtags);
 
             List<Publicacion> activePublicaciones = whaleDao.getPublicacionesByHashTag(hashtags);
@@ -316,10 +331,10 @@ public class Main {
     }
 
     public static Comentario includeComentario(int id) {
-        System.out.println("Escribe 'exit' para salir.");
         System.out.print("Añade un comentario: "); String tempCome = sc.nextLine();
+        System.out.println("("+c[4]+"'salir'"+r+" para cancelar)");
 
-        if (tempCome.equalsIgnoreCase("exit")) return null;
+        if (tempCome.equalsIgnoreCase("salir")) return null;
 
         String tempHashTag = UtilsCheck.checkHashtagText(tempCome);
         tempCome = UtilsApp.removeHashTag(tempCome);
