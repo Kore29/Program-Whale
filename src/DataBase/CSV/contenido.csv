@@ -2,10 +2,9 @@ id_contenido,autor,creacion,multimedia,texto,likes,hashtag,id_referencia
 76,holis1,2025-05-01,,Viva peru carajo,1,#Trump,,
 75,juan123,2025-04-30,,Hola que tal como estais estoy con pau en clase,2,#vida,,
 74,juan123,2025-04-22,,Hola como estais todos,1,#whale,,
-73,juan123,2025-04-17,,Me gustan mucho las señoras; soy mediorarito,1,#whale,,
 70,juan123,2025-04-15,,No se muy bien como funciona esto,1,,,
 71,juan123,2025-04-15,,yo tampoco,0,,70
-72,juan123,2025-04-15,,Hola que tal; por poco se me quema la casa por conectar un enchufe,0,#whale,,
+72,juan123,2025-04-15,,Hola que tal; por poco se me quema la casa por conectar un enchufe,1,#whale,,
 67,juan123,2025-04-13,,hola que tal estas me llamo juan,27,,,
 79,juan123,2025-02-15,,hola a todos,16,#live,,
 78,juan123,2025-02-15,,hola a todos,16,#live,,
@@ -27,3 +26,4 @@ id_contenido,autor,creacion,multimedia,texto,likes,hashtag,id_referencia
 4,ana321,2024-01-05,https://example.com/image2.jpg,Un paseo por el bosque.,26,#nature,,
 3,luis789,2024-01-04,,Entrenamiento matutino completado.,26,#gym,,
 2,maria456,2024-01-03,https://example.com/video1.mp4,Receta casera de pasta al pesto.,26,#food,,
+26,juan123,2025-05-04,,Esto es una prueba; me llamo Marti,0,#whale,,

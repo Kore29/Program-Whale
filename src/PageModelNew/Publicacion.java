@@ -16,10 +16,16 @@ public class Publicacion extends Contenido {
 
     }
 
-    public String getHashtag() {return hashtag;}
+    /** Devuelve el hashtag asociado a la publicación (ej: "#viajes"). */
+    public String getHashtag() { return hashtag; }
 
-    public int getLikes() {return likes;}
+    /** Devuelve la cantidad de likes que tiene la publicación. */
+    public int getLikes() { return likes; }
 
-    public List<Comentario> getComentarios() {return comentarios;}
-    public void addComentarios(List<Comentario> comentarios) {this.comentarios =  comentarios;}
+    /** Devuelve la lista de comentarios de la publicación. */
+    public List<Comentario> getComentarios() { return comentarios; }
+
+    /** Reemplaza la lista de comentarios de la publicación. */
+    public void addComentarios(List<Comentario> comentarios) { this.comentarios = comentarios; }
+
 }

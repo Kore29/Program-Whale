@@ -16,29 +16,22 @@ public class Contenido {
         this.texto = texto;
     }
 
+    /**Devuelve el identificador único de la publicación.*/
+    public Integer getId() {return id_contenido;}
 
-    // ID
-    public Integer getId() {
-        return id_contenido;
-    }
+    /**Asigna un identificador único a la publicación.*/
     public void setId(Integer id_contenido) {this.id_contenido = id_contenido;}
 
-    //Autor
-    public String getAutor() {
-        return autor;
-    }
+    /**Devuelve el nombre del autor de la publicación.*/
+    public String getAutor() {return autor;}
 
-    //Creacion
-    public String getCreacion() {
-        return creacion;
-    }
+    /**Devuelve la fecha y hora en la que se creó la publicación.*/
+    public String getCreacion() {return creacion;}
 
-    //Multimedia
-    public String getMultimedia() {
-        return multimedia;
-    }
 
-    //Texto
+    /**Devuelve el contenido multimedia asociado a la publicación.*/
+    public String getMultimedia() {return multimedia;}
+
+    /** Devuelve el texto escrito por el autor en la publicación.*/
     public String getTexto() {return texto;}
-
 }

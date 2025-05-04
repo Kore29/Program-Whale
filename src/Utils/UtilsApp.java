@@ -12,6 +12,11 @@ import static Utils.UtilsColors.r;
 
 public class UtilsApp {
 
+    /**
+     * Solicita al usuario un nuevo nombre y lo devuelve.
+     * @param usuario el usuario que desea cambiar su nombre.
+     * @return el nuevo nombre introducido por el usuario.
+     */
     public static String changeNombre(Usuario usuario) {
         System.out.println("Introduce el nombre por el que deseas cambiar: ");
         String tempNomb = sc.nextLine();
@@ -19,6 +24,11 @@ public class UtilsApp {
         return tempNomb;
     }
 
+    /**
+     * Solicita al usuario el ID de una publicación a eliminar y la elimina si se confirma.
+     * @param publicacions lista de publicaciones del usuario.
+     * @return la publicación eliminada si se elimina con éxito, o null si se cancela la operación.
+     */
     public static Publicacion deletePublicacion(List<Publicacion> publicacions) {
         while (true) {
             System.out.println("("+c[4]+"'salir'"+r+" para cancelar)");
@@ -68,7 +78,11 @@ public class UtilsApp {
         return null;
     }
 
-
+    /**
+     * Muestra la lista de amigos del usuario y solicita el nombre de uno para eliminarlo.
+     * @param usuario el usuario que desea eliminar un amigo.
+     * @return el nombre del amigo a eliminar, o una cadena vacía si no hay amigos o hay un error.
+     */
     public static String deleteAmigo(Usuario usuario) {
         if (usuario.getAmigos().isEmpty()) {
             System.out.println("No tienes amigos en tu lista.");
@@ -96,6 +110,11 @@ public class UtilsApp {
         }
     }
 
+    /**
+     * Recomienda amigos al usuario y solicita el nombre de uno para agregar.
+     * @param usuario el usuario que quiere agregar un nuevo amigo.
+     * @return el nombre del nuevo amigo si se confirma la operación, o una cadena vacía si se cancela o hay un error.
+     */
     public static String includeAmigo(Usuario usuario) {
         List<String> amigos = whaleDao.getAmigosByUsuario(usuario.getNombre());
         usuario.setAmigos(amigos);
@@ -145,7 +164,12 @@ public class UtilsApp {
         return "";
     }
 
-public static String removeHashTag(String text) {
+    /**
+     * Elimina todas las palabras que empiezan con '#' del texto dado.
+     * @param text el texto que puede contener hashtags.
+     * @return el mismo texto sin palabras que contengan hashtags (palabras que empiecen por '#').
+     */
+    public static String removeHashTag(String text) {
         StringBuilder newText = new StringBuilder();
         for (String e : text.split(" ")) {
             if (!e.startsWith("#")) {

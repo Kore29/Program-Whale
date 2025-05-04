@@ -7,6 +7,12 @@ import PageModelNew.Publicacion;
 
 public class UtilsShow {
 
+    /**
+     * Muestra por consola una lista de publicaciones con sus respectivos comentarios.
+     * Incluye información como ID, fecha de creación, texto, hashtag, número de likes y comentarios.
+     *
+     * @param activePublicaciones la lista de publicaciones a mostrar.
+     */
     public static void showPublicaciones(List<Publicacion> activePublicaciones) {
         for (Publicacion activePublicacion : activePublicaciones) {
             List<Comentario> activeComentarios = activePublicacion.getComentarios();
@@ -26,6 +32,12 @@ public class UtilsShow {
         }
     }
 
+    /**
+     * Muestra por consola una única publicación con todos sus comentarios.
+     * Presenta los mismos datos que el método anterior, pero enfocado a una sola publicación.
+     *
+     * @param activePublicacion la publicación individual que se desea mostrar.
+     */
     public static void showPublicacion(Publicacion activePublicacion) {
 
             System.out.println("\u001B[33mID:" + activePublicacion.getId() + " | " + activePublicacion.getCreacion() + "\u001B[0m");

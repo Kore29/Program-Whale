@@ -14,7 +14,6 @@ public class ConexionDataBase {
      * Implementa el patrón Singleton para asegurar una única conexión.
      *
      * @return Una conexión activa a la base de datos.
-     * @throws SQLException Si ocurre un error al establecer la conexión.
      */
     public static Connection getInstance() throws SQLException {
         if (!isConnectionActive()) {
@@ -24,8 +23,8 @@ public class ConexionDataBase {
                         ConexioDataInfo.getUSR(),
                         ConexioDataInfo.getPWD()
                 );
-            } catch (Exception e) {
-                return null;
+            } catch (Exception _) {
+
             }
         }
         return connection;
@@ -50,7 +49,6 @@ public class ConexionDataBase {
 
     /**
      * Metodo para verificar si la conexión está activa.
-     *
      * @return true si la conexión está activa, false en caso contrario.
      */
     public static boolean isConnectionActive() {

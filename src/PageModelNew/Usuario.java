@@ -1,8 +1,5 @@
 package PageModelNew;
 
-import PageModelNew.Contenido;
-import PageModelNew.Publicacion;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,36 +22,52 @@ public class Usuario {
 
     }
 
-    // Add Contenido
-    public void addPublicacion(PageModelNew.Publicacion p) {publicaciones.add(p);}
+    /** Añade una nueva publicación al usuario. */
+    public void addPublicacion(PageModelNew.Publicacion p) { publicaciones.add(p); }
 
-    //Usuario
-    public String getNombre() {return nombre;}
-    public void setNombre(String nombre) {this.nombre = nombre;}
+    /** Devuelve el nombre del usuario. */
+    public String getNombre() { return nombre; }
 
-    //Contraseña
-    public String getContrasena() {return contrasenya;}
-    public void setContrasena(String contrasena) {this.contrasenya = contrasena;}
+    /** Cambia el nombre del usuario. */
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    // Email
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    /** Devuelve la contraseña del usuario. */
+    public String getContrasena() { return contrasenya; }
 
-    //Creacion
-    public String getCreacion() {return creacion;}
-    public void setCreacion(String creacion) {this.creacion = creacion;}
+    /** Cambia la contraseña del usuario. */
+    public void setContrasena(String contrasena) { this.contrasenya = contrasena; }
 
-    //Amigos
-    public List<String> getAmigos() {return amigos;}
-    public void setAmigos(List<String> amigos) {this.amigos = amigos;}
+    /** Devuelve el email del usuario. */
+    public String getEmail() { return email; }
 
-    // Modificar Amigos
-    public void addAmigo(String amigo) {if (!amigos.contains(amigo)) {amigos.add(amigo);}}
-    public void removeAmigo(String amigo) {amigos.remove(amigo);}
-    public boolean isAmigo(String amigo) {return amigos.contains(amigo);}
+    /** Cambia el email del usuario. */
+    public void setEmail(String email) { this.email = email; }
 
-    //Publicaciones
-    public List<Publicacion> getPublicaciones() {return publicaciones;}
-    public void setPublicaciones(List<Publicacion> publicaciones) {this.publicaciones = publicaciones;}
+    /** Devuelve la fecha de creación del usuario. */
+    public String getCreacion() { return creacion; }
+
+    /** Cambia la fecha de creación del usuario. */
+    public void setCreacion(String creacion) { this.creacion = creacion; }
+
+    /** Devuelve la lista de amigos del usuario. */
+    public List<String> getAmigos() { return amigos; }
+
+    /** Reemplaza la lista de amigos del usuario. */
+    public void setAmigos(List<String> amigos) { this.amigos = amigos; }
+
+    /** Añade un amigo si no estaba ya en la lista. */
+    public void addAmigo(String amigo) { if (!amigos.contains(amigo)) amigos.add(amigo); }
+
+    /** Elimina un amigo de la lista. */
+    public void removeAmigo(String amigo) { amigos.remove(amigo); }
+
+    /** Comprueba si un usuario es amigo. */
+    public boolean isAmigo(String amigo) { return amigos.contains(amigo); }
+
+    /** Devuelve la lista de publicaciones del usuario. */
+    public List<Publicacion> getPublicaciones() { return publicaciones; }
+
+    /** Reemplaza la lista de publicaciones del usuario. */
+    public void setPublicaciones(List<Publicacion> publicaciones) { this.publicaciones = publicaciones; }
 
 }

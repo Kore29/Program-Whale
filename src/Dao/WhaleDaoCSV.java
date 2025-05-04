@@ -85,12 +85,12 @@ public class WhaleDaoCSV implements WhaleDao {
             while ((line = reader.readLine()) != null) {
                 String[] campos = line.split(",", -1);
                 Usuario usuario = new Usuario(
-                        campos[0], // nombre
-                        campos[1], // contrasena
-                        campos[2], // email
-                        campos[3], // creacion
-                        getAmigosByUsuario(campos[0]), // amigos
-                        null // publicaciones
+                        campos[0],
+                        campos[1],
+                        campos[2],
+                        campos[3],
+                        getAmigosByUsuario(campos[0]),
+                        null
                 );
 
                 usuario.setPublicaciones(getPublicacionesByUsuario(campos[0]));
@@ -135,7 +135,6 @@ public class WhaleDaoCSV implements WhaleDao {
                 }
             }
 
-            // asociar comentarios a publicaciones
             for (Comentario comentario : comentariosPendientes) {
                 Publicacion pub = mapaPublicaciones.get(comentario.getIdReferencia());
                 if (pub != null) {
@@ -156,7 +155,7 @@ public class WhaleDaoCSV implements WhaleDao {
         List<String> amigos = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
-            String linea = reader.readLine(); // Saltar cabecera
+            String linea = reader.readLine();
 
             while ((linea = reader.readLine()) != null) {
                 String[] partes = linea.split(",", -1);
@@ -216,10 +215,10 @@ public class WhaleDaoCSV implements WhaleDao {
                 String[] campos = line.split(",", -1);
                 if (campos[2].equals(email)) {
                     usuario = new Usuario(
-                            campos[0], // nombre
-                            campos[1], // contrasena
-                            campos[2], // email
-                            campos[3], // creacion
+                            campos[0],
+                            campos[1],
+                            campos[2],
+                            campos[3],
                             null,
                             null
                     );
@@ -248,10 +247,10 @@ public class WhaleDaoCSV implements WhaleDao {
                 String[] campos = line.split(",", -1);
                 if (campos[0].equals(name)) {
                     usuario = new Usuario(
-                            campos[0], // nombre
-                            campos[1], // contrasena
-                            campos[2], // email
-                            campos[3], // creacion
+                            campos[0],
+                            campos[1],
+                            campos[2],
+                            campos[3],
                             null,
                             null
                     );
@@ -271,8 +270,42 @@ public class WhaleDaoCSV implements WhaleDao {
 
     @Override
     public void changeName(Usuario usuario, String newName) {
-        // Implementación compleja para CSV - necesitaríamos reescribir
-        System.out.println("Cambiar nombre no implementado para CSV");
+        List<String> nuevasLineas = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                String[] partes = linea.split(",");
+                if (partes.length != 2) continue;
+
+                String usuario1 = partes[0];
+                String usuario2 = partes[1];
+
+                // Cambiar el nombre en ambas columnas si aparece
+                if (usuario1.equals(usuario.getNombre())) {
+                    usuario1 = newName;
+                }
+                if (usuario2.equals(usuario.getNombre())) {
+                    usuario2 = newName;
+                }
+
+                nuevasLineas.add(usuario1 + "," + usuario2);
+            }
+        } catch (IOException e) {
+            System.out.println("Error leyendo amigos.csv para cambiar nombre");
+            e.printStackTrace();
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(amigosPath.toString(), false))) {
+            for (String linea : nuevasLineas) {
+                writer.write(linea);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error escribiendo amigos.csv tras cambiar nombre");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -448,7 +481,6 @@ public class WhaleDaoCSV implements WhaleDao {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] campos = line.split(",", -1);
-                // Solo publicaciones (id_referencia vacío) del usuario
                 if (campos[7].isEmpty() && campos[1].equals(nombre)) {
                     publicaciones.add(createPublicacionFromCSV(campos));
                 }
@@ -482,14 +514,14 @@ public class WhaleDaoCSV implements WhaleDao {
 
     private Publicacion createPublicacionFromCSV(String[] campos) {
         return new Publicacion(
-                Integer.parseInt(campos[0]), // id_contenido
-                campos[1], // autor
-                campos[2], // creacion
-                campos[3].isEmpty() ? null : campos[3], // multimedia
-                campos[4], // texto
-                Integer.parseInt(campos[5]), // likes
-                campos[6], // hashtag
-                getComentariosByPublicacion(Integer.parseInt(campos[0])) // comentarios
+                Integer.parseInt(campos[0]),
+                campos[1],
+                campos[2],
+                campos[3].isEmpty() ? null : campos[3],
+                campos[4],
+                Integer.parseInt(campos[5]),
+                campos[6],
+                getComentariosByPublicacion(Integer.parseInt(campos[0]))
         );
     }
 
@@ -522,8 +554,8 @@ public class WhaleDaoCSV implements WhaleDao {
                 comentario.getCreacion(),
                 comentario.getMultimedia() != null ? comentario.getMultimedia() : "",
                 comentario.getTexto(),
-                "0", // likes (no aplicable para comentarios)
-                "", // hashtag (no aplicable para comentarios)
+                "0",
+                "",
                 String.valueOf(comentario.getIdReferencia())
         );
         writeToCSV(contenidoPath, null, data, true);

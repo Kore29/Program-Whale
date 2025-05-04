@@ -58,8 +58,6 @@ public class Main {
             System.out.print(c[6]+"Introduce el nombre o email de tu usuario: "+r);
             String input = sc.nextLine().trim();
 
-            usuario = whaleDao.getUsuarioByName(input);
-
             if (!UtilsCheck.checkEmail(input).isEmpty()) usuario = whaleDao.getUsuarioByEmail(input);
             else if (!UtilsCheck.checkNombre(input).isEmpty()) usuario = whaleDao.getUsuarioByName(input);
             else {System.out.println(c[3]+"Formato inválido. Introduce un nombre o email válido." + r); continue;}
@@ -171,7 +169,7 @@ public class Main {
 
         while (true) {
             String opt = sc.nextLine();
-            if (UtilsCheck.checkInt(opt).isEmpty()) {
+            if (UtilsCheck.checkInt(opt).isEmpty() && !opt.isEmpty()) {
                 return Integer.parseInt(opt);
             } else {
                 System.out.println(UtilsCheck.checkInt(opt));
@@ -212,6 +210,7 @@ public class Main {
                 }
             }
 
+            boolean exit = false;
             switch (option) {
                 case 1:
                     String newName = UtilsApp.changeNombre(mainUsuario);
@@ -228,10 +227,12 @@ public class Main {
                     whaleDao.insertAmigo(mainUsuario.getNombre(), UtilsApp.includeAmigo(mainUsuario));
                     break;
                 case 5:
+                    exit = true;
                     break;
                 default:
                     System.out.println("Escribe un parámetro válido");
             }
+            if (exit) break;
         }
     }
 
@@ -287,7 +288,7 @@ public class Main {
     }
 
     public static void selectContenido() {
-        int id; Publicacion selectPublicacion;
+        int id;
 
         while (true) {
             System.out.print("Seleciona una de las posibles Publicaciones por el Id: ");
@@ -301,14 +302,11 @@ public class Main {
             }
 
             int finalId = id;
-            boolean valid = pagePublicaciones.stream()
-                    .anyMatch(p -> p.getId() == finalId);
+            boolean valid = pagePublicaciones.stream().anyMatch(p -> p.getId() == finalId);
 
-            if (valid) {
-                break;
-            } else {
-                System.out.println(c[1]+"Error, escribe un Id valido: "+r);
-            }
+            if (valid) break;
+            else System.out.println(c[1]+"Error, escribe un Id valido: "+r);
+
         }
 
         System.out.println("1.Añadir Comentario  2.Dar Like  3.Salir al menú principal.");
@@ -340,9 +338,7 @@ public class Main {
 
         int tempId = whaleDao.getSizePublicaciones() + 1;
 
-        String tempHashTag = UtilsCheck.checkHashtagText(tempCome);
         tempCome = UtilsApp.removeHashTag(tempCome);
-
         String tempFech = String.valueOf(LocalDate.now());
 
         if(!tempCome.trim().isEmpty()) {

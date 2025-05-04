@@ -11,5 +11,6 @@ public class Comentario extends Contenido {
         this.id_referencia = id_referencia;
     }
 
+    /**Devuelve el ID de la publicación a la que esta hace referencia.*/
     public int getIdReferencia() {return id_referencia;}
 }

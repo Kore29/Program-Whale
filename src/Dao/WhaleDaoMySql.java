@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static Utils.UtilsColors.c;
+import static Utils.UtilsColors.r;
 
 public class WhaleDaoMySql implements WhaleDao {
 
@@ -17,13 +19,11 @@ public class WhaleDaoMySql implements WhaleDao {
         try {
             Connection conn = ConexionDataBase.getInstance();
 
-            if (conn != null && !conn.isClosed()) {
-                return true;
-            } else {
-                return false;
-            }
+            if (conn != null && !conn.isClosed()) return true;
+            else return false;
 
         } catch (SQLException e) {
+            System.out.println(c[1]+"Error al utilizar la Base de Datos"+r);
             return false;
         }
     }
@@ -41,7 +41,7 @@ public class WhaleDaoMySql implements WhaleDao {
 
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error al borrar los datos", e);
+            throw new RuntimeException("Error al borrar los datos");
         }
     }
 
@@ -75,7 +75,7 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return null;
         }
 
         return usuarios;
@@ -124,8 +124,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al leer todo el contenido desde la base de datos MySQL");
-            e.printStackTrace();
+
+            return null;
         }
 
         return publicaciones;
@@ -148,8 +148,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al obtener amigos desde MySQL");
-            e.printStackTrace();
+
+            return null;
         }
 
         return amigos;
@@ -170,8 +170,9 @@ public class WhaleDaoMySql implements WhaleDao {
                 amigos.add(rs.getString("amigo"));
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+
+            return null;
         }
 
         return amigos;
@@ -190,8 +191,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.execute();
 
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al insertar usuario", e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -222,7 +223,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
     
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener usuario por email", e);
+
+            return null;
         }
     
         return usuario;
@@ -255,7 +257,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
     
         } catch (SQLException e) {
-            throw new RuntimeException("Error al obtener usuario por nombre", e);
+
+            return null;
         }
     
         return usuario;
@@ -269,8 +272,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(2,usuario.getNombre());
             stmt.execute();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -283,8 +286,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(2, nombre);
             stmt.execute();
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception _) {
+
         }
     }
 
@@ -297,8 +300,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(2, nombre);
             stmt.execute();
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -314,8 +317,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(6, publicacion.getTexto());
             stmt.execute();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -331,8 +334,8 @@ public class WhaleDaoMySql implements WhaleDao {
                 System.out.println("No se encontró ninguna publicación con ese ID.");
             }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -344,8 +347,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setInt(1, id);
             stmt.execute();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -360,8 +363,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.setString(5, comentario.getTexto());
             stmt.execute();
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
     }
 
@@ -400,7 +403,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+
+            return null;
         }
 
         return publicaciones;
@@ -432,7 +436,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return null;
         }
 
         return publicaciones;
@@ -464,7 +469,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return null;
         }
 
         return publicaciones;
@@ -472,7 +478,7 @@ public class WhaleDaoMySql implements WhaleDao {
 
     @Override
     public Publicacion getPublicacionById(int id) {
-        Publicacion tempPubl = null;
+        Publicacion tempPubl;
 
         try (Connection con = ConexionDataBase.getInstance();
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM CONTENIDO WHERE id_referencia IS NULL AND id_contenido = ?")) {
@@ -498,7 +504,8 @@ public class WhaleDaoMySql implements WhaleDao {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return null;
         }
     }
 
@@ -510,15 +517,12 @@ public class WhaleDaoMySql implements WhaleDao {
             PreparedStatement stmt = con.prepareStatement("SELECT COUNT(c.id_contenido) FROM CONTENIDO c");
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
-                return rs.getInt(1);
-            } else {
-                return 0;
-            }
+            if(rs.next()) {return rs.getInt(1);}
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+
         }
+        return 0;
     }
 
     @Override
@@ -547,7 +551,8 @@ public class WhaleDaoMySql implements WhaleDao {
             stmt.close();
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return null;
         }
 
         return comentarios;
