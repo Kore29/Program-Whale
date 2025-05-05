@@ -25,8 +25,7 @@ public class WhaleDaoGlobal implements WhaleDao {
         daoCsv = new WhaleDaoCSV();
         daoMySql = new WhaleDaoMySql();
 
-        // Solo en caso de prueba
-        // moveMySqlToCsv();
+        moveMySqlToCsv();
 
         mysqlUp = daoMySql.testConnection();
         if (mysqlUp) System.out.println(c[2]+"Conexión a la base de datos establecida correctamente."+r);
@@ -101,15 +100,10 @@ public class WhaleDaoGlobal implements WhaleDao {
             }
         }
 
-        int total = daoMySql.getSizePublicaciones();
-        for (int i = 0; i < total; i++) {
-            List<Publicacion> publicaciones = daoMySql.getSixPublicaciones(i);
-            for (Publicacion p : publicaciones) {
-                daoCsv.insertPublicacion(p);
-                daoCsv.updateLikes(p.getId());
-                for (Comentario c : daoMySql.getComentariosByPublicacion(p.getId())) {
-                    daoCsv.insertComentario(c);
-                }
+        for (Publicacion p : daoMySql.getAllContenido()) {
+            daoCsv.insertPublicacion(p);
+            for (Comentario c : daoMySql.getComentariosByPublicacion(p.getId())) {
+                daoCsv.insertComentario(c);
             }
         }
 

@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Utils.UtilsColors.c;
+import static Utils.UtilsColors.r;
+
 public class WhaleDaoCSV implements WhaleDao {
 
     private static final Path basePath = Paths.get("src", "DataBase", "CSV");
@@ -270,42 +273,7 @@ public class WhaleDaoCSV implements WhaleDao {
 
     @Override
     public void changeName(Usuario usuario, String newName) {
-        List<String> nuevasLineas = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(amigosPath.toString()))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                String[] partes = linea.split(",");
-                if (partes.length != 2) continue;
-
-                String usuario1 = partes[0];
-                String usuario2 = partes[1];
-
-                // Cambiar el nombre en ambas columnas si aparece
-                if (usuario1.equals(usuario.getNombre())) {
-                    usuario1 = newName;
-                }
-                if (usuario2.equals(usuario.getNombre())) {
-                    usuario2 = newName;
-                }
-
-                nuevasLineas.add(usuario1 + "," + usuario2);
-            }
-        } catch (IOException e) {
-            System.out.println("Error leyendo amigos.csv para cambiar nombre");
-            e.printStackTrace();
-            return;
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(amigosPath.toString(), false))) {
-            for (String linea : nuevasLineas) {
-                writer.write(linea);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error escribiendo amigos.csv tras cambiar nombre");
-            e.printStackTrace();
-        }
+        System.out.println(c[3]+"Para verse los cambios hace falta reiniciar la aplicación."+r);
     }
 
     @Override
